@@ -1,6 +1,15 @@
 from flask_restful import Resource, reqparse
 from app.models.user import UserModel
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt
+# from flask import Flask
+from flask import jsonify
+# from flask import request
+
+# from flask_jwt_extended import create_access_token
+# from flask_jwt_extended import get_jwt_identity
+# from flask_jwt_extended import jwt_required
+# from flask_jwt_extended import JWTManager
+
 # from app.config import conn
 
 # from werkzeug.security import safe_str_cmp
@@ -78,14 +87,9 @@ class UserLogin(Resource):
         username = dados['username'].strip()
         password = dados['password'].strip()
 
-        # print(username, password, 'usuario encontrado')
-        # input()
-
         user = UserModel.find_by_login(username)
         
         salt = UserModel.find_salt_by_id(user)
-
-        # encrypted_password = UserModel.password_encrypted(password, UserModel.get_new_salt())
 
         if not UserModel.assert_password(user[0], password, salt,):
             return {'status': False}, 400
@@ -96,8 +100,9 @@ class UserLogin(Resource):
             
 
 class UserLogout(Resource):
-    @jwt_required
+    
+    @jwt_required()
     def post(self):
         jwt_id = get_jwt()['jti']
         BLACKLIST.add(jwt_id)
-        return {'message' : 'Deslogado com sucesso!'}, 200  
+        return jsonify({'message' : 'Deslogado com sucesso!'}), 200  

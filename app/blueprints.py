@@ -30,3 +30,12 @@ def register():
     _register_service = UserRegister()
 
     return _register_service.post()    
+
+@avaliable_route.route('/uf', methods=['GET'])
+
+def get_uf():    
+    from app.services.estado import GetEstado
+
+    _Get_services = GetEstado()
+    
+    return _Get_services.get()
