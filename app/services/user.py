@@ -59,6 +59,7 @@ class UserRegister(Resource):
 
         # print(username, password)
         # input()
+        
 
         encrypted_password = UserModel.password_encrypted(password, salt)
                 
