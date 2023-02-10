@@ -5,6 +5,12 @@ from app import server, banco, config
 
 avaliable_route = Blueprint('avaliable_route', __name__)
 
+@avaliable_route.route('/', methods=['POST'])
+def started():    
+    
+    return {'build!':'run aplication success'}, 200
+
+
 @avaliable_route.route('/Login', methods=['POST'])
 def Login():    
     from app.services.user import UserLogin
