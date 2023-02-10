@@ -39,3 +39,12 @@ def get_uf():
     _Get_services = GetEstado()
     
     return _Get_services.get()
+
+@avaliable_route.route('/municipio/<int:id>', methods=['GET'])
+
+def get_municipio(id):    
+    from app.services.municipio import GetMunicipio
+    
+    _Get_services = GetMunicipio()
+    
+    return _Get_services.get(id)
