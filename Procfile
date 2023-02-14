@@ -1,1 +1,2 @@
-web: python server.py
+web: sudo apt install unixodbc
+python server.py
