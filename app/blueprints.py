@@ -54,3 +54,21 @@ def get_municipio(id):
     _Get_services = GetMunicipio()
     
     return _Get_services.get(id)
+
+@avaliable_route.route('/SecretariaMunicipal', methods=['GET'])
+
+def get_secretaria_municipal():    
+    from app.services.secretaria_municipal import GetSecretariamunicipal
+    
+    _Get_services = GetSecretariamunicipal()
+    
+    return _Get_services.get()
+
+@avaliable_route.route('/SecretariaMunicipal/Inserir', methods=['POST'])
+
+def post_secretaria_municipal():    
+    from app.services.secretaria_municipal import GetSecretariamunicipal
+    
+    _Get_services = GetSecretariamunicipal()
+    
+    return _Get_services.post()
