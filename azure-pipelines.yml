@@ -43,11 +43,7 @@ stages:
         source antenv/bin/activate
         python -m pip install --upgrade pip
         pip install setup
-<<<<<<< HEAD
-        pip install -r requirements.txt 
-=======
         pip install -r requirements.txt
->>>>>>> c81f0c4e574f7bc8cd153f8a7424a918e8c00468
       workingDirectory: $(projectRoot)
       displayName: "Install requirements"
 
@@ -84,11 +80,7 @@ stages:
             displayName: 'Use Python version'
 
           - task: AzureWebApp@1
-<<<<<<< HEAD
-            displayName: 'Deploy Azure Web App : editora-aprender-back-homolog'
-=======
             displayName: 'Deploy Azure Web App : editorasadeback'
->>>>>>> c81f0c4e574f7bc8cd153f8a7424a918e8c00468
             inputs:
               azureSubscription: $(azureServiceConnectionId)
               appName: $(webAppName)
