@@ -72,3 +72,21 @@ def post_secretaria_municipal():
     _Get_services = GetSecretariamunicipal()
     
     return _Get_services.post()
+
+@avaliable_route.route('/Escolas', methods=['GET'])
+
+def get_escola():    
+    from app.services.escola import GetEscola
+    
+    _Get_services = GetEscola()
+    
+    return _Get_services.get()
+
+@avaliable_route.route('/Escolas/Inserir', methods=['POST'])
+
+def post_escola():    
+    from app.services.escola import GetEscola
+    
+    _Get_services = GetEscola()
+    
+    return _Get_services.post()
