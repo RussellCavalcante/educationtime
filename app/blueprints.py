@@ -90,3 +90,21 @@ def post_escola():
     _Get_services = GetEscola()
     
     return _Get_services.post()
+
+@avaliable_route.route('/turmas', methods=['GET'])
+
+def get_escola():    
+    from app.services.escola import GetEscola
+    
+    _Get_services = GetEscola()
+    
+    return _Get_services.get()
+
+@avaliable_route.route('/turmas/Inserir', methods=['POST'])
+
+def post_escola():    
+    from app.services.escola import GetEscola
+    
+    _Get_services = GetEscola()
+    
+    return _Get_services.post()
