@@ -22,11 +22,7 @@ variables:
   # Project root folder. Point to the folder containing manage.py file.
   projectRoot: $(System.DefaultWorkingDirectory)
 
-<<<<<<< HEAD
   # Python version: 3.11
-=======
-  # Python version: 3.11.1
->>>>>>> 62f9d181321188637dba00e711e011dd522ccbf1
   pythonVersion: '3.11'
 
 stages:
