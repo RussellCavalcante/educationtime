@@ -5,7 +5,7 @@ from app import server, banco, config
 
 avaliable_route = Blueprint('avaliable_route', __name__)
 
-@avaliable_route.route('/', methods=['POST'])
+@avaliable_route.route('/', methods=['GET'])
 def started():    
     
     return {'build!':'run aplication success'}, 200
