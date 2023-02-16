@@ -1,4 +1,4 @@
-from app import server, banco
+from app import server
 
 if __name__ == '__main__':
     # banco.init_app(server)
