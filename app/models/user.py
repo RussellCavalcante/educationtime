@@ -2,7 +2,7 @@ from sqlalchemy.dialects.postgresql import UUID
 from app import banco
 from uuid import uuid1, uuid4
 import re
-# from app import conn
+from app import conn
 
 
 class UserModel():

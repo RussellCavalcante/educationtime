@@ -6,9 +6,9 @@ from flask_restful import Resource, Api
 # from flask_login import LoginManager
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
-# import pyodbc
-# conn = pyodbc.connect("Driver={ODBC Driver 18 for SQL Server};Server=tcp:editora-aprender-teste.database.windows.net,1433;Database=editora-aprender-homolog;Uid=poncetechadm;Pwd=@Ponce1234;Encrypt=yes;TrustServerCertificate=yes;Connection Timeout=30;")
-# conn.autocommit = True
+import pyodbc
+conn = pyodbc.connect("Driver={ODBC Driver 18 for SQL Server};Server=tcp:editora-aprender-teste.database.windows.net,1433;Database=editora-aprender-homolog;Uid=poncetechadm;Pwd=@Ponce1234;Encrypt=yes;TrustServerCertificate=yes;Connection Timeout=30;")
+conn.autocommit = True
 
 server = Flask(__name__)
 # app.config.from_object('config')
