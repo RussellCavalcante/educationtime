@@ -7,13 +7,25 @@ from flask_jwt_extended import create_access_token, jwt_required, get_jwt
 from app.blacklist import BLACKLIST
 
 atributos = reqparse.RequestParser()
-# atributos.add_argument('username', type=str, required=True, help="campo de nome do usuario e obrigatorio")
-# atributos.add_argument('password', type=str, required=True, help="campo de senha e obrigatorio")
-# atributos.add_argument('email', type=str, help="campo de email e obrigatorio")
-# atributos.add_argument('phone', type=str, help="campo de telefone")
+atributos.add_argument('nome', type=str, help="campo de nome de uf e obrigatorio")
+atributos.add_argument('uf', type=str, help="campo de uf")
+
 
 class GetEstado(Resource):
 
     @jwt_required()
     def get(self):
         return EstadoModel.get_estados(), 200
+
+    @jwt_required()
+    def post(self):
+        dados = atributos.parse_args()
+        
+        nome = dados['nome'].strip()
+        uf = dados['uf'].strip()
+        # ibge = dados['ibge']
+        # pais = dados['pais']
+        # ddd = dados['ddd']
+        
+        EstadoModel.create_estado(nome, uf)
+        return {'created': nome }, 200

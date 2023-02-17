@@ -46,6 +46,15 @@ def get_uf():
     
     return _Get_services.get()
 
+@avaliable_route.route('/uf/Insert', methods=['POST'])
+
+def post_uf():    
+    from app.services.estado import GetEstado
+
+    _Get_services = GetEstado()
+    
+    return _Get_services.post()
+
 @avaliable_route.route('/municipio/<int:id>', methods=['GET'])
 
 def get_municipio(id):    
@@ -93,7 +102,7 @@ def post_escola():
 
 @avaliable_route.route('/turmas', methods=['GET'])
 
-def get_escola():    
+def get_turma():    
     from app.services.escola import GetEscola
     
     _Get_services = GetEscola()
@@ -102,7 +111,7 @@ def get_escola():
 
 @avaliable_route.route('/turmas/Inserir', methods=['POST'])
 
-def post_escola():    
+def post_turma():    
     from app.services.escola import GetEscola
     
     _Get_services = GetEscola()
