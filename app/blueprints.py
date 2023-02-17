@@ -73,14 +73,14 @@ def get_municipio():
     
     return _Get_services.get_all()
 
-@avaliable_route.route('/municipio/inserir/<int:id>', methods=['POST'])
+@avaliable_route.route('/municipio/inserir', methods=['POST'])
 
-def post_municipio_by_uf(id):    
+def post_municipio_by_uf():    
     from app.services.municipio import GetMunicipio
     
     _Get_services = GetMunicipio()
     
-    return _Get_services.post(id)
+    return _Get_services.post()
 
 
 @avaliable_route.route('/secretariamunicipal', methods=['GET'])

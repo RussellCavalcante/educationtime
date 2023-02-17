@@ -9,6 +9,7 @@ from app.blacklist import BLACKLIST
 atributos = reqparse.RequestParser()
 atributos.add_argument('codigo_ibge', type=str, help="campo de nome de uf e obrigatorio")
 atributos.add_argument('nome', type=str, help="campo de uf")
+atributos.add_argument('FK_UF_id', type=int, help="campo de FK_UF_id")
 
 class GetMunicipio(Resource):
 
@@ -28,9 +29,10 @@ class GetMunicipio(Resource):
         
         codigo_ibge = dados['codigo_ibge'].strip()
         nome = dados['nome'].strip()
+        FK_UF_id = dados['FK_UF_id']
         # ibge = dados['ibge']
         # pais = dados['pais']
         # ddd = dados['ddd']
         
-        MunicipioModel.create_municipio(codigo_ibge, nome, args[0])
+        MunicipioModel.create_municipio(codigo_ibge, nome, FK_UF_id)
         return {'created': nome }, 200
