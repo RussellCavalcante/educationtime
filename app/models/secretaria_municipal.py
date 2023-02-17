@@ -34,8 +34,7 @@ class SecretariaMunicipalModel():
         result = cursor.fetchall()
         cursor.close()
 
-        # print(result)
-        # input()
+     
         listEstadosDict = []
         for estadoTupla in result:
             
@@ -55,10 +54,8 @@ class SecretariaMunicipalModel():
         # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
         # try:
             cursor = conn.cursor()
-            print(args[1], args[2], args[3])
-            input()
-            
-            cursor.execute("insert into secretaria_municipal ( nome, cnpj, endereco, telefone, email) values(?,?,?,?,?)",args[1], int(args[2]), args[3], int(args[4]), args[5])
+    
+            cursor.execute("insert into secretaria_municipal ( nome, cnpj, endereco, telefone, email, FK_secretaria_UF_id, FK_secretaria_municipio_id) values(?,?,?,?,?,?,?)",args[1], int(args[2]), args[3], int(args[4]), args[5], int(args[6]), int(args[7]))
             
             conn.commit()
             # conn.close()

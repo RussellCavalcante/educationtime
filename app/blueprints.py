@@ -5,7 +5,7 @@ from app import server, banco, config
 
 avaliable_route = Blueprint('avaliable_route', __name__)
 
-@avaliable_route.route('/', methods=['POST'])
+@avaliable_route.route('/', methods=['GET'])
 def started():    
     
     return {'build!':'run aplication success'}, 200
@@ -46,7 +46,7 @@ def get_uf():
     
     return _Get_services.get()
 
-@avaliable_route.route('/uf/Insert', methods=['POST'])
+@avaliable_route.route('/uf/inserir', methods=['POST'])
 
 def post_uf():    
     from app.services.estado import GetEstado
@@ -57,14 +57,33 @@ def post_uf():
 
 @avaliable_route.route('/municipio/<int:id>', methods=['GET'])
 
-def get_municipio(id):    
+def get_municipio_by(id):    
     from app.services.municipio import GetMunicipio
     
     _Get_services = GetMunicipio()
     
     return _Get_services.get(id)
 
-@avaliable_route.route('/SecretariaMunicipal', methods=['GET'])
+@avaliable_route.route('/municipio', methods=['GET'])
+
+def get_municipio():    
+    from app.services.municipio import GetMunicipio
+    
+    _Get_services = GetMunicipio()
+    
+    return _Get_services.get_all()
+
+@avaliable_route.route('/municipio/inserir/<int:id>', methods=['POST'])
+
+def post_municipio_by_uf(id):    
+    from app.services.municipio import GetMunicipio
+    
+    _Get_services = GetMunicipio()
+    
+    return _Get_services.post(id)
+
+
+@avaliable_route.route('/secretariamunicipal', methods=['GET'])
 
 def get_secretaria_municipal():    
     from app.services.secretaria_municipal import GetSecretariamunicipal
@@ -73,7 +92,7 @@ def get_secretaria_municipal():
     
     return _Get_services.get()
 
-@avaliable_route.route('/SecretariaMunicipal/Inserir', methods=['POST'])
+@avaliable_route.route('/secretariamunicipal/inserir', methods=['POST'])
 
 def post_secretaria_municipal():    
     from app.services.secretaria_municipal import GetSecretariamunicipal
@@ -82,7 +101,7 @@ def post_secretaria_municipal():
     
     return _Get_services.post()
 
-@avaliable_route.route('/Escolas', methods=['GET'])
+@avaliable_route.route('/escolas', methods=['GET'])
 
 def get_escola():    
     from app.services.escola import GetEscola
@@ -91,7 +110,7 @@ def get_escola():
     
     return _Get_services.get()
 
-@avaliable_route.route('/Escolas/Inserir', methods=['POST'])
+@avaliable_route.route('/escolas/inserir', methods=['POST'])
 
 def post_escola():    
     from app.services.escola import GetEscola
@@ -109,7 +128,7 @@ def get_turma():
     
     return _Get_services.get()
 
-@avaliable_route.route('/turmas/Inserir', methods=['POST'])
+@avaliable_route.route('/turmas/inserir', methods=['POST'])
 
 def post_turma():    
     from app.services.escola import GetEscola

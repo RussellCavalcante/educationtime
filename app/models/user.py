@@ -5,6 +5,7 @@ import re
 from app import conn
 
 
+
 class UserModel():
     # __tablename__ = 'users'
     

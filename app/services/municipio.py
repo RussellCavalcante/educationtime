@@ -7,10 +7,8 @@ from flask_jwt_extended import create_access_token, jwt_required, get_jwt
 from app.blacklist import BLACKLIST
 
 atributos = reqparse.RequestParser()
-# atributos.add_argument('username', type=str, required=True, help="campo de nome do usuario e obrigatorio")
-# atributos.add_argument('password', type=str, required=True, help="campo de senha e obrigatorio")
-# atributos.add_argument('email', type=str, help="campo de email e obrigatorio")
-# atributos.add_argument('phone', type=str, help="campo de telefone")
+atributos.add_argument('codigo_ibge', type=str, help="campo de nome de uf e obrigatorio")
+atributos.add_argument('nome', type=str, help="campo de uf")
 
 class GetMunicipio(Resource):
 
@@ -18,3 +16,21 @@ class GetMunicipio(Resource):
     def get(self, *args, **kwargs):
         
         return  MunicipioModel.get_municipios_by_uf(args[0]), 200
+
+    @jwt_required()
+    def get_all(self, *args, **kwargs):
+        
+        return  MunicipioModel.get_municipios_by(), 200
+
+    @jwt_required()
+    def post(self, *args, **kwargs):
+        dados = atributos.parse_args()
+        
+        codigo_ibge = dados['codigo_ibge'].strip()
+        nome = dados['nome'].strip()
+        # ibge = dados['ibge']
+        # pais = dados['pais']
+        # ddd = dados['ddd']
+        
+        MunicipioModel.create_municipio(codigo_ibge, nome, args[0])
+        return {'created': nome }, 200

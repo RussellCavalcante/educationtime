@@ -35,12 +35,10 @@ class EstadoModel():
         
         cursor.close()
         
-        print(estados)
-        input()
         listEstadosDict = []
         for estadoTupla in estados:
             
-            tup1 = ('_id', 'nome', 'uf') 
+            tup1 = ('id', 'nome', 'uf') 
             tup2 = estadoTupla
            
             if len(tup1) == len(tup2): 
@@ -54,10 +52,10 @@ class EstadoModel():
         # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
         # try:
             cursor = conn.cursor()
-            print(args[1], args[2])
-            input()
+            # print(args[1], args[2])
+            # input()
             
-            cursor.execute("insert into estado (id, nome, uf) values(?,?,?)", 1 ,args[1], args[2])
+            cursor.execute("insert into estado (nome, uf) values(?,?)",args[1], args[2])
             
             conn.commit()
             # conn.close()
