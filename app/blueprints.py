@@ -122,17 +122,71 @@ def post_escola():
 @avaliable_route.route('/turmas', methods=['GET'])
 
 def get_turma():    
-    from app.services.escola import GetEscola
+    from app.services.turma import GetTurma
     
-    _Get_services = GetEscola()
+    _Get_services = GetTurma()
     
     return _Get_services.get()
 
 @avaliable_route.route('/turmas/inserir', methods=['POST'])
 
 def post_turma():    
-    from app.services.escola import GetEscola
+    from app.services.turma import GetTurma
     
-    _Get_services = GetEscola()
+    _Get_services = GetTurma()
     
-    return _Get_services.post()
+    return _Get_services.post_turma()
+
+@avaliable_route.route('/turmas/turno', methods=['GET'])
+
+def get_turma():    
+    from app.services.turma import GetTurma
+    
+    _Get_services = GetTurma()
+    
+    return _Get_services.get_turno()
+
+@avaliable_route.route('/turmas/turno/inserir', methods=['POST'])
+
+def post_turma():    
+    from app.services.turma import GetTurma
+    
+    _Get_services = GetTurma()
+    
+    return _Get_services.post_turno()
+
+@avaliable_route.route('/turmas/modalidade', methods=['GET'])
+
+def get_turma():    
+    from app.services.turma import GetTurma
+    
+    _Get_services = GetTurma()
+    
+    return _Get_services.get_modalidade()
+
+@avaliable_route.route('/turmas/modalidade/inserir', methods=['POST'])
+
+def post_turma():    
+    from app.services.turma import GetTurma
+    
+    _Get_services = GetTurma()
+    
+    return _Get_services.post_modalidade()
+
+@avaliable_route.route('/turmas/etapaEnsino', methods=['GET'])
+
+def get_turma():    
+    from app.services.turma import GetTurma
+    
+    _Get_services = GetTurma()
+    
+    return _Get_services.get_etapa_ensino()
+
+@avaliable_route.route('/turmas/etapaEnsino/inserir', methods=['POST'])
+
+def post_turma():    
+    from app.services.turma import GetTurma
+    
+    _Get_services = GetTurma()
+    
+    return _Get_services.post_etapa_ensino()
