@@ -139,7 +139,7 @@ def post_turma():
 
 @avaliable_route.route('/turmas/turno', methods=['GET'])
 
-def get_turma():    
+def get_turno():    
     from app.services.turma import GetTurma
     
     _Get_services = GetTurma()
@@ -148,7 +148,7 @@ def get_turma():
 
 @avaliable_route.route('/turmas/turno/inserir', methods=['POST'])
 
-def post_turma():    
+def post_turno():    
     from app.services.turma import GetTurma
     
     _Get_services = GetTurma()
@@ -157,7 +157,7 @@ def post_turma():
 
 @avaliable_route.route('/turmas/modalidade', methods=['GET'])
 
-def get_turma():    
+def get_modalidade():    
     from app.services.turma import GetTurma
     
     _Get_services = GetTurma()
@@ -166,7 +166,7 @@ def get_turma():
 
 @avaliable_route.route('/turmas/modalidade/inserir', methods=['POST'])
 
-def post_turma():    
+def post_modalidade():    
     from app.services.turma import GetTurma
     
     _Get_services = GetTurma()
@@ -175,7 +175,7 @@ def post_turma():
 
 @avaliable_route.route('/turmas/etapaEnsino', methods=['GET'])
 
-def get_turma():    
+def get_etapa_ensino():    
     from app.services.turma import GetTurma
     
     _Get_services = GetTurma()
@@ -184,7 +184,7 @@ def get_turma():
 
 @avaliable_route.route('/turmas/etapaEnsino/inserir', methods=['POST'])
 
-def post_turma():    
+def post_etapa_ensino():    
     from app.services.turma import GetTurma
     
     _Get_services = GetTurma()
