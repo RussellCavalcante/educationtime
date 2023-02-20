@@ -12,8 +12,9 @@ atributos.add_argument('FK_etapa_ensino_id', type=int, help="campo obrigatorio")
 atributos.add_argument('ano', type=str, help="campo obrigatorio ")
 atributos.add_argument('FK_modalidade_id', type=int, help="campo obrigatorio ")
 atributos.add_argument('FK_turno_id', type=int, help="campo obrigatorio ")
+atributos.add_argument('nome', type=str, help="campo obrigatorio nome ")
 
-class GetEscola(Resource):
+class GetTurma(Resource):
 
     @jwt_required()
     def get(self, *args, **kwargs):
@@ -32,6 +33,49 @@ class GetEscola(Resource):
         TurmaModel.create_turma(nome_escola, endereco, email_escola, telefone, cod_inep)
         
         return  {'created': nome_escola}, 201
-
     
+    @jwt_required()
+    def get_turno(self, *args, **kwargs):
+        
+        return  TurmaModel.get_turno(), 200
+
+    @jwt_required()
+    def post_turno(self, *args, **kwargs):
+        dados = atributos.parse_args()
+        
+        nome = dados['nome'].strip()
+        
+        TurmaModel.create_turno(nome)
+        
+        return  {'created': nome}, 201
+
+    @jwt_required()
+    def get_modalidade(self, *args, **kwargs):
+        
+        return  TurmaModel.get_modalidade(), 200
+
+    @jwt_required()
+    def post_modalidade(self, *args, **kwargs):
+        dados = atributos.parse_args()
+        
+        nome = dados['nome'].strip()
+        
+        TurmaModel.create_modalidade(nome)
+        
+        return  {'created': nome}, 201
+
+    @jwt_required()
+    def get_etapa_ensino(self, *args, **kwargs):
+        
+        return  TurmaModel.get_etapa_ensino(), 200
+
+    @jwt_required()
+    def post_etapa_ensino(self, *args, **kwargs):
+        dados = atributos.parse_args()
+        
+        nome = dados['nome'].strip()
+        
+        TurmaModel.create_etapa_ensino(nome)
+        
+        return  {'created': nome}, 201
 
