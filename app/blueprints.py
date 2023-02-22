@@ -146,15 +146,6 @@ def get_turno():
     
     return _Get_services.get_turno()
 
-@avaliable_route.route('/turmas/turno/inserir', methods=['POST'])
-
-def post_turno():    
-    from app.services.turma import GetTurma
-    
-    _Get_services = GetTurma()
-    
-    return _Get_services.post_turno()
-
 @avaliable_route.route('/turmas/modalidade', methods=['GET'])
 
 def get_modalidade():    
@@ -164,14 +155,6 @@ def get_modalidade():
     
     return _Get_services.get_modalidade()
 
-@avaliable_route.route('/turmas/modalidade/inserir', methods=['POST'])
-
-def post_modalidade():    
-    from app.services.turma import GetTurma
-    
-    _Get_services = GetTurma()
-    
-    return _Get_services.post_modalidade()
 
 @avaliable_route.route('/turmas/etapaEnsino', methods=['GET'])
 
@@ -182,11 +165,21 @@ def get_etapa_ensino():
     
     return _Get_services.get_etapa_ensino()
 
-@avaliable_route.route('/turmas/etapaEnsino/inserir', methods=['POST'])
 
-def post_etapa_ensino():    
-    from app.services.turma import GetTurma
+@avaliable_route.route('/planoaula', methods=['GET'])
+
+def get_planoaula():    
+    from app.services.planoaula import GetPlanoAula
     
-    _Get_services = GetTurma()
+    _Get_services = GetPlanoAula()
     
-    return _Get_services.post_etapa_ensino()
+    return _Get_services.get()
+
+@avaliable_route.route('/planoaula/inserir', methods=['POST'])
+
+def post_plano_aula():    
+    from app.services.planoaula import GetPlanoAula
+    
+    _Get_services = GetPlanoAula()
+    
+    return _Get_services.post_planoaula()

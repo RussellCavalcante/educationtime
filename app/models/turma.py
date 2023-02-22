@@ -115,7 +115,7 @@ class TurmaModel():
     def get_turno(*args, **kwargs):
         cursor = conn.cursor()
  
-        cursor.execute("select * from turma;")
+        cursor.execute("select * from turno;")
         
         result = cursor.fetchall()
         cursor.close()
@@ -125,7 +125,7 @@ class TurmaModel():
         listEstadosDict = []
         for estadoTupla in result:
             
-            tup1 = ('id', 'cod_turma','FK_etapa_ensino_id', 'ano', 'FK_modalidade_id', 'FK_turno_id') 
+            tup1 = ('id', 'nome') 
             tup2 = estadoTupla
            
             if len(tup1) == len(tup2): 

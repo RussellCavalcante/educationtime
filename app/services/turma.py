@@ -25,14 +25,14 @@ class GetTurma(Resource):
     def post_turma(self, *args, **kwargs):
         dados = atributos.parse_args()
         
-        nome_escola = dados['cod_turma'].strip()
-        endereco = dados['FK_etapa_ensino_id'].strip()
-        telefone = dados['ano']
-        email_escola = dados['FK_modalidade_id'].strip()
-        cod_inep = dados['FK_turno_id']
-        TurmaModel.create_turma(nome_escola, endereco, email_escola, telefone, cod_inep)
+        cod_turma = dados['cod_turma'].strip()
+        FK_etapa_ensino_id = dados['FK_etapa_ensino_id']
+        ano = dados['ano'].strip()
+        FK_modalidade_id = dados['FK_modalidade_id']
+        FK_turno_id = dados['FK_turno_id']
+        TurmaModel.create_turma(cod_turma, FK_etapa_ensino_id, ano, FK_modalidade_id, FK_turno_id)
         
-        return  {'created': nome_escola}, 201
+        return  {'created': cod_turma}, 201
     
     @jwt_required()
     def get_turno(self, *args, **kwargs):

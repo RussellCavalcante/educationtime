@@ -5,7 +5,7 @@ import re
 from app import conn
 
 
-class estudanteModel():
+class planoAulaModel():
     # __tablename__ = 'estado'
     
 
@@ -26,10 +26,10 @@ class estudanteModel():
 
 
     @classmethod
-    def get_estudante(*args, **kwargs):
+    def get_planoaula(*args, **kwargs):
         cursor = conn.cursor()
  
-        cursor.execute("select * from estudante;")
+        cursor.execute("select * from plano_aula;")
         
         result = cursor.fetchall()
         cursor.close()
@@ -39,7 +39,7 @@ class estudanteModel():
         listEstadosDict = []
         for estadoTupla in result:
             
-            tup1 = ('id', 'cod_nacional_estudante','nome', 'data_nascimento', 'FK_tipo_estudante_id', 'FK_etapa_ensino_id', 'ano', 'nee', 'nome_mae_aluno') 
+            tup1 = ('id', 'bimestre_escolar','etapa_ensino', 'ano', 'FK_unidade_tematica_id', 'conteudo') 
             tup2 = estadoTupla
            
             if len(tup1) == len(tup2): 
@@ -51,14 +51,14 @@ class estudanteModel():
         return listEstadosDict
 
     @classmethod
-    def create_estudante(*args, **kwargs):
+    def create_planoaula(*args, **kwargs):
         # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
         # try:
             cursor = conn.cursor()
             # print(args[1], args[2], args[3])
             # input()
             
-            cursor.execute("insert into estudante ( cod_nacional_estudante, nome , data_nascimento, FK_tipo_estudante_id, FK_etapa_ensino_id, ano, nee, nome_mae_aluno) values(?,?,?,?,?,?,?)",int(args[1]), args[2], args[3], int(args[4]), int(args[5]), args[6], args[7])
+            cursor.execute("insert into plano_aula ( bimestre_escolar, etapa_ensino, ano, FK_unidade_tematica_id, conteudo) values(?,?,?,?,?)",args[1], args[2], args[3], int(args[4]), args[5])
             
             conn.commit()
             # conn.close()
