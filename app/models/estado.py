@@ -64,3 +64,25 @@ class EstadoModel():
         # except:
         #     print(TypeError)
         # #     return None
+
+    @classmethod
+    def update_estado(*args, **kwargs):
+        # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
+        # try:
+            cursor = conn.cursor()
+            # print(args[1], args[2])
+            # input()
+            
+            cursor.execute('''
+                        UPDATE estado
+                        SET nome = ?
+                        WHERE id = ?
+                        ''',args[1], args[2])
+            
+            conn.commit()
+            # conn.close()
+            # return 'created'
+            # rows = cursor.fetchall()
+        # except:
+        #     print(TypeError)
+        # #     return None

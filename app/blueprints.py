@@ -62,7 +62,7 @@ def post_uf(id):
 
     _Get_services = GetEstado()
     
-    return _Get_services.update()
+    return _Get_services.update(id)
 
 @avaliable_route.route('/municipio/<int:id>', methods=['GET'])
 
