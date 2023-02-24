@@ -50,6 +50,30 @@ class SecretariaMunicipalModel():
         return listEstadosDict
 
     @classmethod
+    def get_secretaria_municipal_by_id(*args, **kwargs):
+        cursor = conn.cursor()
+ 
+        cursor.execute(f"select * from secretaria_municipal where id = {args[1]}")
+        
+        result = cursor.fetchall()
+        cursor.close()
+
+     
+        listEstadosDict = []
+        for estadoTupla in result:
+            
+            tup1 = ('id', 'nome', 'cnpj', 'endereco', 'telefone', 'email', 'FK_secretaria_UF_id', 'FK_secretaria_municipio_id') 
+            tup2 = estadoTupla
+           
+            if len(tup1) == len(tup2): 
+                res = dict(zip(tup1, tup2)) 
+                # print(res)
+
+                listEstadosDict.append(res)   
+            
+        return listEstadosDict
+
+    @classmethod
     def create_secretaria_municipal(*args, **kwargs):
         # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
         # try:

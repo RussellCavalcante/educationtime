@@ -24,6 +24,11 @@ class GetEstudante(Resource):
         return  estudanteModel.get_estudante(), 200
 
     @jwt_required()
+    def get_by_id(self, *args, **kwargs):
+        
+        return  estudanteModel.get_estudante_id(args[0]), 200
+
+    @jwt_required()
     def post_estudante(self, *args, **kwargs):
         dados = atributos.parse_args()
         

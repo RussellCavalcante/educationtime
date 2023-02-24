@@ -22,6 +22,11 @@ class GetTurma(Resource):
         return  TurmaModel.get_turma(), 200
 
     @jwt_required()
+    def get_by_id(self, *args, **kwargs):
+        
+        return  TurmaModel.get_turma_by_id(args[0]), 200
+
+    @jwt_required()
     def post_turma(self, *args, **kwargs):
         dados = atributos.parse_args()
         

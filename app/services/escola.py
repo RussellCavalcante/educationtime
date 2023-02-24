@@ -14,6 +14,10 @@ atributos.add_argument('email_escola', type=str, help="email obrigatorio")
 atributos.add_argument('cod_inep', type=int, help="campo de cod_inep")
 
 class GetEscola(Resource):
+    @jwt_required()
+    def get_by_id(self, *args, **kwargs):
+        
+        return  EscolaModel.get_escola_by_id(args[0]), 200
 
     @jwt_required()
     def get(self, *args, **kwargs):

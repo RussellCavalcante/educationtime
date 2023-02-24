@@ -51,6 +51,31 @@ class planoAulaModel():
         return listEstadosDict
 
     @classmethod
+    def get_planoaula_by_id(*args, **kwargs):
+        cursor = conn.cursor()
+ 
+        cursor.execute(f"select * from plano_aula where id = {args[1]};")
+        
+        result = cursor.fetchall()
+        cursor.close()
+
+        # print(result)
+        # input()
+        listEstadosDict = []
+        for estadoTupla in result:
+            
+            tup1 = ('id', 'bimestre_escolar','etapa_ensino', 'ano', 'FK_unidade_tematica_id', 'conteudo') 
+            tup2 = estadoTupla
+           
+            if len(tup1) == len(tup2): 
+                res = dict(zip(tup1, tup2))
+                # print(res)
+
+                listEstadosDict.append(res)   
+            
+        return listEstadosDict
+
+    @classmethod
     def create_planoaula(*args, **kwargs):
         # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
         # try:

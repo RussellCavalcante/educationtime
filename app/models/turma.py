@@ -51,6 +51,31 @@ class TurmaModel():
         return listEstadosDict
 
     @classmethod
+    def get_turma_by_id(*args, **kwargs):
+        cursor = conn.cursor()
+ 
+        cursor.execute(f"select * from turma where id = {args[1]};")
+        
+        result = cursor.fetchall()
+        cursor.close()
+
+        # print(result)
+        # input()
+        listEstadosDict = []
+        for estadoTupla in result:
+            
+            tup1 = ('id', 'cod_turma','FK_etapa_ensino_id', 'ano', 'FK_modalidade_id', 'FK_turno_id') 
+            tup2 = estadoTupla
+           
+            if len(tup1) == len(tup2): 
+                res = dict(zip(tup1, tup2))
+                # print(res)
+
+                listEstadosDict.append(res)   
+            
+        return listEstadosDict
+
+    @classmethod
     def create_turma(*args, **kwargs):
         # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
         # try:

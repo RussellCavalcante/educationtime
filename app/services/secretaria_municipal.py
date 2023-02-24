@@ -23,6 +23,11 @@ class GetSecretariamunicipal(Resource):
         return  SecretariaMunicipalModel.get_secretaria_municipal(), 200
 
     @jwt_required()
+    def get_by_id(self, *args, **kwargs):
+        
+        return  SecretariaMunicipalModel.get_secretaria_municipal_by_id(args[0]), 200
+
+    @jwt_required()
     def post(self, *args, **kwargs):
         dados = atributos.parse_args()
         

@@ -14,6 +14,10 @@ atributos.add_argument('uf', type=str, help="campo de uf")
 class GetEstado(Resource):
 
     @jwt_required()
+    def get_by_id(self,*args, **kwargs):
+        return EstadoModel.get_estados_by_id(args[0]), 200
+
+    @jwt_required()
     def get(self):
         return EstadoModel.get_estados(), 200
 

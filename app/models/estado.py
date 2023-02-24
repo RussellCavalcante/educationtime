@@ -48,6 +48,29 @@ class EstadoModel():
         return listEstadosDict
 
     @classmethod
+    def get_estados_by_id(*args, **kwargs):
+        cursor = conn.cursor()
+       
+        cursor.execute(f"select * from estado where id = {args[1]};")
+        
+        estados = cursor.fetchall()
+        
+        cursor.close()
+        
+        listEstadosDict = []
+        for estadoTupla in estados:
+            
+            tup1 = ('id', 'nome', 'uf') 
+            tup2 = estadoTupla
+           
+            if len(tup1) == len(tup2): 
+                res = dict(zip(tup1, tup2)) 
+                listEstadosDict.append(res)   
+            
+        return listEstadosDict
+
+
+    @classmethod
     def create_estado(*args, **kwargs):
         # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
         # try:

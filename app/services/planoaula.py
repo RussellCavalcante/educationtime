@@ -21,6 +21,11 @@ class GetPlanoAula(Resource):
     def get(self, *args, **kwargs):
         
         return  planoAulaModel.get_planoaula(), 200
+    
+    @jwt_required()
+    def get_by_id(self, *args, **kwargs):
+        
+        return  planoAulaModel.get_planoaula_by_id(args[0]), 200
 
     @jwt_required()
     def post_planoaula(self, *args, **kwargs):

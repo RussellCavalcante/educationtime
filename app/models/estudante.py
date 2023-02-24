@@ -50,6 +50,33 @@ class estudanteModel():
             
         return listEstadosDict
 
+
+    @classmethod
+    def get_estudante_id(*args, **kwargs):
+        cursor = conn.cursor()
+ 
+        cursor.execute(f"select * from estudante where = {args[1]};")
+        
+        result = cursor.fetchall()
+        cursor.close()
+
+        # print(result)
+        # input()
+        listEstadosDict = []
+        for estadoTupla in result:
+            
+            tup1 = ('id', 'cod_nacional_estudante','nome', 'data_nascimento', 'FK_tipo_estudante_id', 'FK_etapa_ensino_id', 'ano', 'nee', 'nome_mae_aluno') 
+            tup2 = estadoTupla
+           
+            if len(tup1) == len(tup2): 
+                res = dict(zip(tup1, tup2))
+                # print(res)
+
+                listEstadosDict.append(res)   
+            
+        return listEstadosDict
+
+
     @classmethod
     def create_estudante(*args, **kwargs):
         # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id

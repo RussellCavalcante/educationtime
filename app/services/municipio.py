@@ -14,7 +14,7 @@ atributos.add_argument('FK_UF_id', type=int, help="campo de FK_UF_id")
 class GetMunicipio(Resource):
 
     @jwt_required()
-    def get(self, *args, **kwargs):
+    def get_by_uf_id(self, *args, **kwargs):
         
         return  MunicipioModel.get_municipios_by_uf(args[0]), 200
 
@@ -22,6 +22,11 @@ class GetMunicipio(Resource):
     def get_all(self, *args, **kwargs):
         
         return  MunicipioModel.get_municipios_by(), 200
+
+    @jwt_required()
+    def get_by_id(self, *args, **kwargs):
+        
+        return  MunicipioModel.get_municipios_by_id(args[0]), 200
 
     @jwt_required()
     def post(self, *args, **kwargs):

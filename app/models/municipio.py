@@ -47,6 +47,28 @@ class MunicipioModel():
         return listEstadosDict
 
     @classmethod
+    def get_municipios_by_id(*args, **kwargs):
+        cursor = conn.cursor()
+ 
+        cursor.execute(f"select * from municipio where id={args[1]}")
+        
+        estados = cursor.fetchall()
+        cursor.close()
+
+        listEstadosDict = []
+        for estadoTupla in estados:
+            
+            tup1 = ('id', 'codigo_ibge', 'nome', 'FK_UF_id') 
+            tup2 = estadoTupla
+           
+            if len(tup1) == len(tup2): 
+                res = dict(zip(tup1, tup2)) 
+                listEstadosDict.append(res)   
+            
+        return listEstadosDict
+
+
+    @classmethod
     def get_municipios_by(*args, **kwargs):
         cursor = conn.cursor()
  

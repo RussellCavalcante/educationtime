@@ -46,6 +46,16 @@ def get_uf():
     
     return _Get_services.get()
 
+@avaliable_route.route('/uf/<int:id>', methods=['GET'])
+
+def get_uf_by(id):    
+    from app.services.estado import GetEstado
+
+    _Get_services = GetEstado()
+    
+    return _Get_services.get_by_id(id)
+
+
 @avaliable_route.route('/uf/inserir', methods=['POST'])
 
 def post_uf():    
@@ -71,7 +81,7 @@ def get_municipio_by(id):
     
     _Get_services = GetMunicipio()
     
-    return _Get_services.get(id)
+    return _Get_services.get_by_id(id)
 
 @avaliable_route.route('/municipio', methods=['GET'])
 
@@ -109,6 +119,15 @@ def get_secretaria_municipal():
     
     return _Get_services.get()
 
+@avaliable_route.route('/secretariamunicipal/<int:id>', methods=['GET'])
+
+def get_secretaria_municipal_by_id(id):    
+    from app.services.secretaria_municipal import GetSecretariamunicipal
+    
+    _Get_services = GetSecretariamunicipal()
+    
+    return _Get_services.get_by_id(id)
+
 @avaliable_route.route('/secretariamunicipal/inserir', methods=['POST'])
 
 def post_secretaria_municipal():    
@@ -135,6 +154,15 @@ def get_escola():
     _Get_services = GetEscola()
     
     return _Get_services.get()
+
+@avaliable_route.route('/escolas/<int:id>', methods=['GET'])
+
+def get_escola_by(id):    
+    from app.services.escola import GetEscola
+    
+    _Get_services = GetEscola()
+    
+    return _Get_services.get_by_id(id)
 
 @avaliable_route.route('/escolas/inserir', methods=['POST'])
 
@@ -164,6 +192,15 @@ def get_turma():
     
     return _Get_services.get()
 
+@avaliable_route.route('/turmas/<int:id>', methods=['GET'])
+
+def get_turma_by_id(id):    
+    from app.services.turma import GetTurma
+    
+    _Get_services = GetTurma()
+    
+    return _Get_services.get_by_id(id)
+
 @avaliable_route.route('/turmas/inserir', methods=['POST'])
 
 def post_turma():    
@@ -181,6 +218,15 @@ def get_estudante():
     _Get_services = GetEstudante
     
     return _Get_services.get()
+
+avaliable_route.route('/turmas/estudante/<int:id>', methods=['GET'])
+
+def get_estudante(id):    
+    from app.services.estudante import GetEstudante
+    
+    _Get_services = GetEstudante
+    
+    return _Get_services.get_by_id(id)
 
 @avaliable_route.route('/turmas/estudante/inserir', methods=['POST'])
 
@@ -238,6 +284,16 @@ def get_planoaula():
     _Get_services = GetPlanoAula()
     
     return _Get_services.get()
+
+@avaliable_route.route('/planoaula/<int:id>', methods=['GET'])
+
+def get_planoaula_by(id):    
+    from app.services.planoaula import GetPlanoAula
+    
+    _Get_services = GetPlanoAula()
+    
+    return _Get_services.get_by_id(id)
+
 
 @avaliable_route.route('/planoaula/inserir', methods=['POST'])
 
