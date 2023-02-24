@@ -37,5 +37,20 @@ class GetEstudante(Resource):
         
         estudanteModel.create_estudante(cod_nacional_estudante ,nome, data_nascimento, tipo_aluno_id, ano, nee, nome_mae_aluno)
         
-        return  {'created': nome}, 201
+        return  {'created': nome}, 200
     
+    @jwt_required()
+    def update(self, *args, **kwargs):
+        dados = atributos.parse_args()
+        
+        cod_nacional_estudante = dados['cod_nacional_estudante'].strip()
+        nome = dados['nome'].strip()
+        data_nascimento = dados['data_nascimento'].strip()
+        tipo_aluno_id = dados['tipo_aluno_id'].strip()
+        ano = dados['ano'].strip()
+        nee = dados['nee']
+        nome_mae_aluno = dados['nome_mae_aluno'].strip()
+
+        estudanteModel.create_estudante(cod_nacional_estudante ,nome, data_nascimento, tipo_aluno_id, ano, nee, nome_mae_aluno)
+        
+        return {'updated': nome }, 200

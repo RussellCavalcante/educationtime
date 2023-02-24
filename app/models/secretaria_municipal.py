@@ -64,3 +64,26 @@ class SecretariaMunicipalModel():
         # except:
         #     print(TypeError)
         # #     return None
+    
+    @classmethod
+    def update_secretaria_municipal(*args, **kwargs):
+        # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
+        # try:
+            cursor = conn.cursor()
+                # print(args)
+                # input()
+            
+            cursor.execute('''
+                        UPDATE secretaria_municipal
+                        SET nome = ?, cnpj = ?, endereco = ?,telefone = ?,email = ?,FK_secretaria_UF_id = ?, FK_secretaria_municipio_id=?
+                        WHERE id = ?
+                        ''',args[1], int(args[2]), args[3], int(args[4]), args[5], int(args[6]), int(args[7], args[8])
+                        )
+            
+            conn.commit()
+            # conn.close()
+            # return 'created'
+            # rows = cursor.fetchall()
+        # except:
+        #     print(TypeError)
+        # #     return None

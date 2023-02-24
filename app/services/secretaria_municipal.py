@@ -38,4 +38,16 @@ class GetSecretariamunicipal(Resource):
         return  {'created': nome}, 201
 
     
+    @jwt_required()
+    def update(self, *args, **kwargs):
+        dados = atributos.parse_args()
+        nome = dados['nome'].strip()
+        cnpj = dados['cnpj']
+        endereco = dados['endereco'].strip()
+        telefone = dados['telefone']
+        email = dados['email'].strip()
+        FK_secretaria_UF_id = dados['FK_secretaria_UF_id']
+        FK_secretaria_municipio_id = dados['FK_secretaria_municipio_id']
 
+        SecretariaMunicipalModel.update_secretaria_municipal(nome, cnpj, endereco, telefone, email, FK_secretaria_UF_id, FK_secretaria_municipio_id, args[0])
+        return {'updated': nome }, 200

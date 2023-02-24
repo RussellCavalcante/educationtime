@@ -57,7 +57,7 @@ def post_uf():
 
 @avaliable_route.route('/uf/update/<int:id>', methods=['put'])
 
-def post_uf(id):    
+def update_uf(id):    
     from app.services.estado import GetEstado
 
     _Get_services = GetEstado()
@@ -91,6 +91,14 @@ def post_municipio_by_uf():
     
     return _Get_services.post()
 
+@avaliable_route.route('/municipio/update/<int:id>', methods=['PUT'])
+
+def update_municipio(id):    
+    from app.services.municipio import GetMunicipio
+
+    _Get_services = GetMunicipio()
+    
+    return _Get_services.update(id)
 
 @avaliable_route.route('/secretariamunicipal', methods=['GET'])
 
@@ -110,6 +118,15 @@ def post_secretaria_municipal():
     
     return _Get_services.post()
 
+@avaliable_route.route('/secretariamunicipal/update/<int:id>', methods=['PUT'])
+
+def update_secretaria_municipal(id):    
+    from app.services.secretaria_municipal import GetSecretariamunicipal
+
+    _Get_services = GetSecretariamunicipal()
+    
+    return _Get_services.update(id)
+
 @avaliable_route.route('/escolas', methods=['GET'])
 
 def get_escola():    
@@ -127,6 +144,16 @@ def post_escola():
     _Get_services = GetEscola()
     
     return _Get_services.post()
+
+@avaliable_route.route('/escolas/update/<int:id>', methods=['PUT'])
+
+def update_escola(id):    
+    from app.services.escola import GetEscola
+
+    _Get_services = GetEscola()
+    
+    return _Get_services.update(id)
+
 
 @avaliable_route.route('/turmas', methods=['GET'])
 
@@ -174,15 +201,6 @@ def get_turno():
     
     return _Get_services.get_turno()
 
-@avaliable_route.route('/turmas/turno/inserir', methods=['POST'])
-
-def post_turno():    
-    from app.services.turma import GetTurma
-    
-    _Get_services = GetTurma()
-    
-    return _Get_services.post_turno()
-
 @avaliable_route.route('/turmas/modalidade', methods=['GET'])
 
 def get_modalidade():    
@@ -192,14 +210,6 @@ def get_modalidade():
     
     return _Get_services.get_modalidade()
 
-@avaliable_route.route('/turmas/modalidade/inserir', methods=['POST'])
-
-def post_modalidade():    
-    from app.services.turma import GetTurma
-    
-    _Get_services = GetTurma()
-    
-    return _Get_services.post_modalidade()
 
 @avaliable_route.route('/turmas/etapaEnsino', methods=['GET'])
 
@@ -209,3 +219,40 @@ def get_etapa_ensino():
     _Get_services = GetTurma()
     
     return _Get_services.get_etapa_ensino()
+
+@avaliable_route.route('/turmas/update/<int:id>', methods=['PUT'])
+
+def update_turma(id):    
+    from app.services.turma import GetTurma
+
+    _Get_services = GetTurma()
+    
+    return _Get_services.update(id)
+
+
+@avaliable_route.route('/planoaula', methods=['GET'])
+
+def get_planoaula():    
+    from app.services.planoaula import GetPlanoAula
+    
+    _Get_services = GetPlanoAula()
+    
+    return _Get_services.get()
+
+@avaliable_route.route('/planoaula/inserir', methods=['POST'])
+
+def post_plano_aula():    
+    from app.services.planoaula import GetPlanoAula
+    
+    _Get_services = GetPlanoAula()
+    
+    return _Get_services.post_planoaula()
+
+@avaliable_route.route('/planoaula/update/<int:id>', methods=['PUT'])
+
+def update_plano_aula(id):    
+    from app.services.planoaula import GetPlanoAula
+
+    _Get_services = GetPlanoAula()
+    
+    return _Get_services.update(id)

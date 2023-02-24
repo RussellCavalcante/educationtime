@@ -34,12 +34,7 @@ class GetEstado(Resource):
         dados = atributos.parse_args()
         
         nome = dados['nome'].strip()
-        # uf = dados['uf'].strip()
-        # ibge = dados['ibge']
-        # pais = dados['pais']
-        # ddd = dados['ddd']
-        print(nome, args)
-        input()
+        uf = dados['uf'].strip()
 
-        EstadoModel.update_estado(nome, args)
+        EstadoModel.update_estado(nome, uf, args[0])
         return {'updated': nome }, 200

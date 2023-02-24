@@ -67,6 +67,29 @@ class TurmaModel():
         # except:
         #     print(TypeError)
         # #     return None
+    @classmethod
+    def update_turma(*args, **kwargs):
+        # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
+        # try:
+            cursor = conn.cursor()
+                # print(args)
+                # input()
+            
+            cursor.execute('''
+                        UPDATE turma
+                        SET cod_turma = ?, FK_etapa_ensino_id = ?, ano = ?,FK_modalidade_id = ?,FK_turno_id = ?
+                        WHERE id = ?
+                        ''',args[1], int(args[2]), args[3], int(args[4]), int(args[5]), args[6])
+                        
+            
+            conn.commit()
+            # conn.close()
+            # return 'created'
+            # rows = cursor.fetchall()
+        # except:
+        #     print(TypeError)
+        # #     return None
+
 
     @classmethod
     def get_modalidade(*args, **kwargs):
@@ -115,7 +138,7 @@ class TurmaModel():
     def get_turno(*args, **kwargs):
         cursor = conn.cursor()
  
-        cursor.execute("select * from turma;")
+        cursor.execute("select * from turno;")
         
         result = cursor.fetchall()
         cursor.close()
@@ -125,7 +148,7 @@ class TurmaModel():
         listEstadosDict = []
         for estadoTupla in result:
             
-            tup1 = ('id', 'cod_turma','FK_etapa_ensino_id', 'ano', 'FK_modalidade_id', 'FK_turno_id') 
+            tup1 = ('id', 'nome') 
             tup2 = estadoTupla
            
             if len(tup1) == len(tup2): 

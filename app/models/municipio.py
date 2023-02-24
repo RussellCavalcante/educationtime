@@ -86,3 +86,25 @@ class MunicipioModel():
         #     print(TypeError)
         # #     return None
 
+
+    @classmethod
+    def update_municipio(*args, **kwargs):
+        # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
+        # try:
+            cursor = conn.cursor()
+            # print(args)
+            # input()
+            
+            cursor.execute('''
+                        UPDATE municipio
+                        SET codigo_ibge = ?, nome = ? , FK_UF_id = ?
+                        WHERE id = ?
+                        ''',args[1], args[2], args[3], args[4])
+            
+            conn.commit()
+            # conn.close()
+            # return 'created'
+            # rows = cursor.fetchall()
+        # except:
+        #     print(TypeError)
+        # #     return None

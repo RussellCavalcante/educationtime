@@ -66,4 +66,28 @@ class EscolaModel():
             # rows = cursor.fetchall()
         # except:
         #     print(TypeError)
+        # #     return None 
+    
+    @classmethod
+    def update_escola(*args, **kwargs):
+        # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
+        # try:
+            cursor = conn.cursor()
+                # print(args)
+                # input()
+            
+            cursor.execute('''
+                        UPDATE escola
+                        SET nome_escola = ?, endereco = ?, email_escola = ?,telefone = ?,cod_inep = ?
+                        WHERE id = ?
+                        ''',args[1], int(args[2]), args[3], int(args[4]), int(args[5]), args[6])
+                        
+            
+            conn.commit()
+            # conn.close()
+            # return 'created'
+            # rows = cursor.fetchall()
+        # except:
+        #     print(TypeError)
         # #     return None
+

@@ -36,3 +36,14 @@ class GetMunicipio(Resource):
         
         MunicipioModel.create_municipio(codigo_ibge, nome, FK_UF_id)
         return {'created': nome }, 200
+
+    @jwt_required()
+    def update(self, *args, **kwargs):
+        dados = atributos.parse_args()
+        
+        codigo_ibge = dados['codigo_ibge'].strip()
+        nome = dados['nome'].strip()
+        FK_UF_id = dados['FK_UF_id']
+
+        MunicipioModel.update_municipio(codigo_ibge, nome, FK_UF_id, args[0])
+        return {'updated': nome }, 200

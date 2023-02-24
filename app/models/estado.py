@@ -70,14 +70,14 @@ class EstadoModel():
         # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
         # try:
             cursor = conn.cursor()
-            # print(args[1], args[2])
-            # input()
+                # print(args)
+                # input()
             
             cursor.execute('''
                         UPDATE estado
-                        SET nome = ?
+                        SET nome = ?, uf = ?
                         WHERE id = ?
-                        ''',args[1], args[2])
+                        ''',args[1], args[2], args[3])
             
             conn.commit()
             # conn.close()
