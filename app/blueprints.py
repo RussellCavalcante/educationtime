@@ -137,6 +137,25 @@ def post_turma():
     
     return _Get_services.post_turma()
 
+@avaliable_route.route('/turmas/estudante', methods=['GET'])
+
+def get_estudante():    
+    from app.services.estudante import GetEstudante
+    
+    _Get_services = GetEstudante
+    
+    return _Get_services.get()
+
+@avaliable_route.route('/turmas/estudante/inserir', methods=['POST'])
+
+def post_estudante():    
+    from app.services.estudante import GetEstudante
+    
+    _Get_services = GetEstudante
+    
+    return _Get_services.post_estudante()
+
+
 @avaliable_route.route('/turmas/turno', methods=['GET'])
 
 def get_turno():    
@@ -181,12 +200,3 @@ def get_etapa_ensino():
     _Get_services = GetTurma()
     
     return _Get_services.get_etapa_ensino()
-
-@avaliable_route.route('/turmas/etapaEnsino/inserir', methods=['POST'])
-
-def post_etapa_ensino():    
-    from app.services.turma import GetTurma
-    
-    _Get_services = GetTurma()
-    
-    return _Get_services.post_etapa_ensino()

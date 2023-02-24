@@ -69,13 +69,3 @@ class GetTurma(Resource):
         
         return  TurmaModel.get_etapa_ensino(), 200
 
-    @jwt_required()
-    def post_etapa_ensino(self, *args, **kwargs):
-        dados = atributos.parse_args()
-        
-        nome = dados['nome'].strip()
-        
-        TurmaModel.create_etapa_ensino(nome)
-        
-        return  {'created': nome}, 201
-
