@@ -29,3 +29,17 @@ class GetEstado(Resource):
         
         EstadoModel.create_estado(nome, uf)
         return {'created': nome }, 200
+
+    def update(self, *args, **kwargs):
+        dados = atributos.parse_args()
+        
+        nome = dados['nome'].strip()
+        # uf = dados['uf'].strip()
+        # ibge = dados['ibge']
+        # pais = dados['pais']
+        # ddd = dados['ddd']
+        print(nome, args)
+        input()
+
+        EstadoModel.update_estado(nome, args)
+        return {'updated': nome }, 200

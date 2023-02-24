@@ -55,6 +55,15 @@ def post_uf():
     
     return _Get_services.post()
 
+@avaliable_route.route('/uf/update/<int:id>', methods=['put'])
+
+def post_uf(id):    
+    from app.services.estado import GetEstado
+
+    _Get_services = GetEstado()
+    
+    return _Get_services.update()
+
 @avaliable_route.route('/municipio/<int:id>', methods=['GET'])
 
 def get_municipio_by(id):    
