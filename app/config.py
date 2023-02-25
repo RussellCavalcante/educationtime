@@ -21,7 +21,7 @@ server.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 server.config['JWT_SECRET_KEY'] = 'DontTellAnyone'
 server.config['JWT_BLACKLIST_ENABLED'] = True
-server.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=24)
+server.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=999)
 
 # @server.before_first_request
 

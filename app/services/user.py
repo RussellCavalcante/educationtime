@@ -18,6 +18,7 @@ from app.blacklist import BLACKLIST
 atributos = reqparse.RequestParser()
 atributos.add_argument('username', type=str, required=True, help="campo de nome do usuario e obrigatorio")
 atributos.add_argument('password', type=str, required=True, help="campo de senha e obrigatorio")
+atributos.add_argument('nome', type=str, help="campo obrigatorio")
 atributos.add_argument('email', type=str, help="campo de email e obrigatorio")
 atributos.add_argument('phone', type=str, help="campo de telefone")
 
@@ -51,6 +52,8 @@ class UserRegister(Resource):
 
         username = dados['username']
         password = dados['password']
+        nome = dados['nome']
+        email = dados['email']
         
         if UserModel.find_by_login(dados['username']):
             return {'message': "Esse usuario '{}' ja existe.".format(dados['username'])}
@@ -70,7 +73,7 @@ class UserRegister(Resource):
 
         # user = UserModel(**dados)
 
-        UserModel.create_user(username ,encrypted_password, salt)
+        UserModel.create_user(nome , email ,username ,encrypted_password, salt)
         # user.save_user()
 
         return {'message':'Usuario Criado com sucesso!'}, 201
@@ -88,6 +91,7 @@ class UserLogin(Resource):
         username = dados['username'].strip()
         password = dados['password'].strip()
 
+
         user = UserModel.find_by_login(username)
         
         salt = UserModel.find_salt_by_id(user)
@@ -97,7 +101,9 @@ class UserLogin(Resource):
     
         token_de_acesso = create_access_token(identity=1)
         
-        return {'acess_token': token_de_acesso}, 200
+        return {'acess_token': token_de_acesso,
+                'cpf': username,
+                'id': user[0]}, 200
             
 
 class UserLogout(Resource):

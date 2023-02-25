@@ -312,3 +312,40 @@ def update_plano_aula(id):
     _Get_services = GetPlanoAula()
     
     return _Get_services.update(id)
+
+@avaliable_route.route('/rotinaaula', methods=['GET'])
+
+def get_rotinaula():    
+    from app.services.rotinaula import GetrotinaAula
+    
+    _Get_services = GetrotinaAula()
+    
+    return _Get_services.get()
+
+@avaliable_route.route('/rotinaaula/<int:id>', methods=['GET'])
+
+def get_rotinaula_by(id):    
+    from app.services.rotinaula import GetrotinaAula
+    
+    _Get_services = GetrotinaAula()
+    
+    return _Get_services.get_by_id(id)
+
+
+@avaliable_route.route('/rotinaaula/inserir', methods=['POST'])
+
+def post_rotin_aula():    
+    from app.services.rotinaula import GetrotinaAula
+    
+    _Get_services = GetrotinaAula()
+    
+    return _Get_services.post_rotinaoaula()
+
+@avaliable_route.route('/rotinaaula/update/<int:id>', methods=['PUT'])
+
+def update_rotin_aula(id):    
+    from app.services.rotinaula import GetrotinaAula
+
+    _Get_services = GetrotinaAula()
+    
+    return _Get_services.update(id)

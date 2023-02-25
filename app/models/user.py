@@ -83,10 +83,10 @@ class UserModel():
         # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
         cursor = conn.cursor()
  
-        user = cursor.execute(f"select * from users where cpf={username};")
+        cursor.execute("select * from users where cpf = ?;", username)
 
         row = cursor.fetchall()
-
+        
         cursor.commit()
         
         # print('Rows --->>',row, type(row) )
@@ -104,7 +104,7 @@ class UserModel():
             # input()
             conn.autocommit = True
 
-            cursor.execute("insert into users ( cpf, password, salt) values(?,?,?)",args[1], args[2], args[3])
+            cursor.execute("insert into users (nome , email, cpf, password, salt) values(?,?,?,?,?)",args[1], args[2], args[3], args[4], args[5])
             
             conn.commit()
             # conn.close()
