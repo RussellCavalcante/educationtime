@@ -21,6 +21,8 @@ atributos.add_argument('password', type=str, required=True, help="campo de senha
 atributos.add_argument('nome', type=str, help="campo obrigatorio")
 atributos.add_argument('email', type=str, help="campo de email e obrigatorio")
 atributos.add_argument('phone', type=str, help="campo de telefone")
+atributos.add_argument('roles', type=str, help="campo de roles")
+
 
 class User(Resource):
     #/usuarios/{user_id}
@@ -54,6 +56,7 @@ class UserRegister(Resource):
         password = dados['password']
         nome = dados['nome']
         email = dados['email']
+        roles = dados['roles']
         
         if UserModel.find_by_login(dados['username']):
             return {'message': "Esse usuario '{}' ja existe.".format(dados['username'])}
@@ -73,7 +76,7 @@ class UserRegister(Resource):
 
         # user = UserModel(**dados)
 
-        UserModel.create_user(nome , email ,username ,encrypted_password, salt)
+        UserModel.create_user(nome , email ,username ,encrypted_password, salt, roles)
         # user.save_user()
 
         return {'message':'Usuario Criado com sucesso!'}, 201

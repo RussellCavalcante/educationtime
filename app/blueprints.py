@@ -259,7 +259,7 @@ def get_modalidade():
 
 @avaliable_route.route('/turmas/etapaEnsino', methods=['GET'])
 
-def get_etapa_ensino():    
+def get_turma_etapa_ensino():    
     from app.services.turma import GetTurma
     
     _Get_services = GetTurma()
@@ -390,18 +390,18 @@ def update_momento(id):
 @avaliable_route.route('/rotina_aula_momento', methods=['GET'])
 
 def get_rotina_aula_momento():    
-    from app.services.rotina_aula_momento import GetMomento
+    from app.services.rotina_aula_momento import GetRotinaAulaMomento
     
-    _Get_services = GetMomento()
+    _Get_services = GetRotinaAulaMomento()
     
     return _Get_services.get()
 
 @avaliable_route.route('/rotina_aula_momento/<int:id>', methods=['GET'])
 
 def get_rotina_aula_momento_by(id):    
-    from app.services.rotina_aula_momento import GetMomento
+    from app.services.rotina_aula_momento import GetRotinaAulaMomento
     
-    _Get_services = GetMomento()
+    _Get_services = GetRotinaAulaMomento()
     
     return _Get_services.get_by_id(id)
 
@@ -409,17 +409,62 @@ def get_rotina_aula_momento_by(id):
 @avaliable_route.route('/rotina_aula_momento/inserir', methods=['POST'])
 
 def post_rotina_aula_momento():    
-    from app.services.rotina_aula_momento import GetMomento
+    from app.services.rotina_aula_momento import GetRotinaAulaMomento
     
-    _Get_services = GetMomento()
+    _Get_services = GetRotinaAulaMomento()
     
     return _Get_services.post_momemnto()
 
 @avaliable_route.route('/rotina_aula_momento/update/<int:id>', methods=['PUT'])
 
 def update_rotina_aula_momento(id):    
-    from app.services.rotina_aula_momento import GetMomento
+    from app.services.rotina_aula_momento import GetRotinaAulaMomento
 
-    _Get_services = GetMomento()
+    _Get_services = GetRotinaAulaMomento()
     
     return _Get_services.update(id)
+
+@avaliable_route.route('/etapa_ensino', methods=['GET'])
+
+def get_etapa_ensino():    
+    from app.services.etapa_ensino import GetEtapaEnsino
+    
+    _Get_services = GetEtapaEnsino()
+    
+    return _Get_services.get()
+
+@avaliable_route.route('/etapa_ensino/<int:id>', methods=['GET'])
+
+def get_etapa_ensino_by(id):    
+    from app.services.etapa_ensino import GetEtapaEnsino
+    
+    _Get_services = GetEtapaEnsino()
+    
+    return _Get_services.get_by_id(id)
+
+@avaliable_route.route('/grau_etapa_ensino', methods=['GET'])
+
+def get_grau_etapa_ensino():    
+    from app.services.etapa_ensino import GetEtapaEnsino
+    
+    _Get_services = GetEtapaEnsino()
+    
+    return _Get_services.get_grau_etapa_ensino()
+
+@avaliable_route.route('/grau_etapa_ensino/<int:id>', methods=['GET'])
+
+def get_grau_etapa_ensino_by(id):    
+    from app.services.etapa_ensino import GetEtapaEnsino
+    
+    _Get_services = GetEtapaEnsino()
+    
+    return _Get_services.get_grau_etapa_ensino_by_id(id)
+
+@avaliable_route.route('/grau_etapa_ensino/fk_etapa_ensino/<int:id>', methods=['GET'])
+
+def get_grau_etapa_ensino_by_fk_etapa_ensino(id):    
+    from app.services.etapa_ensino import GetEtapaEnsino
+    
+    _Get_services = GetEtapaEnsino()
+    
+    return _Get_services.get_grau_etapa_ensino_by_FK_etapa_ensino(id)

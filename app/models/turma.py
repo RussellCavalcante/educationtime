@@ -206,7 +206,7 @@ class TurmaModel():
     def get_etapa_ensino(*args, **kwargs):
         cursor = conn.cursor()
  
-        cursor.execute("select * from etapa_ensinoS;")
+        cursor.execute("select * from etapa_ensino;")
         
         result = cursor.fetchall()
         cursor.close()

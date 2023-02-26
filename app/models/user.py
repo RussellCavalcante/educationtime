@@ -86,7 +86,7 @@ class UserModel():
         cursor.execute("select * from users where cpf = ?;", username)
 
         row = cursor.fetchall()
-        
+
         cursor.commit()
         
         # print('Rows --->>',row, type(row) )
@@ -104,7 +104,7 @@ class UserModel():
             # input()
             conn.autocommit = True
 
-            cursor.execute("insert into users (nome , email, cpf, password, salt) values(?,?,?,?,?)",args[1], args[2], args[3], args[4], args[5])
+            cursor.execute("insert into users (nome , email, cpf, password, salt, roles) values(?,?,?,?,?)",args[1], args[2], args[3], args[4], args[5], args[5])
             
             conn.commit()
             # conn.close()
