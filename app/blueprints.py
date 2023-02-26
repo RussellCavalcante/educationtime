@@ -349,3 +349,77 @@ def update_rotin_aula(id):
     _Get_services = GetrotinaAula()
     
     return _Get_services.update(id)
+
+@avaliable_route.route('/rotinaaula/momento', methods=['GET'])
+
+def get_momento():    
+    from app.services.momento import GetMomento
+    
+    _Get_services = GetMomento()
+    
+    return _Get_services.get()
+
+@avaliable_route.route('/rotinaaula/momento/<int:id>', methods=['GET'])
+
+def get_momento_by(id):    
+    from app.services.momento import GetMomento
+    
+    _Get_services = GetMomento()
+    
+    return _Get_services.get_by_id(id)
+
+
+@avaliable_route.route('/rotinaaula/momento/inserir', methods=['POST'])
+
+def post_momento():    
+    from app.services.momento import GetMomento
+    
+    _Get_services = GetMomento()
+    
+    return _Get_services.post_momemnto()
+
+@avaliable_route.route('/rotinaaula/momento/update/<int:id>', methods=['PUT'])
+
+def update_momento(id):    
+    from app.services.momento import GetMomento
+
+    _Get_services = GetMomento()
+    
+    return _Get_services.update(id)
+
+@avaliable_route.route('/rotina_aula_momento', methods=['GET'])
+
+def get_rotina_aula_momento():    
+    from app.services.rotina_aula_momento import GetMomento
+    
+    _Get_services = GetMomento()
+    
+    return _Get_services.get()
+
+@avaliable_route.route('/rotina_aula_momento/<int:id>', methods=['GET'])
+
+def get_rotina_aula_momento_by(id):    
+    from app.services.rotina_aula_momento import GetMomento
+    
+    _Get_services = GetMomento()
+    
+    return _Get_services.get_by_id(id)
+
+
+@avaliable_route.route('/rotina_aula_momento/inserir', methods=['POST'])
+
+def post_rotina_aula_momento():    
+    from app.services.rotina_aula_momento import GetMomento
+    
+    _Get_services = GetMomento()
+    
+    return _Get_services.post_momemnto()
+
+@avaliable_route.route('/rotina_aula_momento/update/<int:id>', methods=['PUT'])
+
+def update_rotina_aula_momento(id):    
+    from app.services.rotina_aula_momento import GetMomento
+
+    _Get_services = GetMomento()
+    
+    return _Get_services.update(id)

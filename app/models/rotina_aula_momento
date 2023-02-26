@@ -5,7 +5,7 @@ import re
 from app import conn
 
 
-class SecretariaMunicipalModel():
+class MomentoModel():
     # __tablename__ = 'estado'
     
 
@@ -26,23 +26,24 @@ class SecretariaMunicipalModel():
 
 
     @classmethod
-    def get_secretaria_municipal(*args, **kwargs):
+    def get_rotina_aula_momento(*args, **kwargs):
         cursor = conn.cursor()
  
-        cursor.execute("select * from secretaria_municipal")
+        cursor.execute("select * from rotina_aula_momento;")
         
         result = cursor.fetchall()
         cursor.close()
 
-     
+        # print(result)
+        # input()
         listEstadosDict = []
         for estadoTupla in result:
             
-            tup1 = ('id', 'nome', 'cnpj', 'endereco', 'telefone', 'email', 'FK_secretaria_UF_id', 'FK_secretaria_municipio_id') 
+            tup1 = ('id', 'FK_rotina_aula_id','FK_momento_id') 
             tup2 = estadoTupla
            
             if len(tup1) == len(tup2): 
-                res = dict(zip(tup1, tup2)) 
+                res = dict(zip(tup1, tup2))
                 # print(res)
 
                 listEstadosDict.append(res)   
@@ -50,36 +51,65 @@ class SecretariaMunicipalModel():
         return listEstadosDict
 
     @classmethod
-    def get_secretaria_municipal_by_id(*args, **kwargs):
+    def get_rotina_aula_momento_by_id(*args, **kwargs):
         cursor = conn.cursor()
  
-        cursor.execute(f"select * from secretaria_municipal where id = {args[1]}")
+        cursor.execute(f"select * from rotina_aula_momento where id = {args[1]};")
         
         result = cursor.fetchall()
         cursor.close()
 
-     
+        # print(result)
+        # input()
         listEstadosDict = []
         for estadoTupla in result:
             
-            tup1 = ('id', 'nome', 'cnpj', 'endereco', 'telefone', 'email', 'FK_secretaria_UF_id', 'FK_secretaria_municipio_id') 
+            tup1 = ('id', 'FK_rotina_aula_id','FK_momento_id') 
             tup2 = estadoTupla
            
             if len(tup1) == len(tup2): 
-                res = dict(zip(tup1, tup2)) 
+                res = dict(zip(tup1, tup2))
+                # print(res)
+
+                listEstadosDict.append(res)   
+            
+        return listEstadosDict
+    
+    @classmethod
+    def get_rotina_aula_momento_by_FK_rotina_aula_id(*args, **kwargs):
+        cursor = conn.cursor()
+ 
+        cursor.execute(f"select * from momento where FK_rotina_aula_id = '{args[1]}';")
+        
+        result = cursor.fetchall()
+        cursor.close()
+
+        # print(result)
+        # input()
+        listEstadosDict = []
+        for estadoTupla in result:
+            
+            tup1 = ('id', 'FK_rotina_aula_id','FK_momento_id') 
+            tup2 = estadoTupla
+           
+            if len(tup1) == len(tup2): 
+                res = dict(zip(tup1, tup2))
                 # print(res)
 
                 listEstadosDict.append(res)   
             
         return listEstadosDict
 
+
     @classmethod
-    def create_secretaria_municipal(*args, **kwargs):
+    def create_rotina_aula_momento(*args, **kwargs):
         # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
         # try:
             cursor = conn.cursor()
-    
-            cursor.execute("insert into secretaria_municipal ( nome, cnpj, endereco, telefone, email, FK_secretaria_UF_id, FK_secretaria_municipio_id) values(?,?,?,?,?,?,?)",args[1], int(args[2]), args[3], int(args[4]), args[5], int(args[6]), int(args[7]))
+            # print(args)
+            # input()
+            
+            cursor.execute("insert into rotina_aula_momento ( FK_rotina_aula_id, FK_momento_id ) values(?,?);",int(args[1]), int(args[2]))
             
             conn.commit()
             # conn.close()
@@ -88,21 +118,20 @@ class SecretariaMunicipalModel():
         # except:
         #     print(TypeError)
         # #     return None
-    
+
     @classmethod
-    def update_secretaria_municipal(*args, **kwargs):
+    def update_rotina_aula_momento(*args, **kwargs):
         # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
         # try:
             cursor = conn.cursor()
-                # print(args)
-                # input()
+            # print(args)
+            # input()
             
             cursor.execute('''
-                        UPDATE secretaria_municipal
-                        SET nome = ?, cnpj = ?, endereco = ?,telefone = ?,email = ?,FK_secretaria_UF_id = ?, FK_secretaria_municipio_id=?
+                        UPDATE rotina_aula_momento
+                        SET FK_rotina_aula_id = ?, FK_momento_id = ? 
                         WHERE id = ?
-                        ''',args[1], int(args[2]), args[3], int(args[4]), args[5], int(args[6]), int(args[7]), args[8]
-                        )
+                        ''',int(args[1]), int(args[2]))
             
             conn.commit()
             # conn.close()
