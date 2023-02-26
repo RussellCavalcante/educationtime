@@ -54,7 +54,7 @@ class EtapaEnsinoModel():
     def get_etapa_ensino_by_id(*args, **kwargs):
         cursor = conn.cursor()
  
-        cursor.execute(f"select * from etapa_ensino where id = {args[1]};")
+        cursor.execute(f"select * from grau_etapa_ensino where id = {args[1]};")
         
         result = cursor.fetchall()
         cursor.close()
@@ -64,7 +64,7 @@ class EtapaEnsinoModel():
         listEstadosDict = []
         for estadoTupla in result:
             
-            tup1 = ('id', 'nome') 
+            tup1 = ('id', 'nome_grau', 'FK_etapa_ensino') 
             tup2 = estadoTupla
            
             if len(tup1) == len(tup2): 
