@@ -65,7 +65,7 @@ def post_uf():
     
     return _Get_services.post()
 
-@avaliable_route.route('/uf/update/<int:id>', methods=['put'])
+@avaliable_route.route('/uf/update/<int:id>', methods=['PUT'])
 
 def update_uf(id):    
     from app.services.estado import GetEstado
@@ -215,7 +215,7 @@ def post_turma():
 def get_estudante():    
     from app.services.estudante import GetEstudante
     
-    _Get_services = GetEstudante
+    _Get_services = GetEstudante()
     
     return _Get_services.get()
 
@@ -224,7 +224,7 @@ avaliable_route.route('/turmas/estudante/<int:id>', methods=['GET'])
 def get_estudante(id):    
     from app.services.estudante import GetEstudante
     
-    _Get_services = GetEstudante
+    _Get_services = GetEstudante()
     
     return _Get_services.get_by_id(id)
 
@@ -233,16 +233,16 @@ def get_estudante(id):
 def post_estudante():    
     from app.services.estudante import GetEstudante
     
-    _Get_services = GetEstudante
+    _Get_services = GetEstudante()
     
     return _Get_services.post_estudante()
 
-@avaliable_route.route('/turmas/estudante/update/<int:id>', methods=['POST'])
+@avaliable_route.route('/turmas/estudante/update/<int:id>', methods=['PUT'])
 
 def update_estudante(id):    
     from app.services.estudante import GetEstudante
     
-    _Get_services = GetEstudante
+    _Get_services = GetEstudante()
     
     return _Get_services.update(id)
 

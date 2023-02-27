@@ -8,10 +8,11 @@ from app.blacklist import BLACKLIST
 
 atributos = reqparse.RequestParser()
 atributos.add_argument('cod_nacional_estudante', type=str, help="campo obrigatorio ")
-atributos.add_argument('nome', type=int, help="campo obrigatorio")
+atributos.add_argument('nome', type=str, help="campo obrigatorio")
 atributos.add_argument('data_nascimento', type=str, help="campo obrigatorio ")
-atributos.add_argument('tipo_aluno_id', type=int, help="campo obrigatorio ")
-atributos.add_argument('etapa_ensino_id', type=int, help="campo obrigatorio ")
+atributos.add_argument('tipo_aluno', type=str, help="campo obrigatorio ")
+atributos.add_argument('FK_etapa_ensino_id', type=int, help="campo obrigatorio ")
+atributos.add_argument('FK_turma_id', type=int, help="campo obrigatorio ")
 atributos.add_argument('ano', type=str, help="campo obrigatorio ano ")
 atributos.add_argument('nee', type=str, help="campo obrigatorio nee ")
 atributos.add_argument('nome_mae_aluno', type=str, help="campo obrigatorio nome_mae_aluno")
@@ -35,12 +36,14 @@ class GetEstudante(Resource):
         cod_nacional_estudante = dados['cod_nacional_estudante'].strip()
         nome = dados['nome'].strip()
         data_nascimento = dados['data_nascimento'].strip()
-        tipo_aluno_id = dados['tipo_aluno_id'].strip()
+        tipo_aluno = dados['tipo_aluno']
+        FK_etapa_ensino_id = dados['FK_etapa_ensino_id']
+        FK_turma_id = dados['FK_turma_id']
         ano = dados['ano'].strip()
         nee = dados['nee']
         nome_mae_aluno = dados['nome_mae_aluno'].strip()
         
-        estudanteModel.create_estudante(cod_nacional_estudante ,nome, data_nascimento, tipo_aluno_id, ano, nee, nome_mae_aluno)
+        estudanteModel.create_estudante(cod_nacional_estudante ,nome, data_nascimento, tipo_aluno,FK_etapa_ensino_id, FK_turma_id , ano, nee, nome_mae_aluno)
         
         return  {'created': nome}, 200
     
@@ -51,11 +54,13 @@ class GetEstudante(Resource):
         cod_nacional_estudante = dados['cod_nacional_estudante'].strip()
         nome = dados['nome'].strip()
         data_nascimento = dados['data_nascimento'].strip()
-        tipo_aluno_id = dados['tipo_aluno_id']
+        tipo_aluno = dados['tipo_aluno']
+        FK_etapa_ensino_id = dados['FK_etapa_ensino_id']
+        FK_turma_id = dados['FK_turma_id']
         ano = dados['ano'].strip()
         nee = dados['nee']
         nome_mae_aluno = dados['nome_mae_aluno'].strip()
 
-        estudanteModel.update_estudante(cod_nacional_estudante ,nome, data_nascimento, tipo_aluno_id, ano, nee, nome_mae_aluno, args[0])
+        estudanteModel.update_estudante(cod_nacional_estudante ,nome, data_nascimento, tipo_aluno,FK_etapa_ensino_id, FK_turma_id , ano, nee, nome_mae_aluno, args[0])
         
         return {'updated': nome }, 200

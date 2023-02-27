@@ -39,7 +39,7 @@ class estudanteModel():
         listEstadosDict = []
         for estadoTupla in result:
             
-            tup1 = ('id', 'cod_nacional_estudante','nome', 'data_nascimento', 'FK_tipo_estudante_id', 'FK_etapa_ensino_id', 'ano', 'nee', 'nome_mae_aluno') 
+            tup1 = ('id', 'cod_nacional_estudante','nome', 'data_nascimento', 'tipo_aluno', 'FK_etapa_ensino_id', 'FK_turma_id', 'ano', 'nee', 'nome_mae_aluno') 
             tup2 = estadoTupla
            
             if len(tup1) == len(tup2): 
@@ -65,7 +65,7 @@ class estudanteModel():
         listEstadosDict = []
         for estadoTupla in result:
             
-            tup1 = ('id', 'cod_nacional_estudante','nome', 'data_nascimento', 'FK_tipo_estudante_id', 'FK_etapa_ensino_id', 'ano', 'nee', 'nome_mae_aluno') 
+            tup1 = ('id', 'cod_nacional_estudante','nome', 'data_nascimento', 'tipo_aluno', 'FK_etapa_ensino_id', 'FK_turma_id', 'ano', 'nee', 'nome_mae_aluno') 
             tup2 = estadoTupla
            
             if len(tup1) == len(tup2): 
@@ -85,7 +85,7 @@ class estudanteModel():
             # print(args[1], args[2], args[3])
             # input()
             
-            cursor.execute("insert into estudante ( cod_nacional_estudante, nome , data_nascimento, FK_tipo_estudante_id, FK_etapa_ensino_id, ano, nee, nome_mae_aluno) values(?,?,?,?,?,?,?)",int(args[1]), args[2], args[3], int(args[4]), int(args[5]), args[6], args[7])
+            cursor.execute("insert into estudante ( cod_nacional_estudante, nome , data_nascimento, tipo_aluno, FK_etapa_ensino_id, FK_turma_id, ano, nee, nome_mae_aluno) values(?,?,?,?,?,?,?,?,?)",int(args[1]), args[2], args[3], args[4], int(args[5]), args[6], args[7], args[8], args[9])
             
             conn.commit()
             # conn.close()
@@ -100,14 +100,14 @@ class estudanteModel():
         # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
         # try:
             cursor = conn.cursor()
-            print(args)
-            input()
+            # print(args)
+            # input()
             
             cursor.execute('''
                         UPDATE estudante
-                        SET cod_nacional_estudante = ?, nome = ?, data_nascimento = ?, nome = ?, FK_tipo_estudante_id = ?, FK_etapa_ensino_id = ?,  ano = ?, nee = ?, nome_mae_aluno = ? 
+                        SET cod_nacional_estudante = ?, nome = ?, data_nascimento = ?, tipo_aluno = ?, FK_etapa_ensino_id = ?,FK_turma_id = ? , ano = ?, nee = ?, nome_mae_aluno = ? 
                         WHERE id = ?
-                        ''',int(args[1]), args[2], args[3], int(args[4]), int(args[5]), args[6], args[7], args[8])
+                        ''',int(args[1]), args[2], args[3], args[4], int(args[5]), int(args[6]), args[7], args[8], args[9], args[10])
             
             conn.commit()
             # conn.close()
