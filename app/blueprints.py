@@ -468,3 +468,32 @@ def get_grau_etapa_ensino_by_fk_etapa_ensino(id):
     _Get_services = GetEtapaEnsino()
     
     return _Get_services.get_grau_etapa_ensino_by_FK_etapa_ensino(id)
+
+@avaliable_route.route('/funcoes', methods=['GET'])
+
+def get_funcoes():    
+    from app.services.funcoes import GetFuncoes
+    
+    _Get_services = GetFuncoes()
+    
+    return _Get_services.get()
+
+@avaliable_route.route('/funcoes/<int:id>', methods=['GET'])
+
+def get_funcoes_by(id):    
+    from app.services.funcoes import GetFuncoes
+    
+    _Get_services = GetFuncoes()
+    
+    return _Get_services.get_by_id(id)
+
+
+@avaliable_route.route('/profissionalEducacao/inserir', methods=['POST'])
+
+
+def post_profissional_educacao():    
+    from app.services.user import ProfissionalEducacaoRegister
+    
+    _Get_services = ProfissionalEducacaoRegister()
+    
+    return _Get_services.post_profisional_educacao()

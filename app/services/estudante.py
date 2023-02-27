@@ -56,6 +56,6 @@ class GetEstudante(Resource):
         nee = dados['nee']
         nome_mae_aluno = dados['nome_mae_aluno'].strip()
 
-        estudanteModel.create_estudante(cod_nacional_estudante ,nome, data_nascimento, tipo_aluno_id, ano, nee, nome_mae_aluno)
+        estudanteModel.update_estudante(cod_nacional_estudante ,nome, data_nascimento, tipo_aluno_id, ano, nee, nome_mae_aluno, args[0])
         
         return {'updated': nome }, 200

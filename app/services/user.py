@@ -17,7 +17,7 @@ from app.blacklist import BLACKLIST
 
 atributos = reqparse.RequestParser()
 atributos.add_argument('username', type=str, required=True, help="campo de nome do usuario e obrigatorio")
-atributos.add_argument('password', type=str, required=True, help="campo de senha e obrigatorio")
+atributos.add_argument('password', type=str, help="campo de senha e obrigatorio")
 atributos.add_argument('nome', type=str, help="campo obrigatorio")
 atributos.add_argument('email', type=str, help="campo de email e obrigatorio")
 atributos.add_argument('phone', type=str, help="campo de telefone")
@@ -56,6 +56,38 @@ class UserRegister(Resource):
         password = dados['password']
         nome = dados['nome']
         email = dados['email']
+        
+        if UserModel.find_by_login(dados['username']):
+            return {'message': "Esse usuario '{}' ja existe.".format(dados['username'])}
+        
+        salt = UserModel.get_new_salt()
+
+        # print(username, password)
+        # input()
+        
+
+        encrypted_password = UserModel.password_encrypted(password, salt)
+                
+        if not UserModel.email_validator(dados['email']):
+            return {'message': "Email '{}' esta invalido.".format(dados["email"])}, 400
+
+        # dados = {**dados, **{ 'salt': salt, 'password': encrypted_password }}
+
+        # user = UserModel(**dados)
+
+        UserModel.create_user(nome , email ,username ,encrypted_password, salt)
+        # user.save_user()
+
+        return {'message':'Usuario Criado com sucesso!'}, 201
+
+class ProfissionalEducacaoRegister(Resource):
+    def post_profisional_educacao(self):
+        dados = atributos.parse_args()
+
+        username = dados['username']
+        password = dados['password']
+        nome = dados['nome']
+        email = dados['email']
         roles = dados['funcao']
         
         if UserModel.find_by_login(dados['username']):
@@ -76,11 +108,10 @@ class UserRegister(Resource):
 
         # user = UserModel(**dados)
 
-        UserModel.create_user(nome , email ,username ,encrypted_password, salt, roles)
+        UserModel.create_profissional_educacao_(nome , email ,username ,encrypted_password, salt, roles)
         # user.save_user()
 
         return {'message':'Usuario Criado com sucesso!'}, 201
-
 
         
 
