@@ -237,6 +237,16 @@ def post_estudante():
     
     return _Get_services.post_estudante()
 
+@avaliable_route.route('/turmas/estudante/update/<int:id>', methods=['POST'])
+
+def update_estudante(id):    
+    from app.services.estudante import GetEstudante
+    
+    _Get_services = GetEstudante
+    
+    return _Get_services.update(id)
+
+
 
 @avaliable_route.route('/turmas/turno', methods=['GET'])
 

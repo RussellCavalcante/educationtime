@@ -51,7 +51,7 @@ class GetEstudante(Resource):
         cod_nacional_estudante = dados['cod_nacional_estudante'].strip()
         nome = dados['nome'].strip()
         data_nascimento = dados['data_nascimento'].strip()
-        tipo_aluno_id = dados['tipo_aluno_id'].strip()
+        tipo_aluno_id = dados['tipo_aluno_id']
         ano = dados['ano'].strip()
         nee = dados['nee']
         nome_mae_aluno = dados['nome_mae_aluno'].strip()
