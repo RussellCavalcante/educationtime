@@ -39,7 +39,7 @@ class EscolaModel():
         listEstadosDict = []
         for estadoTupla in result:
             
-            tup1 = ('id', 'nome_escola','endereco', 'email_escola', 'telefone', 'cod_inep') 
+            tup1 = ('id', 'nome_escola','endereco', 'email_escola', 'telefone', 'cod_inep', 'accept') 
             tup2 = estadoTupla
            
             if len(tup1) == len(tup2): 
@@ -63,7 +63,7 @@ class EscolaModel():
         listEstadosDict = []
         for estadoTupla in result:
             
-            tup1 = ('id', 'nome_escola','endereco', 'email_escola', 'telefone', 'cod_inep') 
+            tup1 = ('id', 'nome_escola','endereco', 'email_escola', 'telefone', 'cod_inep', 'accept') 
             tup2 = estadoTupla
            
             if len(tup1) == len(tup2): 
