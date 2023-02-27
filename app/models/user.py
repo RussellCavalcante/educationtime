@@ -94,17 +94,35 @@ class UserModel():
         if len(row) != 0:
             return row[0]
         return None
+    
+    @classmethod
+    def find_by_roles(cls, username):
+        # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
+        cursor = conn.cursor()
+ 
+        cursor.execute("select * from users where funcoes = ?;", username)
+
+        row = cursor.fetchall()
+
+        cursor.commit()
+        
+        # print('Rows --->>',row, type(row) )
+        # input()
+        if len(row) != 0:
+            return row[0]
+        return None
 
     @classmethod
     def create_user(*args, **kwargs):
         # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
         # try:
             cursor = conn.cursor()
-            print(args[1], args[2], args[3])
+            # print(args)
             # input()
+
             conn.autocommit = True
 
-            cursor.execute("insert into users (nome , email, cpf, password, salt, roles) values(?,?,?,?,?)",args[1], args[2], args[3], args[4], args[5], args[5])
+            cursor.execute("insert into users (nome , email, cpf, password, salt,) values(?,?,?,?,?)",args[1], args[2], args[3], args[4], args[5])
             
             conn.commit()
             # conn.close()
@@ -114,6 +132,25 @@ class UserModel():
         #     print(TypeError)
         # #     return None
 
+    @classmethod
+    def create_profissional_educacao_(*args, **kwargs):
+        # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
+        # try:
+            cursor = conn.cursor()
+            # print(args)
+            # input()
+
+            conn.autocommit = True
+
+            cursor.execute("insert into users (nome , email, cpf, password, salt, FK_funcoes_id) values(?,?,?,?,?,?)",args[1], args[2], args[3], args[4], args[5], args[6])
+            
+            conn.commit()
+            # conn.close()
+            # return 'created'
+            # rows = cursor.fetchall()
+        # except:
+        #     print(TypeError)
+        # #     return None
 
     @classmethod
     def get_new_salt(cls, *args, **kwargs):

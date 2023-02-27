@@ -21,7 +21,7 @@ atributos.add_argument('password', type=str, required=True, help="campo de senha
 atributos.add_argument('nome', type=str, help="campo obrigatorio")
 atributos.add_argument('email', type=str, help="campo de email e obrigatorio")
 atributos.add_argument('phone', type=str, help="campo de telefone")
-atributos.add_argument('roles', type=str, help="campo de roles")
+atributos.add_argument('funcao', type=int, help="campo de roles")
 
 
 class User(Resource):
@@ -56,7 +56,7 @@ class UserRegister(Resource):
         password = dados['password']
         nome = dados['nome']
         email = dados['email']
-        roles = dados['roles']
+        roles = dados['funcao']
         
         if UserModel.find_by_login(dados['username']):
             return {'message': "Esse usuario '{}' ja existe.".format(dados['username'])}

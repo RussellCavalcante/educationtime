@@ -9,10 +9,10 @@ from app.blacklist import BLACKLIST
 atributos = reqparse.RequestParser()
 atributos.add_argument('cod_turma', type=str, help="campo obrigatorio ")
 atributos.add_argument('FK_etapa_ensino_id', type=int, help="campo obrigatorio")
-atributos.add_argument('ano', type=str, help="campo obrigatorio ")
+atributos.add_argument('ano_letivo', type=str, help="campo obrigatorio ")
 atributos.add_argument('FK_modalidade_id', type=int, help="campo obrigatorio ")
 atributos.add_argument('FK_turno_id', type=int, help="campo obrigatorio ")
-atributos.add_argument('nome', type=str, help="campo obrigatorio nome ")
+atributos.add_argument('FK_grau_etapa_ensino_id', type=int, help="campo obrigatorio nome ")
 
 class GetTurma(Resource):
 
@@ -30,12 +30,16 @@ class GetTurma(Resource):
     def post_turma(self, *args, **kwargs):
         dados = atributos.parse_args()
         
+        # print(dados)
+        # input()
         cod_turma = dados['cod_turma'].strip()
         FK_etapa_ensino_id = dados['FK_etapa_ensino_id']
-        ano = dados['ano'].strip()
+        ano_letivo = dados['ano_letivo'].strip()
         FK_modalidade_id = dados['FK_modalidade_id']
         FK_turno_id = dados['FK_turno_id']
-        TurmaModel.create_turma(cod_turma, FK_etapa_ensino_id, ano, FK_modalidade_id, FK_turno_id)
+        FK_grau_etapa_ensino_id = dados['FK_grau_etapa_ensino_id']
+
+        TurmaModel.create_turma(cod_turma, FK_etapa_ensino_id, ano_letivo, FK_modalidade_id, FK_turno_id, FK_grau_etapa_ensino_id)
         
         return  {'created': cod_turma}, 201
     
@@ -80,9 +84,10 @@ class GetTurma(Resource):
 
         cod_turma = dados['cod_turma'].strip()
         FK_etapa_ensino_id = dados['FK_etapa_ensino_id']
-        ano = dados['ano'].strip()
+        ano_letivo = dados['ano_letivo'].strip()
         FK_modalidade_id = dados['FK_modalidade_id']
         FK_turno_id = dados['FK_turno_id']
+        FK_grau_etapa_ensino_id = dados['FK_grau_etapa_ensino_id']
 
-        TurmaModel.update_turma(cod_turma, FK_etapa_ensino_id, ano, FK_modalidade_id, FK_turno_id, args[0])
+        TurmaModel.update_turma(cod_turma, FK_etapa_ensino_id, ano_letivo, FK_modalidade_id, FK_turno_id, FK_grau_etapa_ensino_id, args[0])
         return {'updated': cod_turma }, 200
