@@ -7,38 +7,50 @@ from flask_jwt_extended import create_access_token, jwt_required, get_jwt
 from app.blacklist import BLACKLIST
 
 atributos = reqparse.RequestParser()
-atributos.add_argument('nome', type=str, help="campo de nome de uf e obrigatorio")
-atributos.add_argument('uf', type=str, help="campo de uf")
+atributos.add_argument('nome', type=str, required=True,help="campo de nome de uf e obrigatorio")
+atributos.add_argument('uf', type=str,  required=True, help="campo de uf")
 
 
 class GetEstado(Resource):
 
     @jwt_required()
     def get_by_id(self,*args, **kwargs):
-        return EstadoModel.get_estados_by_id(args[0]), 200
-
+        try:
+            return EstadoModel.get_estados_by_id(args[0]), 200
+        except:
+            return { 'error': 'verifique a requisição !' },400
     @jwt_required()
     def get(self):
-        return EstadoModel.get_estados(), 200
-
+        try:
+            return EstadoModel.get_estados(), 200
+        except:
+            return { 'error': 'verifique a requisição !' },400
+        
     @jwt_required()
     def post(self):
-        dados = atributos.parse_args()
-        
-        nome = dados['nome'].strip()
-        uf = dados['uf'].strip()
-        # ibge = dados['ibge']
-        # pais = dados['pais']
-        # ddd = dados['ddd']
-        
-        EstadoModel.create_estado(nome, uf)
-        return {'created': nome }, 200
+        try:
+
+            dados = atributos.parse_args()
+            
+            nome = dados['nome'].strip()
+            uf = dados['uf'].strip()
+            # ibge = dados['ibge']
+            # pais = dados['pais']
+            # ddd = dados['ddd']
+            
+            EstadoModel.create_estado(nome, uf)
+            return {'created': nome }, 200
+        except:
+            return { 'error': 'verifique a requisição !' },400
 
     def update(self, *args, **kwargs):
-        dados = atributos.parse_args()
-        
-        nome = dados['nome'].strip()
-        uf = dados['uf'].strip()
+        try:
+            dados = atributos.parse_args()
+            
+            nome = dados['nome'].strip()
+            uf = dados['uf'].strip()
 
-        EstadoModel.update_estado(nome, uf, args[0])
-        return {'updated': nome }, 200
+            EstadoModel.update_estado(nome, uf, args[0])
+            return {'updated': nome }, 200
+        except:
+            return { 'error': 'verifique a requisição !' },400
