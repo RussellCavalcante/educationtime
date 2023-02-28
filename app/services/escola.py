@@ -32,16 +32,19 @@ class GetEscola(Resource):
 
     @jwt_required()
     def post(self, *args, **kwargs):
-        dados = atributos.parse_args()
-        
-        nome_escola = dados['nome_escola'].strip()
-        endereco = dados['endereco'].strip()
-        telefone = dados['telefone']
-        email_escola = dados['email_escola'].strip()
-        cod_inep = dados['cod_inep']
-        EscolaModel.create_escola(nome_escola, endereco, email_escola, telefone, cod_inep)
-        
-        return  {'created': nome_escola}, 201
+        try:
+            dados = atributos.parse_args()
+            
+            nome_escola = dados['nome_escola'].strip()
+            endereco = dados['endereco'].strip()
+            telefone = dados['telefone']
+            email_escola = dados['email_escola'].strip()
+            cod_inep = dados['cod_inep']
+            EscolaModel.create_escola(nome_escola, endereco, email_escola, telefone, cod_inep)
+            
+            return  {'created': nome_escola}, 201
+        except:
+            return { 'error': 'verifique a requisição !' }, 400
 
     @jwt_required()
     def update(self, *args, **kwargs):
