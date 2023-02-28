@@ -18,37 +18,51 @@ class GetMomento(Resource):
 
     @jwt_required()
     def get(self, *args, **kwargs):
-        
-        return  MomentoModel.get_momento(), 200
+        try:
+                
+            return  MomentoModel.get_momento(), 200
+        except:
+            return { 'error': 'verifique a requisição !' }, 400
     
     @jwt_required()
     def get_by_id(self, *args, **kwargs):
-        
-        return  MomentoModel.get_momento_by_id(args[0]), 200
+        try:
+
+            return  MomentoModel.get_momento_by_id(args[0]), 200
+        except:
+            return { 'error': 'verifique a requisição !' }, 400
 
     @jwt_required()
     def post_momemnto(self, *args, **kwargs):
-        dados = atributos.parse_args()
-        
-        nome_momento = dados['nome_momento'].strip()
-        prioridade = dados['prioridade']
-        descricao = dados['descricao']
-        id = MomentoModel.get_momento_by_nome_momemto(nome_momento)
-        
-        MomentoModel.create_momento(nome_momento ,int(prioridade), descricao)
-        
+        try:
+                
+            dados = atributos.parse_args()
+            
+            nome_momento = dados['nome_momento'].strip()
+            prioridade = dados['prioridade']
+            descricao = dados['descricao']
+            id = MomentoModel.get_momento_by_nome_momemto(nome_momento)
+            
+            MomentoModel.create_momento(nome_momento ,int(prioridade), descricao)
+            
 
-        return  {'created': nome_momento,
-                 'id': id}, 201
-    
+            return  {'created': nome_momento,
+                    'id': id}, 201
+        except:
+            return { 'error': 'verifique a requisição !' }, 400
+        
     @jwt_required()
     def update(self, *args, **kwargs):
-        dados = atributos.parse_args()
-        
-        nome_momento = dados['nome_momento'].strip()
-        priodidade = dados['priodidade']
-        descricao = dados['descricao'].strip()
-        
+        try:
+                
+            dados = atributos.parse_args()
+            
+            nome_momento = dados['nome_momento'].strip()
+            priodidade = dados['priodidade']
+            descricao = dados['descricao'].strip()
+            
 
-        MomentoModel.update_momento(nome_momento ,priodidade, descricao, args[0])
-        return {'updated': nome_momento }, 200
+            MomentoModel.update_momento(nome_momento ,priodidade, descricao, args[0])
+            return {'updated': nome_momento }, 200
+        except:
+            return { 'error': 'verifique a requisição !' }, 400

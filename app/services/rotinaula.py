@@ -21,41 +21,57 @@ class GetrotinaAula(Resource):
 
     @jwt_required()
     def get(self, *args, **kwargs):
-        
-        return  RotinaAulaModel.get_rotina_aula(), 200
+        try:
+                
+            return  RotinaAulaModel.get_rotina_aula(), 200
+        except:
+            return { 'error': 'verifique a requisição !' }, 400
     
     @jwt_required()
     def get_by_id(self, *args, **kwargs):
-        
-        return  RotinaAulaModel.get_rotinaaula_by_id(args[0]), 200
+        try:
+                
+            return  RotinaAulaModel.get_rotinaaula_by_id(args[0]), 200
+        except:
+            return { 'error': 'verifique a requisição !' }, 400
 
     @jwt_required()
     def post_rotinaoaula(self, *args, **kwargs):
-        dados = atributos.parse_args()
+        try:
+
+            dados = atributos.parse_args()
+            
+            nome = dados['nome'].strip()
+            FK_turma_id = dados['FK_turma_id']
+            FK_profissional_id = dados['FK_profissional_id']
+            FK_momento_id = dados['FK_momento_id']
+            FK_componente_curricular_id = dados['FK_componente_curricular_id']
+            update_date = dados['update_date'].strip()
+            current_date = dados['current_date'].strip()
+            
+            RotinaAulaModel.create_rotinaaula(nome ,int(FK_turma_id), int(FK_profissional_id),  int(FK_momento_id), int(FK_componente_curricular_id), str(update_date), str(current_date))
+            
+            return  {'created': nome}, 201
         
-        nome = dados['nome'].strip()
-        FK_turma_id = dados['FK_turma_id']
-        FK_profissional_id = dados['FK_profissional_id']
-        FK_momento_id = dados['FK_momento_id']
-        FK_componente_curricular_id = dados['FK_componente_curricular_id']
-        update_date = dados['update_date'].strip()
-        current_date = dados['current_date'].strip()
-        
-        RotinaAulaModel.create_rotinaaula(nome ,int(FK_turma_id), int(FK_profissional_id),  int(FK_momento_id), int(FK_componente_curricular_id), str(update_date), str(current_date))
-        
-        return  {'created': nome}, 201
+        except:
+            return { 'error': 'verifique a requisição !' }, 400
     
     @jwt_required()
     def update(self, *args, **kwargs):
-        dados = atributos.parse_args()
-        
-        nome = dados['nome'].strip()
-        FK_turma_id = dados['FK_turma_id'].strip()
-        FK_profissional_id = dados['FK_profissional_id'].strip()
-        FK_momento_id = dados['FK_momento_id']
-        FK_momento_id = dados['FK_componente_curricular_id'].strip()
-        update_date = dados['update_date'].strip()
-        current_date = dados['current_date'].strip()
+        try:
 
-        RotinaAulaModel.update_rotinaaula(nome ,FK_turma_id, FK_profissional_id, FK_momento_id, FK_momento_id, update_date, current_date, args[0])
-        return {'updated': nome }, 200
+            dados = atributos.parse_args()
+            
+            nome = dados['nome'].strip()
+            FK_turma_id = dados['FK_turma_id'].strip()
+            FK_profissional_id = dados['FK_profissional_id'].strip()
+            FK_momento_id = dados['FK_momento_id']
+            FK_momento_id = dados['FK_componente_curricular_id'].strip()
+            update_date = dados['update_date'].strip()
+            current_date = dados['current_date'].strip()
+
+            RotinaAulaModel.update_rotinaaula(nome ,FK_turma_id, FK_profissional_id, FK_momento_id, FK_momento_id, update_date, current_date, args[0])
+            return {'updated': nome }, 200
+
+        except:
+            return { 'error': 'verifique a requisição !' }, 400

@@ -18,76 +18,109 @@ class GetTurma(Resource):
 
     @jwt_required()
     def get(self, *args, **kwargs):
+        try:
+            
+            return  TurmaModel.get_turma(), 200
+        except:
+            return { 'error': 'verifique a requisição !' }, 400
         
-        return  TurmaModel.get_turma(), 200
-
     @jwt_required()
     def get_by_id(self, *args, **kwargs):
-        
-        return  TurmaModel.get_turma_by_id(args[0]), 200
+        try:
+                
+            return  TurmaModel.get_turma_by_id(args[0]), 200
+        except:
+            return { 'error': 'verifique a requisição !' }, 400
 
     @jwt_required()
     def post_turma(self, *args, **kwargs):
-        dados = atributos.parse_args()
-        
-        # print(dados)
-        # input()
-        cod_turma = dados['cod_turma'].strip()
-        FK_etapa_ensino_id = dados['FK_etapa_ensino_id']
-        ano_letivo = dados['ano_letivo'].strip()
-        FK_modalidade_id = dados['FK_modalidade_id']
-        FK_turno_id = dados['FK_turno_id']
-        FK_grau_etapa_ensino_id = dados['FK_grau_etapa_ensino_id']
+        try:
+                
+            dados = atributos.parse_args()
+            
+            # print(dados)
+            # input()
+            cod_turma = dados['cod_turma'].strip()
+            FK_etapa_ensino_id = dados['FK_etapa_ensino_id']
+            ano_letivo = dados['ano_letivo'].strip()
+            FK_modalidade_id = dados['FK_modalidade_id']
+            FK_turno_id = dados['FK_turno_id']
+            FK_grau_etapa_ensino_id = dados['FK_grau_etapa_ensino_id']
 
-        TurmaModel.create_turma(cod_turma, FK_etapa_ensino_id, ano_letivo, FK_modalidade_id, FK_turno_id, FK_grau_etapa_ensino_id)
-        
-        return  {'created': cod_turma}, 201
+            TurmaModel.create_turma(cod_turma, FK_etapa_ensino_id, ano_letivo, FK_modalidade_id, FK_turno_id, FK_grau_etapa_ensino_id)
+            
+            return  {'created': cod_turma}, 201
+        except:
+            return { 'error': 'verifique a requisição !' }, 400
     
     @jwt_required()
     def get_turno(self, *args, **kwargs):
-        
-        return  TurmaModel.get_turno(), 200
+        try:
+                
+            return  TurmaModel.get_turno(), 200
+        except:
+            return { 'error': 'verifique a requisição !' }, 400
 
     @jwt_required()
     def post_turno(self, *args, **kwargs):
-        dados = atributos.parse_args()
+        try:
+            dados = atributos.parse_args()
+            
+            nome = dados['nome'].strip()
+            
+            TurmaModel.create_turno(nome)
+            
+            return  {'created': nome}, 201
         
-        nome = dados['nome'].strip()
-        
-        TurmaModel.create_turno(nome)
-        
-        return  {'created': nome}, 201
+        except:
+                return { 'error': 'verifique a requisição !' }, 400
 
     @jwt_required()
     def get_modalidade(self, *args, **kwargs):
-        
-        return  TurmaModel.get_modalidade(), 200
+        try:
 
+            return  TurmaModel.get_modalidade(), 200
+        except:
+            return { 'error': 'verifique a requisição !' }, 400
+    
     @jwt_required()
     def post_modalidade(self, *args, **kwargs):
-        dados = atributos.parse_args()
+        try:
+
+            dados = atributos.parse_args()
+            
+            nome = dados['nome'].strip()
+            
+            TurmaModel.create_modalidade(nome)
+            
+            return  {'created': nome}, 201
         
-        nome = dados['nome'].strip()
-        
-        TurmaModel.create_modalidade(nome)
-        
-        return  {'created': nome}, 201
+        except:
+            return { 'error': 'verifique a requisição !' }, 400
 
     @jwt_required()
     def get_etapa_ensino(self, *args, **kwargs):
-        
-        return  TurmaModel.get_etapa_ensino(), 200
+        try:
+                
+            return  TurmaModel.get_etapa_ensino(), 200
+        except:
+            return { 'error': 'verifique a requisição !' }, 400
 
     @jwt_required()
     def update(self, *args, **kwargs):
-        dados = atributos.parse_args()
+        try:
 
-        cod_turma = dados['cod_turma'].strip()
-        FK_etapa_ensino_id = dados['FK_etapa_ensino_id']
-        ano_letivo = dados['ano_letivo'].strip()
-        FK_modalidade_id = dados['FK_modalidade_id']
-        FK_turno_id = dados['FK_turno_id']
-        FK_grau_etapa_ensino_id = dados['FK_grau_etapa_ensino_id']
+            dados = atributos.parse_args()
 
-        TurmaModel.update_turma(cod_turma, FK_etapa_ensino_id, ano_letivo, FK_modalidade_id, FK_turno_id, FK_grau_etapa_ensino_id, args[0])
-        return {'updated': cod_turma }, 200
+            cod_turma = dados['cod_turma'].strip()
+            FK_etapa_ensino_id = dados['FK_etapa_ensino_id']
+            ano_letivo = dados['ano_letivo'].strip()
+            FK_modalidade_id = dados['FK_modalidade_id']
+            FK_turno_id = dados['FK_turno_id']
+            FK_grau_etapa_ensino_id = dados['FK_grau_etapa_ensino_id']
+
+            TurmaModel.update_turma(cod_turma, FK_etapa_ensino_id, ano_letivo, FK_modalidade_id, FK_turno_id, FK_grau_etapa_ensino_id, args[0])
+            return {'updated': cod_turma }, 200
+        
+        except:
+            return { 'error': 'verifique a requisição !' }, 400

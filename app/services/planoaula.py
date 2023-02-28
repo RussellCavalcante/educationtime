@@ -19,37 +19,51 @@ class GetPlanoAula(Resource):
 
     @jwt_required()
     def get(self, *args, **kwargs):
+        try:
         
-        return  planoAulaModel.get_planoaula(), 200
-    
+            return  planoAulaModel.get_planoaula(), 200
+        except:
+            return { 'error': 'verifique a requisição !' }, 400
+        
     @jwt_required()
     def get_by_id(self, *args, **kwargs):
+        try:
+                
+            return  planoAulaModel.get_planoaula_by_id(args[0]), 200
+        except:
+            return { 'error': 'verifique a requisição !' }, 400
         
-        return  planoAulaModel.get_planoaula_by_id(args[0]), 200
-
     @jwt_required()
     def post_planoaula(self, *args, **kwargs):
-        dados = atributos.parse_args()
-        
-        bimestre_escolar = dados['bimestre_escolar'].strip()
-        etapa_ensino = dados['etapa_ensino'].strip()
-        ano = dados['ano'].strip()
-        FK_unidade_tematica_id = dados['FK_unidade_tematica_id']
-        conteudo = dados['conteudo'].strip()
-        
-        planoAulaModel.create_planoaula(bimestre_escolar ,etapa_ensino, ano, FK_unidade_tematica_id, conteudo)
-        
-        return  {'created': bimestre_escolar}, 201
+        try:
+
+            dados = atributos.parse_args()
+            
+            bimestre_escolar = dados['bimestre_escolar'].strip()
+            etapa_ensino = dados['etapa_ensino'].strip()
+            ano = dados['ano'].strip()
+            FK_unidade_tematica_id = dados['FK_unidade_tematica_id']
+            conteudo = dados['conteudo'].strip()
+            
+            planoAulaModel.create_planoaula(bimestre_escolar ,etapa_ensino, ano, FK_unidade_tematica_id, conteudo)
+            
+            return  {'created': bimestre_escolar}, 201
+        except:
+            return { 'error': 'verifique a requisição !' }, 400
     
     @jwt_required()
     def update(self, *args, **kwargs):
-        dados = atributos.parse_args()
-        
-        bimestre_escolar = dados['bimestre_escolar'].strip()
-        etapa_ensino = dados['etapa_ensino'].strip()
-        ano = dados['ano'].strip()
-        FK_unidade_tematica_id = dados['FK_unidade_tematica_id']
-        conteudo = dados['conteudo'].strip()
-        
-        planoAulaModel.update_planoaula(bimestre_escolar ,etapa_ensino, ano, FK_unidade_tematica_id, conteudo, args[0])
-        return {'updated': bimestre_escolar }, 200
+        try:
+
+            dados = atributos.parse_args()
+            
+            bimestre_escolar = dados['bimestre_escolar'].strip()
+            etapa_ensino = dados['etapa_ensino'].strip()
+            ano = dados['ano'].strip()
+            FK_unidade_tematica_id = dados['FK_unidade_tematica_id']
+            conteudo = dados['conteudo'].strip()
+            
+            planoAulaModel.update_planoaula(bimestre_escolar ,etapa_ensino, ano, FK_unidade_tematica_id, conteudo, args[0])
+            return {'updated': bimestre_escolar }, 200
+        except:
+            return { 'error': 'verifique a requisição !' }, 400

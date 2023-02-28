@@ -19,11 +19,14 @@ class GetFuncoes(Resource):
 
     @jwt_required()
     def get(self, *args, **kwargs):
-        
-        return  FuncoesModel.get_funcoes(), 200
-    
+        try:
+            return  FuncoesModel.get_funcoes(), 200
+        except:
+            return { 'error': 'verifique a requisição !' }, 400
     @jwt_required()
     def get_by_id(self, *args, **kwargs):
-        
-        return  FuncoesModel.get_funcoes_by_id(args[0]), 200
-    
+        try:
+
+            return  FuncoesModel.get_funcoes_by_id(args[0]), 200
+        except:
+            return { 'error': 'verifique a requisição !' }, 400

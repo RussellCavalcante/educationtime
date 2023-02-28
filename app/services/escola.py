@@ -16,13 +16,19 @@ atributos.add_argument('cod_inep', type=int, help="campo de cod_inep")
 class GetEscola(Resource):
     @jwt_required()
     def get_by_id(self, *args, **kwargs):
-        
-        return  EscolaModel.get_escola_by_id(args[0]), 200
+        try:
+                
+            return  EscolaModel.get_escola_by_id(args[0]), 200
+        except:
+            return { 'error': 'verifique a requisição !' }, 400
 
     @jwt_required()
     def get(self, *args, **kwargs):
-        
-        return  EscolaModel.get_escola(), 200
+        try:
+                
+            return  EscolaModel.get_escola(), 200
+        except:
+            return { 'error': 'verifique a requisição !' }, 400
 
     @jwt_required()
     def post(self, *args, **kwargs):

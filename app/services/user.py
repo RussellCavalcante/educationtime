@@ -39,80 +39,93 @@ class User(Resource):
     @jwt_required
     def delete(self, user_id):
         # user = UserModel.find_user(user_id)
-        user = user_id
-        if user:
-            try:
-                user.delete_user()   
-            except:
-                 return {'message': 'Desculpe foi possivel deletar'}, 500
-            return {'message': 'User deleted'}
-        return {'message': 'User not found.' }, 404
+        try:
+
+            user = user_id
+            if user:
+                try:
+                    user.delete_user()   
+                except:
+                    return {'message': 'Desculpe foi possivel deletar'}, 500
+                return {'message': 'User deleted'}
+            return {'message': 'User not found.' }, 404
+        
+        except:
+            return { 'error': 'verifique a requisição !' }, 400
 
 class UserRegister(Resource):
     def post(self):
-        dados = atributos.parse_args()
+        try:
+            dados = atributos.parse_args()
 
-        username = dados['username']
-        password = dados['password']
-        nome = dados['nome']
-        email = dados['email']
+            username = dados['username']
+            password = dados['password']
+            nome = dados['nome']
+            email = dados['email']
+            
+            if UserModel.find_by_login(dados['username']):
+                return {'message': "Esse usuario '{}' ja existe.".format(dados['username'])}
+            
+            salt = UserModel.get_new_salt()
+
+            # print(username, password)
+            # input()
+            
+
+            encrypted_password = UserModel.password_encrypted(password, salt)
+                    
+            if not UserModel.email_validator(dados['email']):
+                return {'message': "Email '{}' esta invalido.".format(dados["email"])}, 400
+
+            # dados = {**dados, **{ 'salt': salt, 'password': encrypted_password }}
+
+            # user = UserModel(**dados)
+
+            UserModel.create_user(nome , email ,username ,encrypted_password, salt)
+            # user.save_user()
+
+            return {'message':'Usuario Criado com sucesso!'}, 201
         
-        if UserModel.find_by_login(dados['username']):
-            return {'message': "Esse usuario '{}' ja existe.".format(dados['username'])}
-        
-        salt = UserModel.get_new_salt()
-
-        # print(username, password)
-        # input()
-        
-
-        encrypted_password = UserModel.password_encrypted(password, salt)
-                
-        if not UserModel.email_validator(dados['email']):
-            return {'message': "Email '{}' esta invalido.".format(dados["email"])}, 400
-
-        # dados = {**dados, **{ 'salt': salt, 'password': encrypted_password }}
-
-        # user = UserModel(**dados)
-
-        UserModel.create_user(nome , email ,username ,encrypted_password, salt)
-        # user.save_user()
-
-        return {'message':'Usuario Criado com sucesso!'}, 201
+        except:
+            return { 'error': 'verifique a requisição !' }, 400
 
 class ProfissionalEducacaoRegister(Resource):
     def post_profisional_educacao(self):
-        dados = atributos.parse_args()
+        try:
 
-        username = dados['username']
-        password = dados['password']
-        nome = dados['nome']
-        email = dados['email']
-        roles = dados['funcao']
+            dados = atributos.parse_args()
+
+            username = dados['username']
+            password = dados['password']
+            nome = dados['nome']
+            email = dados['email']
+            roles = dados['funcao']
+            
+            if UserModel.find_by_login(dados['username']):
+                return {'message': "Esse usuario '{}' ja existe.".format(dados['username'])}
+            
+            salt = UserModel.get_new_salt()
+
+            # print(username, password)
+            # input()
+            
+
+            encrypted_password = UserModel.password_encrypted(password, salt)
+                    
+            if not UserModel.email_validator(dados['email']):
+                return {'message': "Email '{}' esta invalido.".format(dados["email"])}, 400
+
+            # dados = {**dados, **{ 'salt': salt, 'password': encrypted_password }}
+
+            # user = UserModel(**dados)
+
+            UserModel.create_profissional_educacao_(nome , email ,username ,encrypted_password, salt, roles)
+            # user.save_user()
+
+            return {'message':'Usuario Criado com sucesso!'}, 201
         
-        if UserModel.find_by_login(dados['username']):
-            return {'message': "Esse usuario '{}' ja existe.".format(dados['username'])}
-        
-        salt = UserModel.get_new_salt()
-
-        # print(username, password)
-        # input()
-        
-
-        encrypted_password = UserModel.password_encrypted(password, salt)
-                
-        if not UserModel.email_validator(dados['email']):
-            return {'message': "Email '{}' esta invalido.".format(dados["email"])}, 400
-
-        # dados = {**dados, **{ 'salt': salt, 'password': encrypted_password }}
-
-        # user = UserModel(**dados)
-
-        UserModel.create_profissional_educacao_(nome , email ,username ,encrypted_password, salt, roles)
-        # user.save_user()
-
-        return {'message':'Usuario Criado com sucesso!'}, 201
-
+        except:
+            return { 'error': 'verifique a requisição !' }, 400
         
 
 class UserLogin(Resource):
@@ -120,25 +133,27 @@ class UserLogin(Resource):
 
     @classmethod
     def post(cls):
-        dados = atributos.parse_args()
+        try:
+            dados = atributos.parse_args()
 
-        username = dados['username'].strip()
-        password = dados['password'].strip()
+            username = dados['username'].strip()
+            password = dados['password'].strip()
 
 
-        user = UserModel.find_by_login(username)
-        
-        salt = UserModel.find_salt_by_id(user)
-
-        if not UserModel.assert_password(user[0], password, salt,):
-            return {'status': False}, 400
-    
-        token_de_acesso = create_access_token(identity=1)
-        
-        return {'acess_token': token_de_acesso,
-                'cpf': username,
-                'id': user[0]}, 200
+            user = UserModel.find_by_login(username)
             
+            salt = UserModel.find_salt_by_id(user)
+
+            if not UserModel.assert_password(user[0], password, salt,):
+                return {'status': False}, 400
+        
+            token_de_acesso = create_access_token(identity=1)
+            
+            return {'acess_token': token_de_acesso,
+                    'cpf': username,
+                    'id': user[0]}, 200
+        except:
+            return { 'error': 'verifique a requisição !' }, 400   
 
 class UserLogout(Resource):
     

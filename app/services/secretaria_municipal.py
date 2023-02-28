@@ -19,40 +19,53 @@ class GetSecretariamunicipal(Resource):
 
     @jwt_required()
     def get(self, *args, **kwargs):
+        try:
+            return  SecretariaMunicipalModel.get_secretaria_municipal(), 200
+        except:
+            return { 'error': 'verifique a requisição !' }, 400
         
-        return  SecretariaMunicipalModel.get_secretaria_municipal(), 200
-
     @jwt_required()
     def get_by_id(self, *args, **kwargs):
-        
-        return  SecretariaMunicipalModel.get_secretaria_municipal_by_id(args[0]), 200
+        try:
+            return  SecretariaMunicipalModel.get_secretaria_municipal_by_id(args[0]), 200
+        except:
+            return { 'error': 'verifique a requisição !' }, 400
 
     @jwt_required()
     def post(self, *args, **kwargs):
-        dados = atributos.parse_args()
+        try:
+                
+            dados = atributos.parse_args()
+            nome = dados['nome'].strip()
+            cnpj = dados['cnpj']
+            endereco = dados['endereco'].strip()
+            telefone = dados['telefone']
+            email = dados['email'].strip()
+            FK_secretaria_UF_id = dados['FK_secretaria_UF_id']
+            FK_secretaria_municipio_id = dados['FK_secretaria_municipio_id']
+            SecretariaMunicipalModel.create_secretaria_municipal(nome, cnpj, endereco, telefone, email, FK_secretaria_UF_id, FK_secretaria_municipio_id)
         
-        nome = dados['nome'].strip()
-        cnpj = dados['cnpj']
-        endereco = dados['endereco'].strip()
-        telefone = dados['telefone']
-        email = dados['email'].strip()
-        FK_secretaria_UF_id = dados['FK_secretaria_UF_id']
-        FK_secretaria_municipio_id = dados['FK_secretaria_municipio_id']
-        SecretariaMunicipalModel.create_secretaria_municipal(nome, cnpj, endereco, telefone, email, FK_secretaria_UF_id, FK_secretaria_municipio_id)
+        except:
+            return { 'error': 'verifique a requisição !' }, 400
         
         return  {'created': nome}, 201
 
     
     @jwt_required()
     def update(self, *args, **kwargs):
-        dados = atributos.parse_args()
-        nome = dados['nome'].strip()
-        cnpj = dados['cnpj']
-        endereco = dados['endereco'].strip()
-        telefone = dados['telefone']
-        email = dados['email'].strip()
-        FK_secretaria_UF_id = dados['FK_secretaria_UF_id']
-        FK_secretaria_municipio_id = dados['FK_secretaria_municipio_id']
+        try:
 
-        SecretariaMunicipalModel.update_secretaria_municipal(nome, cnpj, endereco, telefone, email, FK_secretaria_UF_id, FK_secretaria_municipio_id, args[0])
-        return {'updated': nome }, 200
+            dados = atributos.parse_args()
+            nome = dados['nome'].strip()
+            cnpj = dados['cnpj']
+            endereco = dados['endereco'].strip()
+            telefone = dados['telefone']
+            email = dados['email'].strip()
+            FK_secretaria_UF_id = dados['FK_secretaria_UF_id']
+            FK_secretaria_municipio_id = dados['FK_secretaria_municipio_id']
+
+            SecretariaMunicipalModel.update_secretaria_municipal(nome, cnpj, endereco, telefone, email, FK_secretaria_UF_id, FK_secretaria_municipio_id, args[0])
+            return {'updated': nome }, 200
+        
+        except:
+            return { 'error': 'verifique a requisição !' }, 400

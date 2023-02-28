@@ -19,26 +19,34 @@ class GetEtapaEnsino(Resource):
 
     @jwt_required()
     def get(self, *args, **kwargs):
+        try:
+            return  EtapaEnsinoModel.get_etapa_ensino(), 200
+        except:
+            return { 'error': 'verifique a requisição !' }, 400
         
-        return  EtapaEnsinoModel.get_etapa_ensino(), 200
-    
     @jwt_required()
     def get_by_id(self, *args, **kwargs):
+        try:
+            return  EtapaEnsinoModel.get_etapa_ensino_by_id(args[0]), 200
+        except:
+            return { 'error': 'verifique a requisição !' }, 400
         
-        return  EtapaEnsinoModel.get_etapa_ensino_by_id(args[0]), 200
-    
     @jwt_required()
     def get_grau_etapa_ensino(self, *args, **kwargs):
+        try:
+            return  EtapaEnsinoModel.get_grau_etapa_ensino(), 200
+        except:
+            return { 'error': 'verifique a requisição !' }, 400
         
-        return  EtapaEnsinoModel.get_grau_etapa_ensino(), 200
-
     @jwt_required()
     def get_grau_etapa_ensino_by_id(self, *args, **kwargs):
-        
-        return  EtapaEnsinoModel.get_etapa_ensino_by_id(args[0]), 200
-    
+        try:
+            return  EtapaEnsinoModel.get_etapa_ensino_by_id(args[0]), 200
+        except:
+            return { 'error': 'verifique a requisição !' }, 400
     @jwt_required()
     def get_grau_etapa_ensino_by_FK_etapa_ensino(self, *args, **kwargs):
-        
-        return  EtapaEnsinoModel.get_grau_etapa_ensino_by_FK_etapa_ensino(args[0]), 200
-    
+        try:
+            return  EtapaEnsinoModel.get_grau_etapa_ensino_by_FK_etapa_ensino(args[0]), 200
+        except:
+            return { 'error': 'verifique a requisição !' }, 400
