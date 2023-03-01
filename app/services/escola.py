@@ -48,15 +48,17 @@ class GetEscola(Resource):
 
     @jwt_required()
     def update(self, *args, **kwargs):
-        dados = atributos.parse_args()
-        
-        nome_escola = dados['nome_escola'].strip()
-        endereco = dados['endereco'].strip()
-        telefone = dados['telefone']
-        email_escola = dados['email_escola'].strip()
-        cod_inep = dados['cod_inep']
-        
-        EscolaModel.update_escola(nome_escola, endereco, email_escola, telefone, cod_inep, args[0])
-        return {'updated': nome_escola }, 200
-
+        try:
+            dados = atributos.parse_args()
+            
+            nome_escola = dados['nome_escola'].strip()
+            endereco = dados['endereco'].strip()
+            telefone = dados['telefone']
+            email_escola = dados['email_escola'].strip()
+            cod_inep = dados['cod_inep']
+            
+            EscolaModel.update_escola(nome_escola, endereco, email_escola, telefone, cod_inep, args[0])
+            return {'updated': nome_escola }, 200
+        except:
+            return { 'error': 'verifique a requisição !' }, 400
 
