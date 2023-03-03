@@ -21,7 +21,7 @@ atributos.add_argument('password', type=str, help="campo de senha e obrigatorio"
 atributos.add_argument('nome', type=str, help="campo obrigatorio")
 atributos.add_argument('email', type=str, help="campo de email e obrigatorio")
 atributos.add_argument('phone', type=str, help="campo de telefone")
-atributos.add_argument('funcao', type=int, help="campo de roles")
+atributos.add_argument('FK_perfil_id', type=int, help="campo de perfil_id")
 
 
 class User(Resource):
@@ -62,33 +62,29 @@ class UserRegister(Resource):
             password = dados['password']
             nome = dados['nome']
             email = dados['email']
-            
+            FK_perfil_id = dados['FK_perfil_id']
+
             if UserModel.find_by_login(dados['username']):
                 return {'message': "Esse usuario '{}' ja existe.".format(dados['username'])}
             
             salt = UserModel.get_new_salt()
-
-            # print(username, password)
-            # input()
-            
 
             encrypted_password = UserModel.password_encrypted(password, salt)
                     
             if not UserModel.email_validator(dados['email']):
                 return {'message': "Email '{}' esta invalido.".format(dados["email"])}, 400
 
-            # dados = {**dados, **{ 'salt': salt, 'password': encrypted_password }}
-
-            # user = UserModel(**dados)
-
             UserModel.create_user(nome , email ,username ,encrypted_password, salt)
-            # user.save_user()
+ 
+            id = UserModel.find_by_login(dados['username'])
+           
+            UserModel.associateUserProfile(id[0], FK_perfil_id) 
 
             return {'message':'Usuario Criado com sucesso!'}, 201
         
         except:
             return { 'error': 'verifique a requisição !' }, 400
-
+        
 class ProfissionalEducacaoRegister(Resource):
     def post_profisional_educacao(self):
         try:

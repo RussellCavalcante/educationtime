@@ -479,23 +479,68 @@ def get_grau_etapa_ensino_by_fk_etapa_ensino(id):
     
     return _Get_services.get_grau_etapa_ensino_by_FK_etapa_ensino(id)
 
-@avaliable_route.route('/funcoes', methods=['GET'])
+@avaliable_route.route('/perfil', methods=['GET'])
 
-def get_funcoes():    
-    from app.services.funcoes import GetFuncoes
+def get_perfil():    
+    from app.services.perfil import PerfilServices
     
-    _Get_services = GetFuncoes()
+    _Get_services = PerfilServices()
     
     return _Get_services.get()
 
-@avaliable_route.route('/funcoes/<int:id>', methods=['GET'])
+@avaliable_route.route('/perfil/<int:id>', methods=['GET'])
 
-def get_funcoes_by(id):    
-    from app.services.funcoes import GetFuncoes
+def get_perfil_by(id):    
+    from app.services.perfil import PerfilServices
     
-    _Get_services = GetFuncoes()
+    _Get_services = PerfilServices()
     
     return _Get_services.get_by_id(id)
+
+@avaliable_route.route('/perfil/Cadastro', methods=['POST'])
+
+def post_perfil():    
+    from app.services.perfil import PerfilRegister
+    
+    _Get_services = PerfilRegister()
+    
+    return _Get_services.post()
+
+@avaliable_route.route('/perfil/Cadastro/<int:id>', methods=['PUT'])
+
+def update_perfil_register(id):    
+    from app.services.perfil import PerfilRegister
+    
+    _Get_services = PerfilRegister()
+    
+    return _Get_services.update(id)
+
+@avaliable_route.route('/perfil/perfilRoles/<int:id>', methods=['GET'])
+
+def get_perfilRoles_by_perfil_id(id):    
+    from app.services.perfil import PerfilServices
+    
+    _Get_services = PerfilServices()
+    
+    return _Get_services.get_perfilRolesby_perfil_id(id)
+
+@avaliable_route.route('/perfil/perfilRoles', methods=['GET'])
+
+def get_perfilRoles():    
+    from app.services.perfil import PerfilServices
+    
+    _Get_services = PerfilServices()
+    
+    return _Get_services.get_perfilRoles()
+
+@avaliable_route.route('/perfil/Roles', methods=['GET'])
+
+def get_Roles():    
+    from app.services.perfil import PerfilServices
+    
+    _Get_services = PerfilServices()
+    
+    return _Get_services.get_Roles()
 
 
 @avaliable_route.route('/profissionalEducacao/inserir', methods=['POST'])

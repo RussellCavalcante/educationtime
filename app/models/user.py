@@ -173,3 +173,22 @@ class UserModel():
     #     banco.session.delete(self)
     #     banco.session.commit()
 
+    @classmethod
+    def associateUserProfile(*args, **kwargs):
+        # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
+        # try:
+            cursor = conn.cursor()
+            # print(args)
+            # input()
+
+            conn.autocommit = True
+
+            cursor.execute("insert into user_profiles (FK_user_id , FK_profile_id) values(?,?)",args[1], args[2])
+            
+            conn.commit()
+            # conn.close()
+            # return 'created'
+            # rows = cursor.fetchall()
+        # except:
+        #     print(TypeError)
+        # #     return None
