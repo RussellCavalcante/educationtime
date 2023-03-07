@@ -38,7 +38,7 @@ class SecretariaMunicipalModel():
         listEstadosDict = []
         for estadoTupla in result:
             
-            tup1 = ('id', 'nome', 'cnpj', 'endereco', 'telefone', 'email', 'FK_secretaria_UF_id', 'FK_secretaria_municipio_id') 
+            tup1 = ('id', 'nome', 'cnpj', 'endereco', 'telefone', 'email',  'FK_secretaria_municipio_id') 
             tup2 = estadoTupla
            
             if len(tup1) == len(tup2): 
@@ -62,7 +62,7 @@ class SecretariaMunicipalModel():
         listEstadosDict = []
         for estadoTupla in result:
             
-            tup1 = ('id', 'nome', 'cnpj', 'endereco', 'telefone', 'email', 'FK_secretaria_UF_id', 'FK_secretaria_municipio_id') 
+            tup1 = ('id', 'nome', 'cnpj', 'endereco', 'telefone', 'email',  'FK_secretaria_municipio_id') 
             tup2 = estadoTupla
            
             if len(tup1) == len(tup2): 
@@ -79,7 +79,7 @@ class SecretariaMunicipalModel():
         # try:
             cursor = conn.cursor()
     
-            cursor.execute("insert into secretaria_municipal ( nome, cnpj, endereco, telefone, email, FK_secretaria_UF_id, FK_secretaria_municipio_id) values(?,?,?,?,?,?,?)",args[1], int(args[2]), args[3], int(args[4]), args[5], int(args[6]), int(args[7]))
+            cursor.execute("insert into secretaria_municipal ( nome, cnpj, endereco, telefone, email, FK_secretaria_municipio_id) values(?,?,?,?,?,?,?)",args[1], int(args[2]), args[3], int(args[4]), args[5], int(args[6]), int(args[7]))
             
             conn.commit()
             # conn.close()
@@ -99,7 +99,7 @@ class SecretariaMunicipalModel():
             
             cursor.execute('''
                         UPDATE secretaria_municipal
-                        SET nome = ?, cnpj = ?, endereco = ?,telefone = ?,email = ?,FK_secretaria_UF_id = ?, FK_secretaria_municipio_id=?
+                        SET nome = ?, cnpj = ?, endereco = ?,telefone = ?,email =  ?, FK_secretaria_municipio_id=?
                         WHERE id = ?
                         ''',args[1], int(args[2]), args[3], int(args[4]), args[5], int(args[6]), int(args[7]), args[8]
                         )

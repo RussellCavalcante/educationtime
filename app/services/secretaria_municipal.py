@@ -12,7 +12,6 @@ atributos.add_argument('cnpj', type=int, help="campo de senha e obrigatorio")
 atributos.add_argument('endereco', type=str, help="campo de email e obrigatorio")
 atributos.add_argument('telefone', type=int, help="campo de telefone")
 atributos.add_argument('email', type=str, help="email obrigatorio")
-atributos.add_argument('FK_secretaria_UF_id', type=int, help="campo de telefone")
 atributos.add_argument('FK_secretaria_municipio_id', type=int, help="email obrigatorio")
 
 class GetSecretariamunicipal(Resource):
@@ -41,9 +40,8 @@ class GetSecretariamunicipal(Resource):
             endereco = dados['endereco'].strip()
             telefone = dados['telefone']
             email = dados['email'].strip()
-            FK_secretaria_UF_id = dados['FK_secretaria_UF_id']
             FK_secretaria_municipio_id = dados['FK_secretaria_municipio_id']
-            SecretariaMunicipalModel.create_secretaria_municipal(nome, cnpj, endereco, telefone, email, FK_secretaria_UF_id, FK_secretaria_municipio_id)
+            SecretariaMunicipalModel.create_secretaria_municipal(nome, cnpj, endereco, telefone, email, FK_secretaria_municipio_id)
         
         except:
             return { 'error': 'verifique a requisição !' }, 400
@@ -61,10 +59,9 @@ class GetSecretariamunicipal(Resource):
             endereco = dados['endereco'].strip()
             telefone = dados['telefone']
             email = dados['email'].strip()
-            FK_secretaria_UF_id = dados['FK_secretaria_UF_id']
             FK_secretaria_municipio_id = dados['FK_secretaria_municipio_id']
 
-            SecretariaMunicipalModel.update_secretaria_municipal(nome, cnpj, endereco, telefone, email, FK_secretaria_UF_id, FK_secretaria_municipio_id, args[0])
+            SecretariaMunicipalModel.update_secretaria_municipal(nome, cnpj, endereco, telefone, email, FK_secretaria_municipio_id, args[0])
             return {'updated': nome }, 200
         
         except:
