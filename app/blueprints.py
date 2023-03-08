@@ -552,3 +552,40 @@ def post_profissional_educacao():
     _Get_services = ProfissionalEducacaoRegister()
     
     return _Get_services.post_profisional_educacao()
+
+@avaliable_route.route('/Dirigente', methods=['GET'])
+
+def get_Dirigente():    
+    from app.services.dirigente_municipal import DirigenteMunicipalServices
+    
+    _Get_services = DirigenteMunicipalServices()
+    
+    return _Get_services.get()
+
+@avaliable_route.route('/Dirigente/<int:id>', methods=['GET'])
+
+def get_Dirigente_by(id):    
+    from app.services.dirigente_municipal import DirigenteMunicipalServices
+    
+    _Get_services = DirigenteMunicipalServices()
+    
+    return _Get_services.get_by_id(id)
+
+
+@avaliable_route.route('/Dirigente/Cadastro', methods=['POST'])
+
+def post_dirigente():    
+    from app.services.dirigente_municipal import DirigenteMunicipalServices
+    
+    _Get_services = DirigenteMunicipalServices()
+    
+    return _Get_services.post()
+
+@avaliable_route.route('/Dirigente/Update/<int:id>', methods=['PUT'])
+
+def update_dirigente(id):    
+    from app.services.dirigente_municipal import DirigenteMunicipalServices
+
+    _Get_services = DirigenteMunicipalServices()
+    
+    return _Get_services.update(id)

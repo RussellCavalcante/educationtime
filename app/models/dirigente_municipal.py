@@ -5,7 +5,7 @@ import re
 from app import conn
 
 
-class SecretariaMunicipalModel():
+class DirigenteMunicipalModel():
     # __tablename__ = 'estado'
     
 
@@ -23,13 +23,13 @@ class SecretariaMunicipalModel():
     #     self.email = email
     #     self.phone = phone
     #     self.salt = salt
-
+    
 
     @classmethod
-    def get_secretaria_municipal(*args, **kwargs):
+    def get_dirigente_municipal(*args, **kwargs):
         cursor = conn.cursor()
  
-        cursor.execute("select * from secretaria_municipal")
+        cursor.execute("select * from dirigente_municipal")
         
         result = cursor.fetchall()
         cursor.close()
@@ -38,7 +38,7 @@ class SecretariaMunicipalModel():
         listEstadosDict = []
         for estadoTupla in result:
             
-            tup1 = ('id', 'nome', 'cnpj', 'endereco', 'telefone', 'email',  'FK_secretaria_municipio_id') 
+            tup1 = ('id', 'data_inicio', 'data_fim', 'endereco', 'telefone', 'email',  'FK_secretaria_municipio_id') 
             tup2 = estadoTupla
            
             if len(tup1) == len(tup2): 
@@ -50,10 +50,10 @@ class SecretariaMunicipalModel():
         return listEstadosDict
 
     @classmethod
-    def get_secretaria_municipal_by_id(*args, **kwargs):
+    def get_dirigente_municipal_by_id(*args, **kwargs):
         cursor = conn.cursor()
  
-        cursor.execute(f"select * from secretaria_municipal where id = {args[1]}")
+        cursor.execute(f"select * from dirigente_municipal where id = {args[1]}")
         
         result = cursor.fetchall()
         cursor.close()
@@ -62,7 +62,7 @@ class SecretariaMunicipalModel():
         listEstadosDict = []
         for estadoTupla in result:
             
-            tup1 = ('id', 'nome', 'cnpj', 'endereco', 'telefone', 'email',  'FK_secretaria_municipio_id') 
+            tup1 = ('id', 'data_inicio', 'data_fim', 'FK_secretaria_municipal_id', 'FK_user_id') 
             tup2 = estadoTupla
            
             if len(tup1) == len(tup2): 
@@ -74,12 +74,12 @@ class SecretariaMunicipalModel():
         return listEstadosDict
 
     @classmethod
-    def create_secretaria_municipal(*args, **kwargs):
+    def create_dirigente_municipal(*args, **kwargs):
         # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
         # try:
             cursor = conn.cursor()
     
-            cursor.execute("insert into secretaria_municipal ( nome, cnpj, endereco, telefone, email, FK_secretaria_municipio_id) values(?,?,?,?,?,?)",args[1], int(args[2]), args[3], int(args[4]), args[5], int(args[6]))
+            cursor.execute("insert into dirigente_municipal ( data_inicio, data_fim, FK_secretaria_municipal_id, FK_user_id) values(?,?,?,?)",args[1], args[2], int(args[3]), int(args[4]))
             
             conn.commit()
             # conn.close()
@@ -90,7 +90,7 @@ class SecretariaMunicipalModel():
         # #     return None
     
     @classmethod
-    def update_secretaria_municipal(*args, **kwargs):
+    def update_dirigente_municipal(*args, **kwargs):
         # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
         # try:
             cursor = conn.cursor()
@@ -98,10 +98,10 @@ class SecretariaMunicipalModel():
                 # input()
             
             cursor.execute('''
-                        UPDATE secretaria_municipal
-                        SET nome = ?, cnpj = ?, endereco = ?,telefone = ?,email =  ?, FK_secretaria_municipio_id=?
+                        UPDATE dirigente_municipal
+                        SET data_inicio = ?, data_fim = ?, FK_secretaria_municipal_id = ?, FK_user_id = ?
                         WHERE id = ?
-                        ''',args[1], int(args[2]), args[3], int(args[4]), args[5], int(args[6]), int(args[7])
+                        ''',args[1], args[2], int(args[3]), int(args[4])
                         )
             
             conn.commit()

@@ -133,6 +133,26 @@ class UserModel():
         # #     return None
 
     @classmethod
+    def create_dirigente_municipal(*args, **kwargs):
+        # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
+        # try:
+            cursor = conn.cursor()
+            # print(args)
+            # input()
+
+            conn.autocommit = True
+
+            cursor.execute("insert into users (cpf , nome , email , telefone, FK_perfil_id) values(?,?,?,?,?)",args[1], args[2], args[3], args[4], args[5])
+            
+            conn.commit()
+            # conn.close()
+            # return 'created'
+            # rows = cursor.fetchall()
+        # except:
+        #     print(TypeError)
+        # #     return None
+
+    @classmethod
     def create_profissional_educacao_(*args, **kwargs):
         # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
         # try:
