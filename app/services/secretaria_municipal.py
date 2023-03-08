@@ -42,11 +42,12 @@ class GetSecretariamunicipal(Resource):
             email = dados['email'].strip()
             FK_secretaria_municipio_id = dados['FK_secretaria_municipio_id']
             SecretariaMunicipalModel.create_secretaria_municipal(nome, cnpj, endereco, telefone, email, FK_secretaria_municipio_id)
+            return  {'created': nome}, 201
         
         except:
             return { 'error': 'verifique a requisição !' }, 400
         
-        return  {'created': nome}, 201
+        
 
     
     @jwt_required()

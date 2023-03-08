@@ -79,7 +79,7 @@ class SecretariaMunicipalModel():
         # try:
             cursor = conn.cursor()
     
-            cursor.execute("insert into secretaria_municipal ( nome, cnpj, endereco, telefone, email, FK_secretaria_municipio_id) values(?,?,?,?,?,?,?)",args[1], int(args[2]), args[3], int(args[4]), args[5], int(args[6]), int(args[7]))
+            cursor.execute("insert into secretaria_municipal ( nome, cnpj, endereco, telefone, email, FK_secretaria_municipio_id) values(?,?,?,?,?,?)",args[1], int(args[2]), args[3], int(args[4]), args[5], int(args[6]))
             
             conn.commit()
             # conn.close()
