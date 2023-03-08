@@ -101,7 +101,7 @@ class DirigenteMunicipalModel():
                         UPDATE dirigente_municipal
                         SET data_inicio = ?, data_fim = ?, FK_secretaria_municipal_id = ?, FK_user_id = ?
                         WHERE id = ?
-                        ''',args[1], args[2], int(args[3]), int(args[4])
+                        ''',args[1], args[2], int(args[3]), int(args[4]), int(args[5])
                         )
             
             conn.commit()

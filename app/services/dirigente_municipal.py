@@ -50,11 +50,12 @@ class DirigenteMunicipalServices(Resource):
             data_inicio = dados['data_inicio']
             data_fim = dados['data_fim']
             FK_secretaria_municipio_id = dados['FK_secretaria_municipio_id']
-            FK_user_id = dados['FK_user_id']
 
             UserModel.create_dirigente_municipal(cpf, nome, email, telefone, FK_perfil_id)
 
-            DirigenteMunicipalModel.create_dirigente_municipal(data_inicio, data_fim, FK_secretaria_municipio_id, FK_user_id)
+            user = UserModel.find_by_login(cpf)
+
+            DirigenteMunicipalModel.create_dirigente_municipal(data_inicio, data_fim, FK_secretaria_municipio_id, user[9])
             
             return  {'created': nome}, 201
         
@@ -78,9 +79,12 @@ class DirigenteMunicipalServices(Resource):
             data_inicio = dados['data_inicio']
             data_fim = dados['data_fim']
             FK_secretaria_municipio_id = dados['FK_secretaria_municipio_id']
-            FK_user_id = dados['FK_user_id']
-
-            DirigenteMunicipalModel.update_dirigente_municipal(data_inicio, data_fim , FK_secretaria_municipio_id, FK_user_id , args[0])
+            
+            user = UserModel.find_by_login(cpf)
+            UserModel.update_dirigente_municipal(cpf, nome, email, telefone, FK_perfil_id, user[9])
+            user = UserModel.find_by_login(cpf)
+            DirigenteMunicipalModel.update_dirigente_municipal(data_inicio, data_fim, FK_secretaria_municipio_id, user[9] , args[0])
+            
             return {'updated': nome }, 200
         
         except:
