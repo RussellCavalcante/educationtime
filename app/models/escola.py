@@ -39,7 +39,7 @@ class EscolaModel():
         listEstadosDict = []
         for estadoTupla in result:
             
-            tup1 = ('id', 'nome_escola','endereco', 'email_escola', 'telefone', 'cod_inep', 'accept') 
+            tup1 = ('id', 'nome_escola','endereco', 'email_escola', 'telefone', 'cod_inep', 'FK_municipio_id') 
             tup2 = estadoTupla
            
             if len(tup1) == len(tup2): 
@@ -63,7 +63,7 @@ class EscolaModel():
         listEstadosDict = []
         for estadoTupla in result:
             
-            tup1 = ('id', 'nome_escola','endereco', 'email_escola', 'telefone', 'cod_inep', 'accept') 
+            tup1 = ('id', 'nome_escola','endereco', 'email_escola', 'telefone', 'cod_inep', 'FK_municipio_id') 
             tup2 = estadoTupla
            
             if len(tup1) == len(tup2): 
@@ -83,7 +83,7 @@ class EscolaModel():
             # print(args[1], args[2], args[3])
             # input()
             
-            cursor.execute("insert into escola ( nome_escola , endereco , email_escola, telefone, cod_inep) values(?,?,?,?,?)",args[1], args[2], args[3], int(args[4]), int(args[5]))
+            cursor.execute("insert into escola ( nome_escola , endereco , email_escola, telefone, cod_inep, FK_municipio_id) values(?,?,?,?,?,?)",args[1], args[2], args[3], int(args[4]), int(args[5]), int(args[6]))
             
             conn.commit()
             # conn.close()
@@ -103,9 +103,9 @@ class EscolaModel():
             
             cursor.execute('''
                         UPDATE escola
-                        SET nome_escola = ?, endereco = ?, email_escola = ?,telefone = ?,cod_inep = ?
+                        SET nome_escola = ?, endereco = ?, email_escola = ?,telefone = ?,cod_inep = ?, FK_municipio_id = ?
                         WHERE id = ?
-                        ''',args[1], int(args[2]), args[3], int(args[4]), int(args[5]), args[6])
+                        ''',args[1], int(args[2]), args[3], int(args[4]), int(args[5]), args[6], args[7])
                         
             
             conn.commit()

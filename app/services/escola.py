@@ -12,6 +12,8 @@ atributos.add_argument('endereco', type=str, help="campo de email e obrigatorio"
 atributos.add_argument('telefone', type=int, help="campo de telefone")
 atributos.add_argument('email_escola', type=str, help="email obrigatorio")
 atributos.add_argument('cod_inep', type=int, help="campo de cod_inep")
+atributos.add_argument('FK_municipio_id', type=int, help="campo de municipio")
+
 
 class GetEscola(Resource):
     @jwt_required()
@@ -40,9 +42,12 @@ class GetEscola(Resource):
             telefone = dados['telefone']
             email_escola = dados['email_escola'].strip()
             cod_inep = dados['cod_inep']
-            EscolaModel.create_escola(nome_escola, endereco, email_escola, telefone, cod_inep)
+            FK_municipio_id = dados['FK_municipio_id']
+
+            EscolaModel.create_escola(nome_escola, endereco, email_escola, telefone, cod_inep, FK_municipio_id)
             
             return  {'created': nome_escola}, 201
+        
         except:
             return { 'error': 'verifique a requisição !' }, 400
 
@@ -56,9 +61,11 @@ class GetEscola(Resource):
             telefone = dados['telefone']
             email_escola = dados['email_escola'].strip()
             cod_inep = dados['cod_inep']
+            FK_municipio_id = dados['FK_municipio_id']
             
-            EscolaModel.update_escola(nome_escola, endereco, email_escola, telefone, cod_inep, args[0])
+            EscolaModel.update_escola(nome_escola, endereco, email_escola, telefone, cod_inep, FK_municipio_id ,args[0])
             return {'updated': nome_escola }, 200
+        
         except:
             return { 'error': 'verifique a requisição !' }, 400
 
