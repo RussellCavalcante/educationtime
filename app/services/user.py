@@ -70,7 +70,12 @@ class UserRegister(Resource):
             salt = UserModel.get_new_salt()
 
             encrypted_password = UserModel.password_encrypted(password, salt)
-                    
+            print(encrypted_password)
+
+            print(salt)
+
+            input()
+
             if not UserModel.email_validator(dados['email']):
                 return {'message': "Email '{}' esta invalido.".format(dados["email"])}, 400
 
@@ -140,8 +145,8 @@ class UserLogin(Resource):
             
             salt = UserModel.find_salt_by_id(user)
 
-            if not UserModel.assert_password(user[0], password, salt,):
-                return {'status': False}, 400
+            if not UserModel.assert_password(user[0], password, salt):
+                return {'status': "login incorreto por favor refazer login"}, 400
         
             token_de_acesso = create_access_token(identity=1)
             

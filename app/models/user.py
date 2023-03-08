@@ -37,17 +37,17 @@ class UserModel():
 
     def assert_password(*args, **kwargs) -> bool:
         from hashlib import md5
-        
+
         password_with_md5 = args[1] + args[2]
         password_with_md5 = md5(str(password_with_md5).encode('utf-8')).hexdigest()
 
         cursor = conn.cursor()
  
-        user = cursor.execute(f"select password from users where id={args[0]};")
+        cursor.execute(f"select password from users where id={args[0]};")
 
         password = cursor.fetchall()
         cursor.close()
-        
+
         return password_with_md5 == password[0][0]
     
     @classmethod
@@ -75,7 +75,7 @@ class UserModel():
         rows = cursor.fetchall()
 
         if len(rows) != 0:
-            return rows[0][6]
+            return rows[0][7]
         return None
     
     @classmethod
