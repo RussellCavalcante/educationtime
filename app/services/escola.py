@@ -63,6 +63,7 @@ class GetEscola(Resource):
             cod_inep = dados['cod_inep']
             FK_municipio_id = dados['FK_municipio_id']
             
+            
             EscolaModel.update_escola(nome_escola, endereco, email_escola, telefone, cod_inep, FK_municipio_id ,args[0])
             return {'updated': nome_escola }, 200
         
