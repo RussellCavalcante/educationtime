@@ -38,7 +38,7 @@ class DirigenteMunicipalModel():
         listEstadosDict = []
         for estadoTupla in result:
             
-            tup1 = ('id', 'data_inicio', 'data_fim', 'endereco', 'telefone', 'email',  'FK_secretaria_municipio_id') 
+            tup1 = ('id', 'data_inicio', 'data_fim',  'FK_secretaria_municipio_id', 'FK_user_id') 
             tup2 = estadoTupla
            
             if len(tup1) == len(tup2): 
@@ -62,7 +62,7 @@ class DirigenteMunicipalModel():
         listEstadosDict = []
         for estadoTupla in result:
             
-            tup1 = ('id', 'data_inicio', 'data_fim', 'FK_secretaria_municipal_id', 'FK_user_id') 
+            tup1 = ('id', 'data_inicio', 'data_fim',  'FK_secretaria_municipio_id', 'FK_user_id') 
             tup2 = estadoTupla
            
             if len(tup1) == len(tup2): 
