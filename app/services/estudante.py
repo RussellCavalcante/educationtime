@@ -12,6 +12,7 @@ atributos.add_argument('nome', type=str, help="campo obrigatorio")
 atributos.add_argument('data_nascimento', type=str, help="campo obrigatorio ")
 atributos.add_argument('tipo_aluno', type=str, help="campo obrigatorio ")
 atributos.add_argument('nee', type=str, help="campo obrigatorio nee ")
+atributos.add_argument('FK_escola_id', type=int, help="campo obrigatorio int ")
 
 
 class GetEstudante(Resource):
@@ -42,8 +43,9 @@ class GetEstudante(Resource):
             data_nascimento = dados['data_nascimento'].strip()
             tipo_aluno = dados['tipo_aluno']
             nee = dados['nee']
+            FK_escola_id = dados['FK_escola_id']
         
-            estudanteModel.create_estudante(cod_nacional_estudante ,nome, data_nascimento, tipo_aluno, nee)
+            estudanteModel.create_estudante(cod_nacional_estudante ,nome, data_nascimento, tipo_aluno, nee, FK_escola_id)
             
             return  {'created': nome}, 200
         except:
@@ -60,8 +62,9 @@ class GetEstudante(Resource):
             data_nascimento = dados['data_nascimento'].strip()
             tipo_aluno = dados['tipo_aluno']
             nee = dados['nee']
+            FK_escola_id = dados['FK_escola_id']
 
-            estudanteModel.update_estudante(cod_nacional_estudante ,nome, data_nascimento, tipo_aluno, nee, args[0])
+            estudanteModel.update_estudante(cod_nacional_estudante ,nome, data_nascimento, tipo_aluno, nee, FK_escola_id, args[0])
             
             return {'updated': nome }, 200
         
