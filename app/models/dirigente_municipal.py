@@ -34,9 +34,6 @@ class DirigenteMunicipalModel():
         result = cursor.fetchall()
         cursor.close()
 
-        print(result)
-        input()
-
         listEstadosDict = []
         for estadoTupla in result:
             
