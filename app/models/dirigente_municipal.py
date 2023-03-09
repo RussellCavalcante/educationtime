@@ -42,7 +42,7 @@ class DirigenteMunicipalModel():
                     'data_fim',
                     'FK_secretaria_municipal_id',
                     'FK_user_id',
-                    'nome1',
+                    'nome usuario',
                     'email',
                     'telefone',
                     'cpf',
