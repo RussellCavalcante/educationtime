@@ -24,10 +24,10 @@ class DirigenteMunicipalServices(Resource):
 
     @jwt_required()
     def get(self, *args, **kwargs):
-        try:
+        # try:
             return  DirigenteMunicipalModel.get_dirigente_municipal(), 200
-        except:
-            return { 'error': 'verifique a requisição !' }, 400
+        # except:
+        #     return { 'error': 'verifique a requisição !' }, 400
         
     @jwt_required()
     def get_by_id(self, *args, **kwargs):
@@ -54,8 +54,8 @@ class DirigenteMunicipalServices(Resource):
             UserModel.create_dirigente_municipal(cpf, nome, email, int(telefone), FK_perfil_id)
 
             user = UserModel.find_by_login(cpf)
-
-            DirigenteMunicipalModel.create_dirigente_municipal(data_inicio, data_fim, FK_secretaria_municipio_id, user[9])
+            
+            DirigenteMunicipalModel.create_dirigente_municipal(data_inicio, data_fim, FK_secretaria_municipio_id, user[0])
             
             return  {'created': nome}, 201
         
@@ -81,9 +81,9 @@ class DirigenteMunicipalServices(Resource):
             FK_secretaria_municipio_id = dados['FK_secretaria_municipio_id']
 
             user = UserModel.find_by_login(cpf)
-            UserModel.update_dirigente_municipal(cpf, nome, email, int(telefone), FK_perfil_id, user[9])
+            UserModel.update_dirigente_municipal(cpf, nome, email, int(telefone), FK_perfil_id, user[0])
             user = UserModel.find_by_login(cpf)
-            DirigenteMunicipalModel.update_dirigente_municipal(data_inicio, data_fim, FK_secretaria_municipio_id, user[9] , args[0])
+            DirigenteMunicipalModel.update_dirigente_municipal(data_inicio, data_fim, FK_secretaria_municipio_id, user[0] , args[0])
             
             return {'updated': nome }, 200
         
