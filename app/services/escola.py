@@ -18,11 +18,11 @@ atributos.add_argument('FK_municipio_id', type=int, help="campo de municipio")
 class GetEscola(Resource):
     @jwt_required()
     def get_by_id(self, *args, **kwargs):
-        try:
+        # try:
                 
             return  EscolaModel.get_escola_by_id(args[0]), 200
-        except:
-            return { 'error': 'verifique a requisição !' }, 400
+        # except:
+        #     return { 'error': 'verifique a requisição !' }, 400
 
     @jwt_required()
     def get(self, *args, **kwargs):
@@ -63,7 +63,7 @@ class GetEscola(Resource):
             cod_inep = dados['cod_inep']
             FK_municipio_id = dados['FK_municipio_id']
             
-            
+
             EscolaModel.update_escola(nome_escola, endereco, email_escola, telefone, cod_inep, FK_municipio_id ,args[0])
             return {'updated': nome_escola }, 200
         

@@ -12,7 +12,7 @@ atributos = reqparse.RequestParser()
 atributos.add_argument('cpf', type=str, required=True, help="campo de nome do usuario e obrigatorio")
 atributos.add_argument('nome', type=str, help="campo obrigatorio")
 atributos.add_argument('email', type=str, help="campo de email e obrigatorio")
-atributos.add_argument('telefone', type=str, help="campo de telefone")
+atributos.add_argument('telefone', type=int, help="campo de telefone")
 atributos.add_argument('FK_perfil_id', type=int, help="campo de perfil_id")
 atributos.add_argument('data_inicio', type=str, help="campo de nome do usuario e obrigatorio")
 atributos.add_argument('data_fim', type=str, help="campo de email e obrigatorio")
@@ -51,7 +51,7 @@ class DirigenteMunicipalServices(Resource):
             data_fim = dados['data_fim']
             FK_secretaria_municipio_id = dados['FK_secretaria_municipio_id']
 
-            UserModel.create_dirigente_municipal(cpf, nome, email, telefone, FK_perfil_id)
+            UserModel.create_dirigente_municipal(cpf, nome, email, int(telefone), FK_perfil_id)
 
             user = UserModel.find_by_login(cpf)
 
@@ -79,9 +79,9 @@ class DirigenteMunicipalServices(Resource):
             data_inicio = dados['data_inicio']
             data_fim = dados['data_fim']
             FK_secretaria_municipio_id = dados['FK_secretaria_municipio_id']
-            
+
             user = UserModel.find_by_login(cpf)
-            UserModel.update_dirigente_municipal(cpf, nome, email, telefone, FK_perfil_id, user[9])
+            UserModel.update_dirigente_municipal(cpf, nome, email, int(telefone), FK_perfil_id, user[9])
             user = UserModel.find_by_login(cpf)
             DirigenteMunicipalModel.update_dirigente_municipal(data_inicio, data_fim, FK_secretaria_municipio_id, user[9] , args[0])
             

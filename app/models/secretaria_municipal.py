@@ -29,7 +29,7 @@ class SecretariaMunicipalModel():
     def get_secretaria_municipal(*args, **kwargs):
         cursor = conn.cursor()
  
-        cursor.execute("select * from secretaria_municipal")
+        cursor.execute("SELECT * FROM secretaria_municipal INNER JOIN municipio ON secretaria_municipal.FK_secretaria_municipio_id = municipio.id INNER JOIN estado ON municipio.FK_UF_id = estado.id;")
         
         result = cursor.fetchall()
         cursor.close()
@@ -38,7 +38,7 @@ class SecretariaMunicipalModel():
         listEstadosDict = []
         for estadoTupla in result:
             
-            tup1 = ('id', 'nome', 'cnpj', 'endereco', 'telefone', 'email',  'FK_secretaria_municipio_id') 
+            tup1 = ('id', 'nome', 'cnpj', 'endereco', 'telefone', 'email',  'FK_secretaria_municipio_id', 'idMunicipio', 'codigo_ibge', 'nomemunicipio', 'FK_UF_id', 'iduf', 'nomeuf', 'uf' ) 
             tup2 = estadoTupla
            
             if len(tup1) == len(tup2): 
@@ -53,7 +53,7 @@ class SecretariaMunicipalModel():
     def get_secretaria_municipal_by_id(*args, **kwargs):
         cursor = conn.cursor()
  
-        cursor.execute(f"select * from secretaria_municipal where id = {args[1]}")
+        cursor.execute(f"SELECT * FROM secretaria_municipal INNER JOIN municipio ON secretaria_municipal.FK_secretaria_municipio_id = municipio.id INNER JOIN estado ON municipio.FK_UF_id = estado.id WHERE secretaria_municipal.id = {args[1]};")
         
         result = cursor.fetchall()
         cursor.close()
@@ -62,7 +62,7 @@ class SecretariaMunicipalModel():
         listEstadosDict = []
         for estadoTupla in result:
             
-            tup1 = ('id', 'nome', 'cnpj', 'endereco', 'telefone', 'email',  'FK_secretaria_municipio_id') 
+            tup1 = ('id', 'nome', 'cnpj', 'endereco', 'telefone', 'email',  'FK_secretaria_municipio_id', 'idMunicipio', 'codigo_ibge', 'nomemunicipio', 'FK_UF_id', 'iduf', 'nomeuf', 'uf') 
             tup2 = estadoTupla
            
             if len(tup1) == len(tup2): 

@@ -29,7 +29,7 @@ class EscolaModel():
     def get_escola(*args, **kwargs):
         cursor = conn.cursor()
  
-        cursor.execute("select * from escola;")
+        cursor.execute("SELECT * FROM escola INNER JOIN municipio ON escola.FK_municipio_id = municipio.id INNER JOIN estado ON municipio.FK_UF_id = estado.id;")
         
         result = cursor.fetchall()
         cursor.close()
@@ -39,7 +39,7 @@ class EscolaModel():
         listEstadosDict = []
         for estadoTupla in result:
             
-            tup1 = ('id', 'nome_escola','endereco', 'email_escola', 'telefone', 'cod_inep', 'FK_municipio_id') 
+            tup1 = ('id', 'nome_escola','endereco', 'email_escola', 'telefone', 'cod_inep', 'FK_municipio_id', 'idMunicipio', 'codigo_ibge', 'nomemunicipio', 'FK_UF_id', 'iduf', 'nomeuf', 'uf') 
             tup2 = estadoTupla
            
             if len(tup1) == len(tup2): 
@@ -55,7 +55,7 @@ class EscolaModel():
         cursor = conn.cursor()
         
  
-        cursor.execute(f"select * from escola where id = {args[1]};")
+        cursor.execute(f"SELECT * FROM escola INNER JOIN municipio ON escola.FK_municipio_id = municipio.id INNER JOIN estado ON municipio.FK_UF_id = estado.id WHERE escola.id= {args[1]};")
         
         result = cursor.fetchall()
         cursor.close()
@@ -63,7 +63,7 @@ class EscolaModel():
         listEstadosDict = []
         for estadoTupla in result:
             
-            tup1 = ('id', 'nome_escola','endereco', 'email_escola', 'telefone', 'cod_inep', 'FK_municipio_id') 
+            tup1 = ('id', 'nome_escola','endereco', 'email_escola', 'telefone', 'cod_inep', 'FK_municipio_id', 'idMunicipio', 'codigo_ibge', 'nomemunicipio', 'FK_UF_id', 'iduf', 'nomeuf', 'uf') 
             tup2 = estadoTupla
            
             if len(tup1) == len(tup2): 

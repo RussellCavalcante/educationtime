@@ -49,8 +49,8 @@ class MunicipioModel():
     @classmethod
     def get_municipios_by_id(*args, **kwargs):
         cursor = conn.cursor()
- 
-        cursor.execute(f"select * from municipio where id={args[1]}")
+        
+        cursor.execute(f"SELECT * FROM municipio INNER JOIN estado ON municipio.FK_UF_id = estado.id WHERE municipio.id={args[1]};")
         
         estados = cursor.fetchall()
         cursor.close()
@@ -58,7 +58,7 @@ class MunicipioModel():
         listEstadosDict = []
         for estadoTupla in estados:
             
-            tup1 = ('id', 'codigo_ibge', 'nome', 'FK_UF_id') 
+            tup1 = ('id', 'codigo_ibge', 'nome', 'FK_UF_id', 'iduf', 'nomeuf', 'uf') 
             tup2 = estadoTupla
            
             if len(tup1) == len(tup2): 
@@ -72,7 +72,7 @@ class MunicipioModel():
     def get_municipios_by(*args, **kwargs):
         cursor = conn.cursor()
  
-        cursor.execute(f"select * from municipio;")
+        cursor.execute(f"SELECT * FROM municipio INNER JOIN estado ON municipio.FK_UF_id = estado.id;;")
         
         estados = cursor.fetchall()
         cursor.close()
@@ -80,7 +80,7 @@ class MunicipioModel():
         listEstadosDict = []
         for estadoTupla in estados:
             
-            tup1 = ('id', 'codigo_ibge', 'nome', 'FK_UF_id') 
+            tup1 = ('id', 'codigo_ibge', 'nome', 'FK_UF_id', 'iduf', 'nomeuf', 'uf') 
             tup2 = estadoTupla
            
             if len(tup1) == len(tup2): 
