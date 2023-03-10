@@ -64,6 +64,29 @@ class DirigenteMunicipalModel():
                 listEstadosDict.append(res)   
             
         return listEstadosDict
+    @classmethod
+    def get_dirigente_municipal_by_secretaria_id(*args, **kwargs):
+        cursor = conn.cursor()
+        
+        cursor.execute(f"SELECT dirigente_municipal.id, users.nome FROM dirigente_municipal INNER JOIN users ON dirigente_municipal.FK_user_id =  users.id INNER JOIN  secretaria_municipal ON  dirigente_municipal.FK_secretaria_municipal_id = secretaria_municipal.id INNER JOIN municipio ON secretaria_municipal.FK_secretaria_municipio_id = municipio.id WHERE municipio.id ={args[1]};")
+        
+        result = cursor.fetchall()
+        cursor.close()
+
+     
+        listEstadosDict = []
+        for estadoTupla in result:
+            
+            tup1 = ('id','nome') 
+            tup2 = estadoTupla
+           
+            if len(tup1) == len(tup2): 
+                res = dict(zip(tup1, tup2)) 
+                # print(res)
+
+                listEstadosDict.append(res)   
+            
+        return listEstadosDict
 
     @classmethod
     def get_dirigente_municipal_by_id(*args, **kwargs):

@@ -35,6 +35,14 @@ class DirigenteMunicipalServices(Resource):
             return  DirigenteMunicipalModel.get_dirigente_municipal_by_id(args[0]), 200
         except:
             return { 'error': 'verifique a requisição !' }, 400
+        
+    @jwt_required()
+    def get_by_muncipio_id(self, *args, **kwargs):
+        try:
+            return  DirigenteMunicipalModel.get_dirigente_municipal_by_secretaria_id(args[0]), 200
+        except:
+            return { 'error': 'verifique a requisição !' }, 400
+
 
     @jwt_required()
     def post(self, *args, **kwargs):

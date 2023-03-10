@@ -29,15 +29,16 @@ class MunicipioModel():
     def get_municipios_by_uf(*args, **kwargs):
         cursor = conn.cursor()
  
-        cursor.execute(f"select * from municipio where FK_UF_id={args[1]}")
+        cursor.execute(f"select id , nome from municipio where FK_UF_id={args[1]} ORDER BY nome ASC ")
         
         estados = cursor.fetchall()
         cursor.close()
 
+
         listEstadosDict = []
         for estadoTupla in estados:
             
-            tup1 = ('id', 'codigo_ibge', 'nome', 'FK_UF_id') 
+            tup1 = ('id', 'nome') 
             tup2 = estadoTupla
            
             if len(tup1) == len(tup2): 

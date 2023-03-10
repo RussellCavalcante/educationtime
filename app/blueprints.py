@@ -74,6 +74,15 @@ def update_uf(id):
     
     return _Get_services.update(id)
 
+@avaliable_route.route('/municipio/uf/<int:id>', methods=['GET'])
+
+def get_municipio_by_uf(id):    
+    from app.services.municipio import GetMunicipio
+    
+    _Get_services = GetMunicipio()
+    
+    return _Get_services.get_by_uf_id(id)
+
 @avaliable_route.route('/municipio/<int:id>', methods=['GET'])
 
 def get_municipio_by(id):    
@@ -127,6 +136,15 @@ def get_secretaria_municipal_by_id(id):
     _Get_services = GetSecretariamunicipal()
     
     return _Get_services.get_by_id(id)
+
+@avaliable_route.route('/secretariamunicipal/municipio/<int:id>', methods=['GET'])
+
+def get_secretaria_municipal_by_municipio_id(id):    
+    from app.services.secretaria_municipal import GetSecretariamunicipal
+    
+    _Get_services = GetSecretariamunicipal()
+    
+    return _Get_services.get_by_municipio_id(id)
 
 @avaliable_route.route('/secretariamunicipal/inserir', methods=['POST'])
 
@@ -570,6 +588,14 @@ def get_Dirigente_by(id):
     _Get_services = DirigenteMunicipalServices()
     
     return _Get_services.get_by_id(id)
+
+@avaliable_route.route('/dirigente/municipio/<int:id>', methods=['GET'])
+def get_Dirigente_by_municipio_id(id):    
+    from app.services.dirigente_municipal import DirigenteMunicipalServices
+    
+    _Get_services = DirigenteMunicipalServices()
+    
+    return _Get_services.get_by_muncipio_id(id)
 
 
 @avaliable_route.route('/Dirigente/Cadastro', methods=['POST'])

@@ -29,6 +29,13 @@ class GetSecretariamunicipal(Resource):
             return  SecretariaMunicipalModel.get_secretaria_municipal_by_id(args[0]), 200
         except:
             return { 'error': 'verifique a requisição !' }, 400
+        
+    @jwt_required()
+    def get_by_municipio_id(self, *args, **kwargs):
+        try:
+            return  SecretariaMunicipalModel.get_secretaria_municipal_by_municipio_id(args[0]), 200
+        except:
+            return { 'error': 'verifique a requisição !' }, 400
 
     @jwt_required()
     def post(self, *args, **kwargs):

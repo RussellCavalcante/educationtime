@@ -29,7 +29,7 @@ class EstadoModel():
     def get_estados(*args, **kwargs):
         cursor = conn.cursor()
  
-        cursor.execute("select * from estado")
+        cursor.execute("select * from estado ORDER BY nome ASC")
         
         estados = cursor.fetchall()
         
@@ -51,7 +51,7 @@ class EstadoModel():
     def get_estados_by_id(*args, **kwargs):
         cursor = conn.cursor()
        
-        cursor.execute(f"select * from estado where id = {args[1]};")
+        cursor.execute(f"select * from estado where id = {args[1]} ;")
         
         estados = cursor.fetchall()
         
