@@ -7,12 +7,13 @@ from flask_jwt_extended import create_access_token, jwt_required, get_jwt
 from app.blacklist import BLACKLIST
 
 atributos = reqparse.RequestParser()
-atributos.add_argument('cod_turma', type=str, help="campo obrigatorio ")
+atributos.add_argument('nome_turma', type=str, help="campo obrigatorio ")
 atributos.add_argument('FK_etapa_ensino_id', type=int, help="campo obrigatorio")
 atributos.add_argument('ano_letivo', type=str, help="campo obrigatorio ")
 atributos.add_argument('FK_modalidade_id', type=int, help="campo obrigatorio ")
 atributos.add_argument('FK_turno_id', type=int, help="campo obrigatorio ")
 atributos.add_argument('FK_grau_etapa_ensino_id', type=int, help="campo obrigatorio nome ")
+atributos.add_argument('FK_escola_id', type=int, help="campo obrigatorio nome ")
 
 class GetTurma(Resource):
 
@@ -40,16 +41,17 @@ class GetTurma(Resource):
             
             # print(dados)
             # input()
-            cod_turma = dados['cod_turma'].strip()
+            nome_turma = dados['nome_turma'].strip()
             FK_etapa_ensino_id = dados['FK_etapa_ensino_id']
             ano_letivo = dados['ano_letivo'].strip()
             FK_modalidade_id = dados['FK_modalidade_id']
             FK_turno_id = dados['FK_turno_id']
             FK_grau_etapa_ensino_id = dados['FK_grau_etapa_ensino_id']
+            FK_escola_id = dados['FK_escola_id']
 
-            TurmaModel.create_turma(cod_turma, FK_etapa_ensino_id, ano_letivo, FK_modalidade_id, FK_turno_id, FK_grau_etapa_ensino_id)
+            TurmaModel.create_turma(nome_turma, FK_etapa_ensino_id, ano_letivo, FK_modalidade_id, FK_turno_id, FK_grau_etapa_ensino_id, FK_escola_id)
             
-            return  {'created': cod_turma}, 201
+            return  {'created': nome_turma}, 201
         except:
             return { 'error': 'verifique a requisição !' }, 400
     
@@ -112,15 +114,16 @@ class GetTurma(Resource):
 
             dados = atributos.parse_args()
 
-            cod_turma = dados['cod_turma'].strip()
+            nome_turma = dados['nome_turma'].strip()
             FK_etapa_ensino_id = dados['FK_etapa_ensino_id']
             ano_letivo = dados['ano_letivo'].strip()
             FK_modalidade_id = dados['FK_modalidade_id']
             FK_turno_id = dados['FK_turno_id']
             FK_grau_etapa_ensino_id = dados['FK_grau_etapa_ensino_id']
+            FK_escola_id = dados['FK_escola_id']
 
-            TurmaModel.update_turma(cod_turma, FK_etapa_ensino_id, ano_letivo, FK_modalidade_id, FK_turno_id, FK_grau_etapa_ensino_id, args[0])
-            return {'updated': cod_turma }, 200
+            TurmaModel.update_turma(nome_turma, FK_etapa_ensino_id, ano_letivo, FK_modalidade_id, FK_turno_id, FK_grau_etapa_ensino_id, FK_escola_id, args[0])
+            return {'updated': nome_turma }, 200
         
         except:
             return { 'error': 'verifique a requisição !' }, 400

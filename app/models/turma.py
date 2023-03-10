@@ -64,7 +64,7 @@ class TurmaModel():
         listEstadosDict = []
         for estadoTupla in result:
             
-            tup1 = ('id', 'cod_turma','FK_etapa_ensino_id', 'ano_letivo', 'FK_modalidade_id', 'FK_turno_id', 'FK_grau_etapa_ensino_id') 
+            tup1 = ('id', 'nome_turma','FK_etapa_ensino_id', 'ano_letivo', 'FK_modalidade_id', 'FK_turno_id', 'FK_grau_etapa_ensino_id') 
             tup2 = estadoTupla
            
             if len(tup1) == len(tup2): 
@@ -83,7 +83,7 @@ class TurmaModel():
             # print(args[1], args[2], args[3])
             # input()
             
-            cursor.execute("insert into turma ( cod_turma , FK_etapa_ensino_id , ano_letivo, FK_modalidade_id, FK_turno_id, FK_grau_etapa_ensino_id) values(?,?,?,?,?,?)",args[1], args[2], args[3], int(args[4]), int(args[5]), int(args[6]))
+            cursor.execute("insert into turma ( nome_turma , FK_etapa_ensino_id , ano_letivo, FK_modalidade_id, FK_turno_id, FK_grau_etapa_ensino_id, FK_escola_id) values(?,?,?,?,?,?,?)",args[1], args[2], args[3], int(args[4]), int(args[5]), int(args[6]), int(args[7]))
             
             conn.commit()
             # conn.close()
@@ -101,10 +101,10 @@ class TurmaModel():
                 # input()
             
             cursor.execute('''
-                        UPDATE turma
-                        SET cod_turma = ?, FK_etapa_ensino_id = ?, ano_letivo = ?,FK_modalidade_id = ?,FK_turno_id = ? , FK_grau_etapa_ensino_id = ?
-                        WHERE id = ?
-                        ''',args[1], int(args[2]), args[3], int(args[4]), int(args[5]), int(args[6]), args[7])
+                            UPDATE turma
+                            SET nome_turma = ?, FK_etapa_ensino_id = ?, ano_letivo = ?,FK_modalidade_id = ?,FK_turno_id = ? , FK_grau_etapa_ensino_id = ?, FK_escola_id = ?
+                            WHERE id = ?
+                        ''',args[1], int(args[2]), args[3], int(args[4]), int(args[5]), int(args[6]), args[7], args[8])
                         
             
             conn.commit()

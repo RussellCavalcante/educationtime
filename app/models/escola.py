@@ -105,7 +105,7 @@ class EscolaModel():
                         UPDATE escola
                         SET nome_escola = ?, endereco = ?, email_escola = ?,telefone = ?,cod_inep = ?, FK_municipio_id = ?
                         WHERE id = ?
-                        ''',args[1], int(args[2]), args[3], int(args[4]), int(args[5]), args[6], args[7])
+                        ''',args[1], args[2], args[3], int(args[4]), int(args[5]), args[6], args[7])
                         
             
             conn.commit()
