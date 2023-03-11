@@ -77,9 +77,9 @@ class EscolaModel():
     def get_by_muncipio_id(*args, **kwargs):
         cursor = conn.cursor()
         
-        cursor.execute(f"SELECT id, nome_escola, FK_municipio_id from escola WHERE escola.FK_municipio_id = {args[1]};")
+        cursor.execute(f"SELECT id, nome_escola, FK_municipio_id FROM escola WHERE FK_municipio_id = {args[0]};")
         
-        result = cursor.fetchall()
+        result = cursor.fetchall() 
         cursor.close()
 
      

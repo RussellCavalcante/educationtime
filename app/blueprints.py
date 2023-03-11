@@ -184,12 +184,12 @@ def get_escola_by(id):
 
 @avaliable_route.route('/escolas/municipio/<int:id>', methods=['GET'])
 
-def get_escola_by_muncipio_id(id):    
+def get_by_muncipio_id(id):    
     from app.services.escola import GetEscola
     
     _Get_services = GetEscola()
     
-    return _Get_services.get_by_muncipio_id(id)
+    return _Get_services.get_escola_by_muncipio_id(id)
 
 @avaliable_route.route('/escolas/inserir', methods=['POST'])
 
