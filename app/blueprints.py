@@ -616,6 +616,9 @@ def update_dirigente(id):
     
     return _Get_services.update(id)
 
+
+@avaliable_route.route('/estudante/turma/<int:id>', methods=['GET'])
+
 def get_estudante_turma_id(id):
     from app.services.estudante import GetEstudante
 
