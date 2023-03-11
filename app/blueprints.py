@@ -615,3 +615,10 @@ def update_dirigente(id):
     _Get_services = DirigenteMunicipalServices()
     
     return _Get_services.update(id)
+
+def get_estudante_turma_id(id):
+    from app.services.estudante import GetEstudante
+
+    _Get_services = GetEstudante()
+
+    return _Get_services.get_estudante_turma_id(id)
