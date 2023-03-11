@@ -74,7 +74,7 @@ class EscolaModel():
             
         return listEstadosDict
 
-    def get_escola_by_municipio_id(*args, **kwargs):
+    def get_by_muncipio_id(*args, **kwargs):
         cursor = conn.cursor()
         
         cursor.execute(f"SELECT id, nome_escola, FK_municipio_id from escola WHERE escola.FK_municipio_id = {args[1]};")
