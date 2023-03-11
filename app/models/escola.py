@@ -74,6 +74,28 @@ class EscolaModel():
             
         return listEstadosDict
 
+    def get_escola_by_municipio_id(*args, **kwargs):
+        cursor = conn.cursor()
+        
+        cursor.execute(f"SELECT id, nome_escola, FK_municipio_id from escola WHERE escola.FK_municipio_id = {args[1]};")
+        
+        result = cursor.fetchall()
+        cursor.close()
+
+     
+        listEstadosDict = []
+        for estadoTupla in result:
+            
+            tup1 = ('id','nome_escola', 'FK_municipio_id') 
+            tup2 = estadoTupla
+           
+            if len(tup1) == len(tup2): 
+                res = dict(zip(tup1, tup2)) 
+                # print(res)
+
+                listEstadosDict.append(res)   
+            
+        return listEstadosDict
 
     @classmethod
     def create_escola(*args, **kwargs):
