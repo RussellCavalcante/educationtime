@@ -625,6 +625,50 @@ def update_dirigente(id):
     
     return _Get_services.update(id)
 
+@avaliable_route.route('/Enturmar', methods=['GET'])
+
+def get_enturmar():    
+    from app.services.enturmar import EnturmarServices
+    
+    _Get_services = EnturmarServices()
+    
+    return _Get_services.get()
+
+@avaliable_route.route('/Enturmar/<int:id>', methods=['GET'])
+
+def get_enturmar_by(id):    
+    from app.services.enturmar import EnturmarServices
+    
+    _Get_services = EnturmarServices()
+    
+    return _Get_services.get_by_id(id)
+
+@avaliable_route.route('/Enturmar/turma/<int:id>', methods=['GET'])
+def get_enturmar_by_turma_id(id):    
+    from app.services.enturmar import EnturmarServices
+    
+    _Get_services = EnturmarServices()
+    
+    return _Get_services.get_by_turma_id(id)
+
+
+@avaliable_route.route('/Enturmar/Cadastro', methods=['POST'])
+
+def post_enturmar():    
+    from app.services.enturmar import EnturmarServices
+    
+    _Get_services = EnturmarServices()
+    
+    return _Get_services.post()
+
+@avaliable_route.route('/Enturmar/Update/<int:id>', methods=['PUT'])
+
+def update_enturmar(id):    
+    from app.services.enturmar import EnturmarServices
+
+    _Get_services = EnturmarServices()
+    
+    return _Get_services.update(id)
 
 @avaliable_route.route('/estudante/turma/<int:id>', methods=['GET'])
 
