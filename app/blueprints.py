@@ -295,7 +295,7 @@ def get_turma_etapa_ensino():
     
     return _Get_services.get_etapa_ensino()
 
-@avaliable_route.route('/update/<int:id>', methods=['PUT'])
+@avaliable_route.route('/turmas/update/<int:id>', methods=['PUT'])
 
 def update_turma(id):    
     from app.services.turma import GetTurma
