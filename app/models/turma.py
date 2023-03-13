@@ -29,7 +29,7 @@ class TurmaModel():
     def get_turma(*args, **kwargs):
         cursor = conn.cursor()
  
-        cursor.execute("select * from turma;")
+        cursor.execute("SELECT turma.id, turma.nome_turma, turma.ano_letivo, turma.FK_etapa_ensino_id, escola.nome_escola, etapa_ensino.nome, turma.FK_modalidade_id, modalidade.nome, turma.FK_turno_id, turno.nome, turma.FK_grau_etapa_ensino_id, grau_etapa_ensino.nome_grau FROM  turma INNER JOIN  escola ON turma.FK_escola_id =  escola.id INNER JOIN  etapa_ensino ON turma.FK_etapa_ensino_id =  etapa_ensino.id INNER JOIN modalidade ON turma.FK_modalidade_id = modalidade.id INNER JOIN turno ON turma.FK_turno_id = turno.id INNER JOIN grau_etapa_ensino ON turma.FK_grau_etapa_ensino_id = grau_etapa_ensino.id;")
         
         result = cursor.fetchall()
         cursor.close()
@@ -39,7 +39,7 @@ class TurmaModel():
         listEstadosDict = []
         for estadoTupla in result:
             
-            tup1 = ('id', 'cod_turma','FK_etapa_ensino_id', 'ano_letivo', 'FK_modalidade_id', 'FK_turno_id', 'FK_grau_etapa_ensino_id') 
+            tup1 = ('id', 'nome_turma','ano_letivo', 'FK_etapa_ensino_id', 'nome_escola', 'etapa_ensino_nome', 'FK_modalidade_id', 'modalidade_nome', 'FK_turno_id', 'turno_nome', 'FK_grau_etapa_ensino_id', 'nome_grau') 
             tup2 = estadoTupla
            
             if len(tup1) == len(tup2): 
@@ -54,17 +54,17 @@ class TurmaModel():
     def get_turma_by_id(*args, **kwargs):
         cursor = conn.cursor()
  
-        cursor.execute(f"select * from turma where id = {args[1]};")
+        cursor.execute(f"SELECT turma.id, turma.nome_turma, turma.ano_letivo, turma.FK_etapa_ensino_id, escola.nome_escola, etapa_ensino.nome, turma.FK_modalidade_id, modalidade.nome, turma.FK_turno_id, turno.nome, turma.FK_grau_etapa_ensino_id, grau_etapa_ensino.nome_grau FROM  turma INNER JOIN  escola ON turma.FK_escola_id =  escola.id INNER JOIN  etapa_ensino ON turma.FK_etapa_ensino_id =  etapa_ensino.id INNER JOIN modalidade ON turma.FK_modalidade_id = modalidade.id INNER JOIN turno ON turma.FK_turno_id = turno.id INNER JOIN grau_etapa_ensino ON turma.FK_grau_etapa_ensino_id = grau_etapa_ensino.id WHERE turma.id = {args[1]};")
         
         result = cursor.fetchall()
         cursor.close()
 
-        # print(result)
+        # print(result) 
         # input()
         listEstadosDict = []
         for estadoTupla in result:
             
-            tup1 = ('id', 'nome_turma','FK_etapa_ensino_id', 'ano_letivo', 'FK_modalidade_id', 'FK_turno_id', 'FK_grau_etapa_ensino_id') 
+            tup1 = ('id', 'nome_turma','ano_letivo', 'FK_etapa_ensino_id', 'nome_escola', 'etapa_ensino_nome', 'FK_modalidade_id', 'modalidade_nome', 'FK_turno_id', 'turno_nome', 'FK_grau_etapa_ensino_id', 'nome_grau') 
             tup2 = estadoTupla
            
             if len(tup1) == len(tup2): 
