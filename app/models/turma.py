@@ -29,7 +29,7 @@ class TurmaModel():
     def get_turma(*args, **kwargs):
         cursor = conn.cursor()
  
-        cursor.execute("select turma.id, turma.nome_turma, turma.ano_letivo, turma.FK_modalidade_id, turma.FK_etapa_ensino_id, turma.FK_grau_etapa_ensino_id, turma.FK_turno_id, turma.FK_escola_id, escola.nome_escola, escola.FK_municipio_id, municipio.nome, municipio.FK_UF_id, estado.uf, estado.nome FROM turma INNER JOIN escola ON turma.FK_escola_id = escola.id INNER JOIN municipio ON escola.FK_municipio_id = municipio.id INNER JOIN estado ON municipio.FK_UF_id = estado.id")
+        cursor.execute("select turma.id, turma.nome_turma, turma.ano_letivo, turma.FK_modalidade_id, modalidade.nome, turma.FK_grau_etapa_ensino_id, grau_etapa_ensino.nome_grau, turma.FK_etapa_ensino_id, etapa_ensino.nome, turma.FK_turno_id, turno.nome, turma.FK_escola_id, escola.nome_escola, escola.FK_municipio_id, municipio.nome, municipio.FK_UF_id, estado.uf, estado.nome FROM turma INNER JOIN etapa_ensino ON turma.FK_etapa_ensino_id = etapa_ensino.id INNER JOIN grau_etapa_ensino  ON turma.FK_grau_etapa_ensino_id = grau_etapa_ensino.id INNER JOIN  turno ON  turma.FK_turno_id =  turno.id INNER JOIN  modalidade ON turma.FK_modalidade_id = modalidade.id INNER JOIN  escola  ON turma.FK_escola_id =  escola.id INNER JOIN  municipio ON  escola.FK_municipio_id = municipio.id INNER JOIN estado  ON municipio.FK_UF_id =  estado.id;")
         
         result = cursor.fetchall()
         cursor.close()
@@ -43,9 +43,13 @@ class TurmaModel():
                     'nome_turma',
                     'ano_letivo',
                     'FK_modalidade_id',
-                    'FK_etapa_ensino_id',
+                    'modalidade_nome',
                     'FK_grau_etapa_ensino_id',
+                    'nome_grau',
+                    'FK_etapa_ensino_id',
+                    'etapa_ensino.nome',
                     'FK_turno_id',
+                    'turno.nome',
                     'FK_escola_id',
                     'nome_escola',
                     'FK_municipio_id',
@@ -67,7 +71,7 @@ class TurmaModel():
     def get_turma_by_id(*args, **kwargs):
         cursor = conn.cursor()
  
-        cursor.execute(f"select turma.id, turma.nome_turma, turma.ano_letivo, turma.FK_modalidade_id, turma.FK_etapa_ensino_id, turma.FK_grau_etapa_ensino_id, turma.FK_turno_id, turma.FK_escola_id, escola.nome_escola, escola.FK_municipio_id, municipio.nome, municipio.FK_UF_id, estado.uf, estado.nome FROM turma INNER JOIN escola ON turma.FK_escola_id = escola.id INNER JOIN municipio ON escola.FK_municipio_id = municipio.id INNER JOIN estado ON municipio.FK_UF_id = estado.id WHERE turma.id = {args[1]};")
+        cursor.execute(f"select turma.id, turma.nome_turma, turma.ano_letivo, turma.FK_modalidade_id, modalidade.nome, turma.FK_grau_etapa_ensino_id, grau_etapa_ensino.nome_grau, turma.FK_etapa_ensino_id, etapa_ensino.nome, turma.FK_turno_id, turno.nome, turma.FK_escola_id, escola.nome_escola, escola.FK_municipio_id, municipio.nome, municipio.FK_UF_id, estado.uf, estado.nome FROM turma INNER JOIN etapa_ensino ON turma.FK_etapa_ensino_id = etapa_ensino.id INNER JOIN grau_etapa_ensino  ON turma.FK_grau_etapa_ensino_id = grau_etapa_ensino.id INNER JOIN  turno ON  turma.FK_turno_id =  turno.id INNER JOIN  modalidade ON turma.FK_modalidade_id = modalidade.id INNER JOIN  escola  ON turma.FK_escola_id =  escola.id INNER JOIN  municipio ON  escola.FK_municipio_id = municipio.id INNER JOIN estado  ON municipio.FK_UF_id =  estado.id WHERE turma.id = {args[1]};")
         result = cursor.fetchall()
         cursor.close()
 
@@ -78,9 +82,13 @@ class TurmaModel():
                     'nome_turma',
                     'ano_letivo',
                     'FK_modalidade_id',
-                    'FK_etapa_ensino_id',
+                    'modalidade_nome',
                     'FK_grau_etapa_ensino_id',
+                    'nome_grau',
+                    'FK_etapa_ensino_id',
+                    'etapa_ensino.nome',
                     'FK_turno_id',
+                    'turno.nome',
                     'FK_escola_id',
                     'nome_escola',
                     'FK_municipio_id',
