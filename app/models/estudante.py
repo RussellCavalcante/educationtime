@@ -80,7 +80,7 @@ class estudanteModel():
     def get_estudante_cod(*args, **kwargs):
         cursor = conn.cursor()
  
-        cursor.execute(f"SELECT estudante.id, estudante.nome, estudante.cod_nacional_estudante WHERE estudante.cod_nacional_estudante= {args[1]};")
+        cursor.execute(f"SELECT id, nome, cod_nacional_estudante FROM estudante WHERE cod_nacional_estudante= {args[1]};")
         
         result = cursor.fetchall()
         cursor.close()
