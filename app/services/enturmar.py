@@ -16,28 +16,6 @@ atributos.add_argument('Fk_estudante_id', type=int, help="campo de perfil_id")
 class EnturmarServices(Resource):
 
     @jwt_required()
-    def get(self, *args, **kwargs):
-        try:
-            return EnturmarModel.get_enturmar(), 200
-        except:
-            return { 'error': 'verifique a requisição !' }, 400
-        
-    @jwt_required()
-    def get_by_id(self, *args, **kwargs):
-        try:
-            return EnturmarModel.get_enturmar_by_id(args[0]), 200
-        except:
-            return { 'error': 'verifique a requisição !' }, 400
-        
-    @jwt_required()
-    def get_by_turma_id(self, *args, **kwargs):
-        try:
-            return EnturmarModel.get_enturmar_by_turma(args[0]), 200
-        except:
-            return { 'error': 'verifique a requisição !' }, 400
-
-
-    @jwt_required()
     def post(self, *args, **kwargs):
         try:
                 
