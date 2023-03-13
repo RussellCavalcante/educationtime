@@ -237,7 +237,7 @@ def post_turma():
     
     return _Get_services.post_turma()
 
-@avaliable_route.route('/estudante', methods=['GET'])
+@avaliable_route.route('/Estudante', methods=['GET'])
 
 def get_estudante():    
     from app.services.estudante import GetEstudante
@@ -246,14 +246,6 @@ def get_estudante():
     
     return _Get_services.get()
 
-avaliable_route.route('/estudante/<int:id>', methods=['GET'])
-
-def get_estudante(id):    
-    from app.services.estudante import GetEstudante
-    
-    _Get_services = GetEstudante()
-    
-    return _Get_services.get_by_id(id)
 
 @avaliable_route.route('/estudante/inserir', methods=['POST'])
 
@@ -651,3 +643,12 @@ def get_estudante_turma_id(id):
     _Get_services = GetEstudante()
 
     return _Get_services.get_estudante_turma_id(id)
+
+@avaliable_route.route('/Estudante/<int:id>', methods=['GET'])
+
+def get_estudante_by(id):    
+    from app.services.estudante import GetEstudante
+    
+    _Get_services = GetEstudante()
+    
+    return _Get_services.get_by_id(id)

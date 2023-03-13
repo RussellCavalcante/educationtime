@@ -29,7 +29,7 @@ class estudanteModel():
     def get_estudante(*args, **kwargs):
         cursor = conn.cursor()
  
-        cursor.execute("SELECT estudante.id, estudante.nome, estudante.cod_nacional_estudante, estudante.data_nascimento, estudante.tipo_aluno, estudante.nee, estudante.FK_escola_id, escola.nome_escola FROM  estudante INNER JOIN  escolaON  estudante.FK_escola_id =  escola.id;;")
+        cursor.execute("SELECT estudante.id, estudante.nome, estudante.cod_nacional_estudante, estudante.data_nascimento, estudante.tipo_aluno, estudante.nee, estudante.FK_escola_id, escola.nome_escola FROM  estudante INNER JOIN  escola ON  estudante.FK_escola_id =  escola.id;")
         
         result = cursor.fetchall()
         cursor.close()
@@ -39,7 +39,7 @@ class estudanteModel():
         listEstadosDict = []
         for estadoTupla in result:
             
-            tup1 = ('id', 'cod_nacional_estudante','nome', 'data_nascimento', 'tipo_aluno', 'nee') 
+            tup1 = ('id', 'estudant_nome','cod_nacional_estudante', 'data_nascimento', 'tipo_aluno', 'nee', 'FK_escola_id', 'nome_escola') 
             tup2 = estadoTupla
            
             if len(tup1) == len(tup2): 
@@ -55,7 +55,7 @@ class estudanteModel():
     def get_estudante_id(*args, **kwargs):
         cursor = conn.cursor()
  
-        cursor.execute(f"select * from estudante where = {args[1]};")
+        cursor.execute(f"SELECT estudante.id, estudante.nome, estudante.cod_nacional_estudante, estudante.data_nascimento, estudante.tipo_aluno, estudante.nee, estudante.FK_escola_id, escola.nome_escola FROM  estudante INNER JOIN  escola ON  estudante.FK_escola_id =  escola.id WHERE estudante.id= {args[1]};")
         
         result = cursor.fetchall()
         cursor.close()
@@ -65,7 +65,7 @@ class estudanteModel():
         listEstadosDict = []
         for estadoTupla in result:
             
-            tup1 = ('id', 'cod_nacional_estudante','nome', 'data_nascimento', 'tipo_aluno', 'nee') 
+            tup1 = ('id', 'estudant_nome','cod_nacional_estudante', 'data_nascimento', 'tipo_aluno', 'nee', 'FK_escola_id', 'nome_escola') 
             tup2 = estadoTupla
            
             if len(tup1) == len(tup2): 
