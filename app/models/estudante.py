@@ -76,6 +76,34 @@ class estudanteModel():
             
         return listEstadosDict
 
+    @classmethod
+    def get_estudante_turma_id(*args, **kwargs):
+        cursor = conn.cursor()
+ 
+        cursor.execute(f"select enturmar.FK_estudante_id, estudante.cod_nacional_estudante, estudante.nome from turma  inner join enturmar on turma.id = enturmar.FK_turma_id inner join estudante on  estudante.id =  enturmar.FK_estudante_id where turma.id = {args[1]};")
+        
+         
+        result = cursor.fetchall()
+        cursor.close()
+
+        # print(result)
+        # input()
+        listEstadosDict = []
+        for estadoTupla in result:
+            
+            tup1 = ('FK_estudante_id',
+             'cod_nacional_estudante',
+             'nome') 
+            tup2 = estadoTupla
+           
+            if len(tup1) == len(tup2): 
+                res = dict(zip(tup1, tup2))
+                # print(res)
+
+                listEstadosDict.append(res)   
+            
+        return listEstadosDict
+
 
     @classmethod
     def create_estudante(*args, **kwargs):

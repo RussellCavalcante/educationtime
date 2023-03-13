@@ -182,6 +182,15 @@ def get_escola_by(id):
     
     return _Get_services.get_by_id(id)
 
+@avaliable_route.route('/escolas/municipio/<int:id>', methods=['GET'])
+
+def get_by_muncipio_id(id):    
+    from app.services.escola import GetEscola
+    
+    _Get_services = GetEscola()
+    
+    return _Get_services.get_escola_by_muncipio_id(id)
+
 @avaliable_route.route('/escolas/inserir', methods=['POST'])
 
 def post_escola():    
@@ -660,3 +669,12 @@ def update_enturmar(id):
     _Get_services = EnturmarServices()
     
     return _Get_services.update(id)
+
+@avaliable_route.route('/estudante/turma/<int:id>', methods=['GET'])
+
+def get_estudante_turma_id(id):
+    from app.services.estudante import GetEstudante
+
+    _Get_services = GetEstudante()
+
+    return _Get_services.get_estudante_turma_id(id)

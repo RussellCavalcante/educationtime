@@ -33,6 +33,13 @@ class GetEscola(Resource):
             return { 'error': 'verifique a requisição !' }, 400
 
     @jwt_required()
+    def get_escola_by_muncipio_id(self, *args, **kwargs):
+        try:
+            return  EscolaModel.get_by_muncipio_id(args[0]), 200
+        except:
+            return { 'error': 'verifique a requisição !' }, 400
+
+    @jwt_required()
     def post(self, *args, **kwargs):
         try:
             dados = atributos.parse_args()
