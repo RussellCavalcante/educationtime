@@ -29,7 +29,7 @@ class TurmaModel():
     def get_turma(*args, **kwargs):
         cursor = conn.cursor()
  
-        cursor.execute("select turma.id, turma.nome_turma, turma.ano_letivo, turma.FK_modalidade_id, turma.FK_grau_etapa_ensino_id, turma.FK_turno_id, escola.nome_escola, escola.FK_municipio_id, municipio.nome, municipio.FK_UF_id, estado.uf, estado.nome FROM turma INNER JOIN escola ON turma.FK_escola_id = escola.id INNER JOIN municipio ON escola.FK_municipio_id = municipio.id INNER JOIN estado ON municipio.FK_UF_id = estado.id")
+        cursor.execute("select turma.id, turma.nome_turma, turma.ano_letivo, turma.FK_modalidade_id, turma.FK_grau_etapa_ensino_id, turma.FK_turno_id, turma.FK_escola_id, escola.nome_escola, escola.FK_municipio_id, municipio.nome, municipio.FK_UF_id, estado.uf, estado.nome FROM turma INNER JOIN escola ON turma.FK_escola_id = escola.id INNER JOIN municipio ON escola.FK_municipio_id = municipio.id INNER JOIN estado ON municipio.FK_UF_id = estado.id")
         
         result = cursor.fetchall()
         cursor.close()
@@ -45,6 +45,7 @@ class TurmaModel():
                     'FK_modalidade_id',
                     'FK_grau_etapa_ensino_id',
                     'FK_turno_id',
+                    'FK_escola_id',
                     'nome_escola',
                     'FK_municipio_id',
                     'nome_municipio',
@@ -65,7 +66,7 @@ class TurmaModel():
     def get_turma_by_id(*args, **kwargs):
         cursor = conn.cursor()
  
-        cursor.execute(f"select turma.id, turma.nome_turma, turma.ano_letivo, turma.FK_modalidade_id, turma.FK_grau_etapa_ensino_id, turma.FK_turno_id, escola.nome_escola, escola.FK_municipio_id, municipio.nome, municipio.FK_UF_id, estado.uf, estado.nome FROM turma INNER JOIN escola ON turma.FK_escola_id = escola.id INNER JOIN municipio ON escola.FK_municipio_id = municipio.id INNER JOIN estado ON municipio.FK_UF_id = estado.id WHERE turma.id = {args[1]};")
+        cursor.execute(f"select turma.id, turma.nome_turma, turma.ano_letivo, turma.FK_modalidade_id, turma.FK_grau_etapa_ensino_id, turma.FK_turno_id, turma.FK_escola_id, escola.nome_escola, escola.FK_municipio_id, municipio.nome, municipio.FK_UF_id, estado.uf, estado.nome FROM turma INNER JOIN escola ON turma.FK_escola_id = escola.id INNER JOIN municipio ON escola.FK_municipio_id = municipio.id INNER JOIN estado ON municipio.FK_UF_id = estado.id WHERE turma.id = {args[1]};")
         result = cursor.fetchall()
         cursor.close()
 
@@ -80,6 +81,7 @@ class TurmaModel():
                     'FK_modalidade_id',
                     'FK_grau_etapa_ensino_id',
                     'FK_turno_id',
+                    'FK_escola_id'
                     'nome_escola',
                     'FK_municipio_id',
                     'nome_municipio',
