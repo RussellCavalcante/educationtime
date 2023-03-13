@@ -237,7 +237,7 @@ def post_turma():
     
     return _Get_services.post_turma()
 
-@avaliable_route.route('/turmas/estudante', methods=['GET'])
+@avaliable_route.route('/estudante', methods=['GET'])
 
 def get_estudante():    
     from app.services.estudante import GetEstudante
@@ -246,7 +246,7 @@ def get_estudante():
     
     return _Get_services.get()
 
-avaliable_route.route('/turmas/estudante/<int:id>', methods=['GET'])
+avaliable_route.route('/estudante/<int:id>', methods=['GET'])
 
 def get_estudante(id):    
     from app.services.estudante import GetEstudante
@@ -255,7 +255,7 @@ def get_estudante(id):
     
     return _Get_services.get_by_id(id)
 
-@avaliable_route.route('/turmas/estudante/inserir', methods=['POST'])
+@avaliable_route.route('/estudante/inserir', methods=['POST'])
 
 def post_estudante():    
     from app.services.estudante import GetEstudante
@@ -264,7 +264,7 @@ def post_estudante():
     
     return _Get_services.post_estudante()
 
-@avaliable_route.route('/turmas/estudante/update/<int:id>', methods=['PUT'])
+@avaliable_route.route('/estudante/update/<int:id>', methods=['PUT'])
 
 def update_estudante(id):    
     from app.services.estudante import GetEstudante
@@ -275,7 +275,7 @@ def update_estudante(id):
 
 
 
-@avaliable_route.route('/turmas/turno', methods=['GET'])
+@avaliable_route.route('/turno', methods=['GET'])
 
 def get_turno():    
     from app.services.turma import GetTurma
@@ -284,7 +284,7 @@ def get_turno():
     
     return _Get_services.get_turno()
 
-@avaliable_route.route('/turmas/modalidade', methods=['GET'])
+@avaliable_route.route('/modalidade', methods=['GET'])
 
 def get_modalidade():    
     from app.services.turma import GetTurma
@@ -294,7 +294,7 @@ def get_modalidade():
     return _Get_services.get_modalidade()
 
 
-@avaliable_route.route('/turmas/etapaEnsino', methods=['GET'])
+@avaliable_route.route('/etapaEnsino', methods=['GET'])
 
 def get_turma_etapa_ensino():    
     from app.services.turma import GetTurma
@@ -303,7 +303,7 @@ def get_turma_etapa_ensino():
     
     return _Get_services.get_etapa_ensino()
 
-@avaliable_route.route('/turmas/update/<int:id>', methods=['PUT'])
+@avaliable_route.route('/update/<int:id>', methods=['PUT'])
 
 def update_turma(id):    
     from app.services.turma import GetTurma
