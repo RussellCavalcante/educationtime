@@ -70,8 +70,6 @@ class TurmaModel():
         result = cursor.fetchall()
         cursor.close()
 
-        # print(result)
-        # input()
         listEstadosDict = []
         for estadoTupla in result:
             
@@ -81,7 +79,7 @@ class TurmaModel():
                     'FK_modalidade_id',
                     'FK_grau_etapa_ensino_id',
                     'FK_turno_id',
-                    'FK_escola_id'
+                    'FK_escola_id',
                     'nome_escola',
                     'FK_municipio_id',
                     'nome_municipio',
