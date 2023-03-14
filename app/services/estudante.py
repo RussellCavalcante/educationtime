@@ -58,7 +58,7 @@ class GetEstudante(Resource):
         
     @jwt_required()
     def post_estudante(self, *args, **kwargs):
-        try:
+        # try:
 
             dados = atributos.parse_args()
             
@@ -72,12 +72,12 @@ class GetEstudante(Resource):
             estudanteModel.create_estudante(cod_nacional_estudante ,nome, data_nascimento, tipo_aluno, nee, FK_escola_id)
             
             return  {'created': nome}, 200
-        except:
-            return { 'error': 'verifique a requisição !' }, 400
+        # except:
+        #     return { 'error': 'verifique a requisição !' }, 400
     
     @jwt_required()
     def update(self, *args, **kwargs):
-        try:
+        # try:
                 
             dados = atributos.parse_args()
             
@@ -92,5 +92,5 @@ class GetEstudante(Resource):
             
             return {'updated': nome }, 200
         
-        except:
-            return { 'error': 'verifique a requisição !' }, 400
+        # except:
+        #     return { 'error': 'verifique a requisição !' }, 400

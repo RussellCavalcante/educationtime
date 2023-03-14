@@ -249,16 +249,16 @@ def get_estudante():
 
 @avaliable_route.route('/Estudante/Cadastro', methods=['GET', 'POST', 'PUT'])
 
-def post_estudante():    
+def post_estudante_cadastro():    
     from app.services.estudante import GetEstudante
     
     _Get_services = GetEstudante()
     
     return _Get_services.post_estudante()
 
-@avaliable_route.route('/estudante/update/<int:id>', methods=['PUT'])
+@avaliable_route.route('/Estudante/Update/<int:id>', methods=['PUT'])
 
-def update_estudante(id):    
+def update_estudante_cadastro(id):    
     from app.services.estudante import GetEstudante
     
     _Get_services = GetEstudante()
