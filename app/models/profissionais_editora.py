@@ -29,7 +29,7 @@ class ProfissionaisEditoraModel():
     def get_profissionais_editora(*args, **kwargs):
         cursor = conn.cursor()
  
-        cursor.execute("SELECT * FROM profissionais_editora;")
+        cursor.execute("SELECT profissionais_editora.id , profissionais_editora.endereco, profissionais_editora.FK_user_id, users.nome, users.email, users.telefone, users.cpf, users.accept_lgpd, users.FK_profile_id, users.perfil_ativo FROM  profissionais_editora INNER JOIN  users ON  profissionais_editora.FK_user_id =  users.id ;")
         
         result = cursor.fetchall()
         cursor.close()
@@ -38,9 +38,16 @@ class ProfissionaisEditoraModel():
         for estadoTupla in result:
             
             tup1 = ('id',
+                    'endereco',
                     'FK_user_id',
-                    'FK_escola_id',
-                    'endereco') 
+                    'nome',
+                    'email',
+                    'telefone',
+                    'cpf',
+                    'accept_lgpd',
+                    'FK_profile_id',
+                    'perfil_ativo') 
+            
             tup2 = estadoTupla
            
             if len(tup1) == len(tup2): 
@@ -54,7 +61,7 @@ class ProfissionaisEditoraModel():
     def get_profissionais_editora_by_id(*args, **kwargs):
         cursor = conn.cursor()
         
-        cursor.execute(f"SELECT * FROM profissionais_editora WHERE id = {args[1]};")
+        cursor.execute(f"SELECT profissionais_editora.id , profissionais_editora.endereco, profissionais_editora.FK_user_id, users.nome, users.email, users.telefone, users.cpf, users.accept_lgpd, users.FK_profile_id, users.perfil_ativo FROM  profissionais_editora INNER JOIN  users ON  profissionais_editora.FK_user_id =  users.id  WHERE profissionais_editora.id = {args[1]};")
         
         result = cursor.fetchall()
         cursor.close()
@@ -62,7 +69,17 @@ class ProfissionaisEditoraModel():
         listEstadosDict = []
         for estadoTupla in result:
             
-            tup1 = ('id','FK_user_id','FK_escola_id', 'endereco') 
+            tup1 = ('id',
+                    'endereco',
+                    'FK_user_id',
+                    'nome',
+                    'email',
+                    'telefone',
+                    'cpf',
+                    'accept_lgpd',
+                    'FK_profile_id',
+                    'perfil_ativo') 
+            
             tup2 = estadoTupla
            
             if len(tup1) == len(tup2): 
