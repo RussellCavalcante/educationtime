@@ -247,7 +247,7 @@ def get_estudante():
     return _Get_services.get()
 
 
-@avaliable_route.route('/Estudante/Cadastro', methods=['GET', 'POST', 'PUT'])
+@avaliable_route.route('/Estudante/Cadastro', methods=['POST'])
 
 def post_estudante_cadastro():    
     from app.services.estudante import GetEstudante
