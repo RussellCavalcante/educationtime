@@ -11,7 +11,7 @@ atributos.add_argument('cod_nacional_estudante', type=str, help="campo obrigator
 atributos.add_argument('nome', type=str, help="campo obrigatorio")
 atributos.add_argument('data_nascimento', type=str, help="campo obrigatorio ")
 atributos.add_argument('tipo_aluno', type=str, help="campo obrigatorio ")
-atributos.add_argument('nee', type=str, help="campo obrigatorio nee ")
+atributos.add_argument('nee', type=int, help="campo obrigatorio nee ")
 atributos.add_argument('FK_escola_id', type=int, help="campo obrigatorio int ")
 
 
