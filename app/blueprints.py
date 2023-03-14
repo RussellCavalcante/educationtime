@@ -662,3 +662,40 @@ def get_estudante_cod(id):
     
     return _Get_services.get_by_cod(id)
 
+@avaliable_route.route('/ProfissionaisEditora', methods=['GET'])
+
+def get_ProfissionaisEditora():    
+    from app.services.profissionais_editora import ProfissionaisEditoraServices
+    
+    _Get_services = ProfissionaisEditoraServices()
+    
+    return _Get_services.get()
+
+@avaliable_route.route('/ProfissionaisEditora/<int:id>', methods=['GET'])
+
+def get_ProfissionaisEditora_by(id):    
+    from app.services.profissionais_editora import ProfissionaisEditoraServices
+    
+    _Get_services = ProfissionaisEditoraServices()
+    
+    return _Get_services.get_by_id(id)
+
+
+@avaliable_route.route('/ProfissionaisEditora/Cadastro', methods=['POST'])
+
+def post_ProfissionaisEditora():    
+    from app.services.profissionais_editora import ProfissionaisEditoraServices
+    
+    _Get_services = ProfissionaisEditoraServices()
+    
+    return _Get_services.post()
+
+
+@avaliable_route.route('/ProfissionaisEditora/Update/<int:id>', methods=['PUT'])
+
+def update_ProfissionaisEditora(id):    
+    from app.services.profissionais_editora import ProfissionaisEditoraServices
+
+    _Get_services = ProfissionaisEditoraServices()
+    
+    return _Get_services.update(id)

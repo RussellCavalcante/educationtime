@@ -176,6 +176,50 @@ class UserModel():
         # #     return None
 
     @classmethod
+    def create_profissionais_editora(*args, **kwargs):
+        # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
+        # try:
+            cursor = conn.cursor()
+            # print(args)
+            # input()
+
+            conn.autocommit = True
+
+            cursor.execute("insert into users (cpf , nome , email , telefone, FK_profile_id) values(?,?,?,?,?)",args[1], args[2], args[3], int(args[4]), args[5])
+            
+            conn.commit()
+            # conn.close()
+            # return 'created'
+            # rows = cursor.fetchall()
+        # except:
+        #     print(TypeError)
+        # #     return None
+
+    @classmethod
+    def update_profissionais_editora(*args, **kwargs):
+        # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
+        # try:
+            cursor = conn.cursor()
+                # print(args)
+                # input()
+            
+            cursor.execute('''
+                        UPDATE users
+                        SET cpf = ?, nome = ?, email = ?, telefone = ? , FK_profile_id = ?
+                        WHERE id = ?
+                        ''',args[1], args[2], args[3], args[4], args[5], int(args[6])
+                        )
+            
+            conn.commit()
+            # conn.close()
+            # return 'created'
+            # rows = cursor.fetchall()
+        # except:
+        #     print(TypeError)
+        # #     return None
+
+
+    @classmethod
     def create_profissional_educacao_(*args, **kwargs):
         # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
         # try:
