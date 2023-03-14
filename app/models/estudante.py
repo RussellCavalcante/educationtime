@@ -160,10 +160,10 @@ class estudanteModel():
         # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
         # try:
             cursor = conn.cursor()
-            # print(args[1], args[2], args[3])
+            # print(args)
             # input()
             
-            cursor.execute("insert into estudante ( cod_nacional_estudante, nome , data_nascimento, tipo_aluno, nee, FK_escola_id) values(?,?,?,?,?,?)",int(args[1]), args[2], args[3], args[4], int(args[5]), int(args[6]))
+            cursor.execute("insert into estudante ( cod_nacional_estudante, nome , data_nascimento, tipo_aluno, nee, FK_escola_id) values(?,?,?,?,?,?)",int(args[1]), args[2], args[3], args[4], args[5], int(args[6]))
             
             conn.commit()
             # conn.close()
@@ -185,7 +185,7 @@ class estudanteModel():
                         UPDATE estudante
                         SET cod_nacional_estudante = ?, nome = ?, data_nascimento = ?, tipo_aluno = ? , nee = ?, FK_escola_id = ? 
                         WHERE id = ?
-                        ''',int(args[1]), args[2], args[3], args[4], int(args[5]), int(args[6]), int(args[7]))
+                        ''',int(args[1]), args[2], args[3], args[4], args[5], int(args[6]), int(args[7]))
 
             
             conn.commit()

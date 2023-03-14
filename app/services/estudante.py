@@ -7,7 +7,7 @@ from flask_jwt_extended import create_access_token, jwt_required, get_jwt
 from app.blacklist import BLACKLIST
 
 atributos = reqparse.RequestParser()
-atributos.add_argument('cod_nacional_estudante', type=str, help="campo obrigatorio")
+atributos.add_argument('cod_nacional_estudante', type=int, help="campo obrigatorio")
 atributos.add_argument('nome', type=str, help="campo obrigatorio")
 atributos.add_argument('data_nascimento', type=str, help="campo obrigatorio ")
 atributos.add_argument('tipo_aluno', type=str, help="campo obrigatorio ")
@@ -62,13 +62,13 @@ class GetEstudante(Resource):
 
             dados = atributos.parse_args()
             
-            cod_nacional_estudante = dados['cod_nacional_estudante'].strip()
+            cod_nacional_estudante = dados['cod_nacional_estudante']
             nome = dados['nome'].strip()
             data_nascimento = dados['data_nascimento'].strip()
-            tipo_aluno = dados['tipo_aluno']
+            tipo_aluno = dados['tipo_aluno'].strip()
             nee = dados['nee']
             FK_escola_id = dados['FK_escola_id']
-        
+
             estudanteModel.create_estudante(cod_nacional_estudante ,nome, data_nascimento, tipo_aluno, nee, FK_escola_id)
             
             return  {'created': nome}, 200
