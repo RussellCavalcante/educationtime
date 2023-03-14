@@ -81,7 +81,7 @@ class GetEstudante(Resource):
                 
             dados = atributos.parse_args()
             
-            cod_nacional_estudante = dados['cod_nacional_estudante'].strip()
+            cod_nacional_estudante = dados['cod_nacional_estudante']
             nome = dados['nome'].strip()
             data_nascimento = dados['data_nascimento'].strip()
             tipo_aluno = dados['tipo_aluno']
