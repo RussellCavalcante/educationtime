@@ -699,3 +699,12 @@ def update_ProfissionaisEditora(id):
     _Get_services = ProfissionaisEditoraServices()
     
     return _Get_services.update(id)
+@avaliable_route.route('/Estudante/Nome/<nome>', methods=['GET'])
+
+def get_estudante_nome(nome):    
+    from app.services.estudante import GetEstudante
+    
+    _Get_services = GetEstudante()
+    
+    return _Get_services.get_by_nome(nome)
+

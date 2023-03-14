@@ -76,7 +76,7 @@ class ProfissionaisEditoraServices(Resource):
     
     @jwt_required()
     def update(self, *args, **kwargs):
-        # try:
+        try:
 
             dados = atributos.parse_args()
             cpf = dados['cpf']
@@ -84,14 +84,10 @@ class ProfissionaisEditoraServices(Resource):
             telefone = dados['telefone']
             email = dados['email'].strip()
             FK_perfil_id = dados['FK_perfil_id']
-
-            # FK_user_id = dados['FK_user_id']
             FK_escola_id = dados['FK_escola_id']
             endereco = dados['endereco']
             
             profissionaleditora = ProfissionaisEditoraModel.get_profissionais_editora_by_id(args[0])
-            print(profissionaleditora)
-            input()
             
             UserModel.update_profissionais_editora(cpf, nome, email, int(telefone), FK_perfil_id, profissionaleditora[0]['FK_user_id'])
             user = UserModel.find_by_login(cpf)
@@ -99,5 +95,5 @@ class ProfissionaisEditoraServices(Resource):
             
             return {'updated': nome }, 200
         
-        # except:
-        #     return { 'error': 'verifique a requisição !' }, 400
+        except:
+            return { 'error': 'verifique a requisição !' }, 400
