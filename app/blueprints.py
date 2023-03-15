@@ -717,3 +717,35 @@ def get_estudante_nome(nome):
     
     return _Get_services.get_by_nome(nome)
 
+@avaliable_route.route('/ProfissionaisEducacao', methods=['GET'])
+def get_ProfissionaisEducacao():    
+    from app.services.profissional_educacao import ProfissionaisEducacaoServices
+    
+    _Get_services = ProfissionaisEducacaoServices()
+    
+    return _Get_services.get()
+@avaliable_route.route('/ProfissionaisEducacao/<int:id>', methods=['GET'])
+
+def get_ProfissionaisEducacao_by(id):    
+    from app.services.profissional_educacao import ProfissionaisEducacaoServices
+    
+    _Get_services = ProfissionaisEducacaoServices()
+    
+    return _Get_services.get_by_id(id)
+
+@avaliable_route.route('/ProfissionaisEducacao/Cadastro', methods=['POST'])
+
+def post_ProfissionaisEducacao():    
+    from app.services.profissional_educacao import ProfissionaisEducacaoServices
+    
+    _Get_services = ProfissionaisEducacaoServices()
+    
+    return _Get_services.post()
+
+@avaliable_route.route('/ProfissionaisEducacao/Update/<int:id>', methods=['PUT'])
+
+def update_ProfissionaisEducacao(id):    
+    from app.services.profissional_educacao import ProfissionaisEducacaoServices
+    _Get_services = ProfissionaisEducacaoServices()
+    
+    return _Get_services.update(id)
