@@ -39,7 +39,7 @@ class estudanteModel():
         listEstadosDict = []
         for estadoTupla in result:
             
-            tup1 = ('id', 'nome','cod_nacional_estudante', 'data_nascimento', 'tipo_aluno', 'nee', 'FK_escola_id', 'nome_escola', 'municipio_id', 'municipio_nome', 'estado_id', 'estado_nome', 'uf') 
+            tup1 = ('id', 'nome','cod_nacional_estudante', 'data_nascimento', 'tipo_aluno', 'nee', 'FK_escola_id', 'nome_escola', 'FK_municipio_id', 'municipio_nome', 'FK_UF_id', 'estado_nome', 'uf') 
             tup2 = estadoTupla
            
             if len(tup1) == len(tup2): 
@@ -65,7 +65,7 @@ class estudanteModel():
         listEstadosDict = []
         for estadoTupla in result:
             
-            tup1 = ('id', 'nome','cod_nacional_estudante', 'data_nascimento', 'tipo_aluno', 'nee', 'FK_escola_id', 'nome_escola', 'municipio_id', 'municipio_nome', 'estado_id', 'estado_nome', 'uf') 
+            tup1 = ('id', 'nome','cod_nacional_estudante', 'data_nascimento', 'tipo_aluno', 'nee', 'FK_escola_id', 'nome_escola', 'FK_municipio_id', 'municipio_nome', 'FK_UF_id', 'estado_nome', 'uf') 
             tup2 = estadoTupla
            
             if len(tup1) == len(tup2): 
