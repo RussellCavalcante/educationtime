@@ -185,7 +185,7 @@ class UserModel():
 
             conn.autocommit = True
 
-            cursor.execute("insert into users (cpf , nome , email , telefone, FK_profile_id) values(?,?,?,?,?)",args[1], args[2], args[3], int(args[4]), args[5])
+            cursor.execute("insert into users (cpf , nome , email , telefone, FK_profile_id, perfil_ativo) values(?,?,?,?,?,?)",args[1], args[2], args[3], int(args[4]), args[5], args[6])
             
             conn.commit()
             # conn.close()
@@ -205,9 +205,9 @@ class UserModel():
             
             cursor.execute('''
                         UPDATE users
-                        SET cpf = ?, nome = ?, email = ?, telefone = ? , FK_profile_id = ?
+                        SET cpf = ?, nome = ?, email = ?, telefone = ? , FK_profile_id = ?, perfil_ativo = ?
                         WHERE id = ?
-                        ''',args[1], args[2], args[3], args[4], args[5], int(args[6])
+                        ''',args[1], args[2], args[3], args[4], args[5], int(args[6]), int(args[7])
                         )
             
             conn.commit()

@@ -29,7 +29,7 @@ class ProfissionaisEditoraModel():
     def get_profissionais_editora(*args, **kwargs):
         cursor = conn.cursor()
  
-        cursor.execute("SELECT profissionais_editora.id , profissionais_editora.endereco, profissionais_editora.FK_user_id, users.nome, users.email, users.telefone, users.cpf, users.accept_lgpd, users.FK_profile_id, users.perfil_ativo FROM  profissionais_editora INNER JOIN  users ON  profissionais_editora.FK_user_id =  users.id ;")
+        cursor.execute("SELECT profissionais_editora.id , profissionais_editora.endereco, profissionais_editora.FK_user_id, users.nome, users.email, users.telefone, users.cpf, users.accept_lgpd, users.FK_profile_id, users.perfil_ativo, profiles.id ,profiles.profile_name FROM  profissionais_editora INNER JOIN  users ON  profissionais_editora.FK_user_id =  users.id INNER JOIN  profiles ON  users.FK_profile_id =  profiles.id ;")
         
         result = cursor.fetchall()
         cursor.close()
@@ -46,7 +46,9 @@ class ProfissionaisEditoraModel():
                     'cpf',
                     'accept_lgpd',
                     'FK_profile_id',
-                    'perfil_ativo') 
+                    'perfil_ativo',
+                    'profile_id' ,
+                    'profile_name') 
             
             tup2 = estadoTupla
            
@@ -61,7 +63,7 @@ class ProfissionaisEditoraModel():
     def get_profissionais_editora_by_id(*args, **kwargs):
         cursor = conn.cursor()
         
-        cursor.execute(f"SELECT profissionais_editora.id , profissionais_editora.endereco, profissionais_editora.FK_user_id, users.nome, users.email, users.telefone, users.cpf, users.accept_lgpd, users.FK_profile_id, users.perfil_ativo FROM  profissionais_editora INNER JOIN  users ON  profissionais_editora.FK_user_id =  users.id  WHERE profissionais_editora.id = {args[1]};")
+        cursor.execute(f"SELECT profissionais_editora.id , profissionais_editora.endereco, profissionais_editora.FK_user_id, users.nome, users.email, users.telefone, users.cpf, users.accept_lgpd, users.FK_profile_id, users.perfil_ativo, profiles.id ,profiles.profile_name FROM  profissionais_editora INNER JOIN  users ON  profissionais_editora.FK_user_id =  users.id INNER JOIN  profiles ON  users.FK_profile_id =  profiles.id WHERE profissionais_editora.id = {args[1]};")
         
         result = cursor.fetchall()
         cursor.close()
@@ -78,7 +80,9 @@ class ProfissionaisEditoraModel():
                     'cpf',
                     'accept_lgpd',
                     'FK_profile_id',
-                    'perfil_ativo') 
+                    'perfil_ativo',
+                    'profile_id' ,
+                    'profile_name') 
             
             tup2 = estadoTupla
            
@@ -135,7 +139,7 @@ class ProfissionaisEditoraModel():
         # try:
             cursor = conn.cursor()
     
-            cursor.execute("insert into profissionais_editora ( FK_escola_id, endereco, FK_user_id) values(?,?,?);",args[1], args[2], int(args[3]))
+            cursor.execute("insert into profissionais_editora ( endereco, FK_user_id) values(?,?);",args[1], int(args[2]))
             
             conn.commit()
             # conn.close()
@@ -155,9 +159,9 @@ class ProfissionaisEditoraModel():
             
             cursor.execute('''
                         UPDATE profissionais_editora
-                        SET FK_escola_id = ?, endereco = ?, FK_user_id = ?
+                        SET  endereco = ?, FK_user_id = ?
                         WHERE id = ?
-                        ''',args[1], args[2], int(args[3]), int(args[4])
+                        ''',args[1], int(args[2]), int(args[3])
                         )
             
             conn.commit()

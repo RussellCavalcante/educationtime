@@ -17,6 +17,7 @@ atributos.add_argument('FK_perfil_id', type=int, help="campo de perfil_id")
 # atributos.add_argument('FK_user_id', type=str, help="campo de nome do usuario e obrigatorio")
 atributos.add_argument('FK_escola_id', type=int, help="campo de email e obrigatorio")
 atributos.add_argument('endereco', type=str, help="endereco")
+atributos.add_argument('perfil_ativo', type=str, help="perfil_ativo")
 # atributos.add_argument('FK_user_id', type=int, help="campo de user")
 
 
@@ -54,17 +55,17 @@ class ProfissionaisEditoraServices(Resource):
             telefone = dados['telefone']
             email = dados['email'].strip()
             FK_perfil_id = dados['FK_perfil_id']
-            FK_escola_id = dados['FK_escola_id']
+            perfil_ativo = dados['perfil_ativo']
             endereco = dados['endereco']
             
             if UserModel.find_by_login(cpf):
                 return {'error': 'Profissional da editora ja existente'}, 400
             
-            UserModel.create_profissionais_editora(cpf, nome, email, int(telefone), FK_perfil_id)
+            UserModel.create_profissionais_editora(cpf, nome, email, int(telefone), FK_perfil_id, perfil_ativo)
 
             user = UserModel.find_by_login(cpf)
             
-            ProfissionaisEditoraModel.create_profissionais_editora(FK_escola_id, endereco, user[0])
+            ProfissionaisEditoraModel.create_profissionais_editora(endereco, user[0])
             
             return  {'created': nome}, 201
         
@@ -84,14 +85,15 @@ class ProfissionaisEditoraServices(Resource):
             telefone = dados['telefone']
             email = dados['email'].strip()
             FK_perfil_id = dados['FK_perfil_id']
-            FK_escola_id = dados['FK_escola_id']
+            perfil_ativo = dados['perfil_ativo']
             endereco = dados['endereco']
             
             profissionaleditora = ProfissionaisEditoraModel.get_profissionais_editora_by_id(args[0])
             
-            UserModel.update_profissionais_editora(cpf, nome, email, int(telefone), FK_perfil_id, profissionaleditora[0]['FK_user_id'])
+
+            UserModel.update_profissionais_editora(cpf, nome, email, int(telefone), FK_perfil_id, perfil_ativo ,profissionaleditora[0]['FK_user_id'])
             user = UserModel.find_by_login(cpf)
-            ProfissionaisEditoraModel.update_profissionais_editora(FK_escola_id, endereco, user[0] , args[0])
+            ProfissionaisEditoraModel.update_profissionais_editora(endereco, user[0] , args[0])
             
             return {'updated': nome }, 200
         
