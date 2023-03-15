@@ -5,7 +5,7 @@ import re
 from app import conn
 
 
-class ProfissionaisEditoraModel():
+class ProfissionaisEducacaoModel():
     # __tablename__ = 'estado'
     
 
@@ -26,27 +26,21 @@ class ProfissionaisEditoraModel():
     
 
     @classmethod
-    def get_profissionais_editora(*args, **kwargs):
+    def get_profissionais_educacao(*args, **kwargs):
         cursor = conn.cursor()
  
-        cursor.execute("SELECT profissionais_editora.id , profissionais_editora.endereco, profissionais_editora.FK_user_id, users.nome, users.email, users.telefone, users.cpf, users.accept_lgpd, users.FK_profile_id, users.perfil_ativo FROM  profissionais_editora INNER JOIN  users ON  profissionais_editora.FK_user_id =  users.id ;")
+        cursor.execute("SELECT profissionais_educacao.id ,  profissionais_educacao.FK_user_id, users.nome, users.email, users.telefone, users.cpf, users.accept_lgpd, users.FK_profile_id, users.perfil_ativo, escola.id, escola.nome_escola ,escola.FK_municipio_id, municipio.id, municipio.nome, estado.id, estado.nome, estado.uf FROM  profissionais_educacao INNER JOIN  users ON  profissionais_educacao.FK_user_id =  users.id INNER JOIN  escola ON  profissionais_educacao.FK_escola_id =  escola.id INNER JOIN  municipio ON  escola.FK_municipio_id =  municipio.id INNER JOIN  estado ON  municipio.FK_UF_id =  estado.id; ")
         
         result = cursor.fetchall()
         cursor.close()
 
+        # print(result)
+        # input()
+
         listEstadosDict = []
         for estadoTupla in result:
             
-            tup1 = ('id',
-                    'endereco',
-                    'FK_user_id',
-                    'nome',
-                    'email',
-                    'telefone',
-                    'cpf',
-                    'accept_lgpd',
-                    'FK_profile_id',
-                    'perfil_ativo') 
+            tup1 = ('id' ,  'user_id', 'nome', 'email', 'telefone', 'cpf', 'accept_lgpd', 'FK_profile_id', 'perfil_ativo', 'escola_id', 'escola_nome_escola' ,'escola_FK_municipio_id', 'municipio_id', 'municipio_nome', 'estado_id', 'estado_nome', 'estado_uf') 
             
             tup2 = estadoTupla
            
@@ -58,10 +52,10 @@ class ProfissionaisEditoraModel():
             
         return listEstadosDict
     @classmethod
-    def get_profissionais_editora_by_id(*args, **kwargs):
+    def get_profissionais_educacao_by_id(*args, **kwargs):
         cursor = conn.cursor()
         
-        cursor.execute(f"SELECT profissionais_editora.id , profissionais_editora.endereco, profissionais_editora.FK_user_id, users.nome, users.email, users.telefone, users.cpf, users.accept_lgpd, users.FK_profile_id, users.perfil_ativo FROM  profissionais_editora INNER JOIN  users ON  profissionais_editora.FK_user_id =  users.id  WHERE profissionais_editora.id = {args[1]};")
+        cursor.execute(f"SELECT profissionais_educacao.id ,  profissionais_educacao.FK_user_id, users.nome, users.email, users.telefone, users.cpf, users.accept_lgpd, users.FK_profile_id, users.perfil_ativo, escola.id, escola.nome_escola ,escola.FK_municipio_id, municipio.id, municipio.nome, estado.id, estado.nome, estado.uf FROM  profissionais_educacao INNER JOIN  users ON  profissionais_educacao.FK_user_id =  users.id INNER JOIN  escola ON  profissionais_educacao.FK_escola_id =  escola.id INNER JOIN  municipio ON  escola.FK_municipio_id =  municipio.id INNER JOIN  estado ON  municipio.FK_UF_id =  estado.id WHERE profissionais_educacao.id = {args[1]};")
         
         result = cursor.fetchall()
         cursor.close()
@@ -69,16 +63,7 @@ class ProfissionaisEditoraModel():
         listEstadosDict = []
         for estadoTupla in result:
             
-            tup1 = ('id',
-                    'endereco',
-                    'FK_user_id',
-                    'nome',
-                    'email',
-                    'telefone',
-                    'cpf',
-                    'accept_lgpd',
-                    'FK_profile_id',
-                    'perfil_ativo') 
+            tup1 = ('id' ,  'user_id', 'nome', 'email', 'telefone', 'cpf', 'accept_lgpd', 'FK_profile_id', 'perfil_ativo', 'escola_id', 'escola_nome_escola' ,'escola_FK_municipio_id', 'municipio_id', 'municipio_nome', 'estado_id', 'estado_nome', 'estado_uf') 
             
             tup2 = estadoTupla
            
@@ -130,12 +115,12 @@ class ProfissionaisEditoraModel():
         # return listEstadosDict
 
     @classmethod
-    def create_profissionais_editora(*args, **kwargs):
+    def create_profissionais_educacao(*args, **kwargs):
         # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
         # try:
             cursor = conn.cursor()
     
-            cursor.execute("insert into profissionais_editora ( FK_escola_id, endereco, FK_user_id) values(?,?,?);",args[1], args[2], int(args[3]))
+            cursor.execute("insert into profissionais_educacao ( FK_escola_id, FK_user_id) values(?,?);",args[1], int(args[2]))
             
             conn.commit()
             # conn.close()
@@ -146,7 +131,7 @@ class ProfissionaisEditoraModel():
         # #     return None
     
     @classmethod
-    def update_profissionais_editora(*args, **kwargs):
+    def update_profissionais_educacao(*args, **kwargs):
         # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
         # try:
             cursor = conn.cursor()
@@ -154,10 +139,10 @@ class ProfissionaisEditoraModel():
                 # input()
             
             cursor.execute('''
-                        UPDATE profissionais_editora
-                        SET FK_escola_id = ?, endereco = ?, FK_user_id = ?
+                        UPDATE profissionais_educacao
+                        SET FK_escola_id = ?, FK_user_id = ?
                         WHERE id = ?
-                        ''',args[1], args[2], int(args[3]), int(args[4])
+                        ''',args[1], args[2], int(args[3])
                         )
             
             conn.commit()
