@@ -32,6 +32,14 @@ class GetTurma(Resource):
             return  TurmaModel.get_turma_by_id(args[0]), 200
         except:
             return { 'error': 'verifique a requisição !' }, 400
+        
+    @jwt_required()
+    def get_by_escola(self, *args, **kwargs):
+        try:
+                
+            return  TurmaModel.get_turma_by_escola(args[0]), 200
+        except:
+            return { 'error': 'verifique a requisição !' }, 400
 
     @jwt_required()
     def post_turma(self, *args, **kwargs):
