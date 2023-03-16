@@ -17,7 +17,6 @@ atributos.add_argument('FK_perfil_id', type=int, help="campo de perfil_id")
 # atributos.add_argument('FK_user_id', type=str, help="campo de nome do usuario e obrigatorio")
 atributos.add_argument('FK_escola_id', type=int, help="campo de email e obrigatorio")
 atributos.add_argument('perfil_ativo', type=str, help="perfil_ativo")
-# atributos.add_argument('FK_user_id', type=int, help="campo de user")
 
 
 class ProfissionaisEducacaoServices(Resource):
@@ -60,9 +59,20 @@ class ProfissionaisEducacaoServices(Resource):
             if UserModel.find_by_login(cpf):
                 return {'error': 'Profissional de educação ja existente'}, 400
             
+            if ProfissionaisEducacaoModel.get_profissionais_educacao_escola_perfil_by_escola_id():
+                # print('entrou')
+                # input()
+                return {'error': 'escola ja associada a perfil'}, 400
+            
+
+
+            # input()
+
             UserModel.create_profissionais_educacao(cpf, nome, email, int(telefone), FK_perfil_id, perfil_ativo)
 
             user = UserModel.find_by_login(cpf)
+            
+
             
             ProfissionaisEducacaoModel.create_profissionais_educacao(FK_escola_id, user[0])
             

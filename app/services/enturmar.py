@@ -10,7 +10,7 @@ from app.blacklist import BLACKLIST
 
 atributos = reqparse.RequestParser()
 atributos.add_argument('FK_turma_id', type=int, help="campo de telefone")
-atributos.add_argument('Fk_estudante_id', type=int, help="campo de perfil_id")
+atributos.add_argument('Fk_estudante_id', type=dict, help="campo de perfil_id")
 
 
 class EnturmarServices(Resource):
@@ -24,8 +24,8 @@ class EnturmarServices(Resource):
             Fk_estudante_id = dados['Fk_estudante_id']
             
             
-            
-            EnturmarModel.create_enturmar( FK_turma_id, Fk_estudante_id)
+            for i , estudante in enumerate(Fk_estudante_id['estudantes']):
+                EnturmarModel.create_enturmar( FK_turma_id, estudante)
             
             return  {'created': FK_turma_id}, 201
         
