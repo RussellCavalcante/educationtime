@@ -17,16 +17,16 @@ atributos.add_argument('FK_perfil_id', type=int, help="campo de perfil_id")
 # atributos.add_argument('FK_user_id', type=str, help="campo de nome do usuario e obrigatorio")
 atributos.add_argument('FK_escola_id', type=int, help="campo de email e obrigatorio")
 atributos.add_argument('perfil_ativo', type=str, help="perfil_ativo")
-
+atributos.add_argument('componentes_curriculares', type=dict, help="componentes_curriculares")
 
 class ProfissionaisEducacaoServices(Resource):
 
     @jwt_required()
     def get(self, *args, **kwargs):
-        try:
+        # try:
             return  ProfissionaisEducacaoModel.get_profissionais_educacao(), 200
-        except:
-            return { 'error': 'verifique a requisição !' }, 400
+        # except:
+        #     return { 'error': 'verifique a requisição !' }, 400
         
     @jwt_required()
     def get_by_id(self, *args, **kwargs):
@@ -34,6 +34,14 @@ class ProfissionaisEducacaoServices(Resource):
             return  ProfissionaisEducacaoModel.get_profissionais_educacao_by_id(args[0]), 200
         except:
             return { 'error': 'verifique a requisição !' }, 400
+        
+
+    @jwt_required()
+    def get_profissional_educador_by_cpf(self, *args, **kwargs):
+        # try:
+            return  ProfissionaisEducacaoModel.get_profissionais_escola_componentes_by_cpf(str(args[0])), 200
+        # except:
+        #     return { 'error': 'verifique a requisição !' }, 400
         
     # @jwt_required()
     # def get_by_muncipio_id(self, *args, **kwargs):
@@ -45,7 +53,7 @@ class ProfissionaisEducacaoServices(Resource):
 
     @jwt_required()
     def post(self, *args, **kwargs):
-        try:
+        # try:
                 
             dados = atributos.parse_args()
             cpf = dados['cpf']
@@ -55,31 +63,53 @@ class ProfissionaisEducacaoServices(Resource):
             FK_perfil_id = dados['FK_perfil_id']
             FK_escola_id = dados['FK_escola_id']
             perfil_ativo = dados['perfil_ativo']
+            componentes_curriculares = dados['componentes_curriculares']
             
             if UserModel.find_by_login(cpf):
-                return {'error': 'Profissional de educação ja existente'}, 400
+                     
+                if ProfissionaisEducacaoModel.get_profissionais_educacao_escola_perfil_by_escola_id(FK_escola_id) == False:
+                    # print('entrou')
+                    # input()
+                    user = UserModel.find_by_login(cpf)
+
+                    UserModel.associateProfissionalEscolaPerfil(user[0], FK_escola_id, FK_perfil_id)
+
+                    # UserModel.associateUserProfile(user[0], FK_perfil_id)
+                    
+                    for i , componentes in enumerate(componentes_curriculares['componentes']):
+                        print(componentes, ProfissionaisEducacaoModel.get_profissionais_escola_componentes(componentes, FK_escola_id))
+                        input()
+                        if ProfissionaisEducacaoModel.get_profissionais_escola_componentes(componentes, FK_escola_id) != False:
+                             return {'error':f'componente curricular com id {componentes} ja existe a esta escola '}, 400
+                        
+                        UserModel.associateProfissionalEscolaComponentes(user[0], FK_escola_id, componentes)
+
+                    return  {'created': nome}, 201
+                
+                elif ProfissionaisEducacaoModel.get_profissionais_educacao_escola_perfil_by_escola_id(FK_escola_id):   
+                    return {'error': 'escola ja associada a perfil'}, 400
             
-            if ProfissionaisEducacaoModel.get_profissionais_educacao_escola_perfil_by_escola_id():
-                # print('entrou')
-                # input()
-                return {'error': 'escola ja associada a perfil'}, 400
-            
+         
 
-
-            # input()
-
-            UserModel.create_profissionais_educacao(cpf, nome, email, int(telefone), FK_perfil_id, perfil_ativo)
+            UserModel.create_profissionais_educacao(cpf, nome, email, int(telefone), perfil_ativo)
 
             user = UserModel.find_by_login(cpf)
             
+            UserModel.associateProfissionalEscolaPerfil(user[0], FK_escola_id, FK_perfil_id)
 
+            UserModel.associateUserProfile(user[0], FK_perfil_id)
             
-            ProfissionaisEducacaoModel.create_profissionais_educacao(FK_escola_id, user[0])
+            ProfissionaisEducacaoModel.create_profissionais_educacao( user[0])
             
+            for i , componentes in enumerate(componentes_curriculares['componentes']):
+                        if ProfissionaisEducacaoModel.get_profissionais_escola_componentes(componentes, FK_escola_id) != False:
+                             return {'error':f'componente curricular com id{componentes} ja existe a esta escola '}
+                        UserModel.associateProfissionalEscolaComponentes(user[0], FK_escola_id, componentes)
+
             return  {'created': nome}, 201
         
-        except:
-            return { 'error': 'verifique a requisição !' }, 400
+        # except:
+        #     return { 'error': 'verifique a requisição !' }, 400
         
         
 
@@ -93,16 +123,28 @@ class ProfissionaisEducacaoServices(Resource):
             nome = dados['nome'].strip()
             telefone = dados['telefone']
             email = dados['email'].strip()
-            FK_perfil_id = dados['FK_perfil_id']
+            # FK_perfil_id = dados['FK_perfil_id']
             FK_escola_id = dados['FK_escola_id']
             perfil_ativo = dados['perfil_ativo']
+            componentes_curriculares = dados['componentes_curriculares']
             
             profissionaleducacao = ProfissionaisEducacaoModel.get_profissionais_educacao_by_id(args[0])
 
-            UserModel.update_profissionais_educacao(cpf, nome, email, int(telefone), FK_perfil_id, perfil_ativo, profissionaleducacao[0]['user_id'])
+            UserModel.update_profissionais_educacao(cpf, nome, email, int(telefone), perfil_ativo, profissionaleducacao[0]['FK_user_id'])
             user = UserModel.find_by_login(cpf)
+            # print(args[0])
+            # input()
+
             ProfissionaisEducacaoModel.update_profissionais_educacao(FK_escola_id, user[0] , args[0])
             
+            for i , componentes in enumerate(componentes_curriculares['componentes']):
+                        componenteId = ProfissionaisEducacaoModel.get_componentes_by_profissional(user[0], componentes, FK_escola_id) 
+                        # print(componenteId)
+                        # input()
+                            # != False:
+                            #  return {'error':f'componente curricular com id {componentes} nao foi encontrado'}
+                        UserModel.update_profissionais_educacao_componentes(user[0], FK_escola_id, componentes, componenteId[0]['id'])
+
             return {'updated': nome }, 200
         
         except:

@@ -229,7 +229,7 @@ class UserModel():
 
             conn.autocommit = True
 
-            cursor.execute("insert into users (cpf , nome , email , telefone, FK_profile_id, perfil_ativo) values(?,?,?,?,?,?)",args[1], args[2], args[3], int(args[4]), args[5], args[6])
+            cursor.execute("insert into users (cpf , nome , email , telefone, perfil_ativo) values(?,?,?,?,?)",args[1], args[2], args[3], int(args[4]), args[5])
             
             conn.commit()
             # conn.close()
@@ -249,9 +249,9 @@ class UserModel():
             
             cursor.execute('''
                         UPDATE users
-                        SET cpf = ?, nome = ?, email = ?, telefone = ? , FK_profile_id = ? , perfil_ativo = ?
+                        SET cpf = ?, nome = ?, email = ?, telefone = ? ,  perfil_ativo = ?
                         WHERE id = ?
-                        ''',args[1], args[2], args[3], args[4], args[5], int(args[6]), int(args[7])
+                        ''',args[1], args[2], args[3], args[4], args[5], int(args[6])
                         )
             
             conn.commit()
@@ -288,6 +288,24 @@ class UserModel():
         # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
         # try:
             cursor = conn.cursor()
+
+            conn.autocommit = True
+
+            cursor.execute("insert into user_profiles (FK_user_id , FK_profile_id) values(?,?)",args[1], args[2])
+            
+            conn.commit()
+            # conn.close()
+            # return 'created'
+            # rows = cursor.fetchall()
+        # except:
+        #     print(TypeError)
+        # #     return None
+
+    @classmethod
+    def associateUserProfile(*args, **kwargs):
+        # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
+        # try:
+            cursor = conn.cursor()
             # print(args)
             # input()
 
@@ -302,3 +320,67 @@ class UserModel():
         # except:
         #     print(TypeError)
         # #     return None
+
+    @classmethod
+    def associateProfissionalEscolaPerfil(*args, **kwargs):
+        # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
+        # try:
+            cursor = conn.cursor()
+            # print(args)
+            # input()
+
+            conn.autocommit = True
+
+            cursor.execute("insert into profissonal_escola_perfil (FK_user_id , FK_escola_id ,FK_perfil_id) values(?,?,?)",args[1], args[2], args[3])
+            
+            conn.commit()
+            # conn.close()
+            # return 'created'
+            # rows = cursor.fetchall()
+        # except:
+        #     print(TypeError)
+        # #     return None
+
+    @classmethod
+    def associateProfissionalEscolaComponentes(*args, **kwargs):
+        # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
+        # try:
+            cursor = conn.cursor()
+            # print(args)
+            # input()
+
+            conn.autocommit = True
+
+            cursor.execute("insert into profissional_escola_componente (FK_user_id , FK_escola_id ,FK_componente_id) values(?,?,?)",args[1], args[2], args[3])
+            
+            conn.commit()
+            # conn.close()
+            # return 'created'
+            # rows = cursor.fetchall()
+        # except:
+        #     print(TypeError)
+        # #     return None
+    
+    @classmethod
+    def update_profissionais_educacao_componentes(*args, **kwargs):
+        # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
+        # try:
+            cursor = conn.cursor()
+            # print(args)
+            # input()
+            
+            cursor.execute('''
+                        UPDATE profissional_escola_componente
+                        SET FK_user_id = ?, FK_escola_id = ?, FK_componente_id = ?
+                        WHERE id = ?
+                        ''',args[1], args[2], args[3], int(args[4])
+                        )
+            
+            conn.commit()
+            # conn.close()
+            # return 'created'
+            # rows = cursor.fetchall()
+        # except:
+        #     print(TypeError)
+        # #     return None
+    
