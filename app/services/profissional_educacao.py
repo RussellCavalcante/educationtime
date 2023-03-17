@@ -39,7 +39,10 @@ class ProfissionaisEducacaoServices(Resource):
     @jwt_required()
     def get_profissional_educador_by_cpf(self, *args, **kwargs):
         # try:
-            return  ProfissionaisEducacaoModel.get_profissionais_escola_componentes_by_cpf(str(args[0])), 200
+            profissional = ProfissionaisEducacaoModel.get_profissionais_escola_componentes_by_cpf(str(args[0]))
+            if profissional != False :
+                  return profissional, 200
+            else : return  {'return':'nao ha registro para esse cpf'}, 200
         # except:
         #     return { 'error': 'verifique a requisição !' }, 400
         
@@ -77,8 +80,8 @@ class ProfissionaisEducacaoServices(Resource):
                     # UserModel.associateUserProfile(user[0], FK_perfil_id)
                     
                     for i , componentes in enumerate(componentes_curriculares['componentes']):
-                        print(componentes, ProfissionaisEducacaoModel.get_profissionais_escola_componentes(componentes, FK_escola_id))
-                        input()
+                        # print(componentes, ProfissionaisEducacaoModel.get_profissionais_escola_componentes(componentes, FK_escola_id))
+                        # input()
                         if ProfissionaisEducacaoModel.get_profissionais_escola_componentes(componentes, FK_escola_id) != False:
                              return {'error':f'componente curricular com id {componentes} ja existe a esta escola '}, 400
                         
