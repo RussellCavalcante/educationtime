@@ -306,7 +306,6 @@ class ProfissionaisEducacaoModel():
 
         listEstadosDict = []
         for estadoTupla in result:
-            
             tup1 = ('id' ,  'FK_user_id', 
                     'nome', 'email', 'telefone', 'cpf', 'accept_lgpd', 'perfil_ativo',
                     'FK_perfil_id', 'profile_name', 'escola_id', 'escola_nome_escola' ,
@@ -314,14 +313,21 @@ class ProfissionaisEducacaoModel():
                     'profissional_escola_componente_id', 'profissional_escola_componente_FK_user_id' , 
                     'profissional_escola_componente_FK_escola_id', 'profissional_escola_componente_FK_componente_id' , 
                     'componente_curricular_nome', 'componente_curricular_FK_area_conhecimento_id', 'area_conhecimento_nome') 
-            
             tup2 = estadoTupla
-           
-            if len(tup1) == len(tup2): 
-                res = dict(zip(tup1, tup2)) 
-                # print(res)
+            if len(tup1) == len(tup2):
+                for i,tupla1 in enumerate(tup1):
+                
+                    
+                    
+                
+                    
+                        if tupla1 == 'escola_id':
+                            print(tup2)
+                            input()
+                        res = dict(zip(tup1, tup2)) 
+                        # print(res)
 
-                listEstadosDict.append(res)   
+            listEstadosDict.append(res)   
         # print(listEstadosDict)
         # input()
 
@@ -415,3 +421,69 @@ class ProfissionaisEducacaoModel():
             return listEstadosDict
 
         return False
+    
+    
+    @classmethod
+    def get_area_do_conhecimento(*args, **kwargs):
+        cursor = conn.cursor()
+ 
+        cursor.execute(f"""SELECT id, nome FROM area_conhecimento;""")
+        
+        result = cursor.fetchall()
+        cursor.close()
+
+        # print(result)
+        # input()
+
+        listEstadosDict = []
+        for estadoTupla in result:
+            
+            tup1 = ('id', 'nome' ) 
+            
+            tup2 = estadoTupla
+           
+            if len(tup1) == len(tup2): 
+                res = dict(zip(tup1, tup2)) 
+                # print(res)
+
+                listEstadosDict.append(res)   
+        # print(listEstadosDict)
+        # input()
+
+        if len(listEstadosDict) != 0:
+            return listEstadosDict
+
+        return False
+    
+    @classmethod
+    def get_componente_by_area_do_conhecimento(*args, **kwargs):
+        cursor = conn.cursor()
+ 
+        cursor.execute(f"""SELECT id, nome, FK_area_conhecimento_id FROM componente_curricular WHERE FK_area_conhecimento_id =  {args[1]} ; """)
+        
+        result = cursor.fetchall()
+        cursor.close()
+
+        # print(result)
+        # input()
+
+        listEstadosDict = []
+        for estadoTupla in result:
+            
+            tup1 = ('id' , 'nome', 'FK_area_conhecimento_id' ) 
+            
+            tup2 = estadoTupla
+           
+            if len(tup1) == len(tup2): 
+                res = dict(zip(tup1, tup2)) 
+                # print(res)
+
+                listEstadosDict.append(res)   
+        # print(listEstadosDict)
+        # input()
+
+        if len(listEstadosDict) != 0:
+            return listEstadosDict
+
+        return False
+    

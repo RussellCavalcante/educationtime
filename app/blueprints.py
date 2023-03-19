@@ -759,3 +759,19 @@ def update_ProfissionaisEducacao(id):
     _Get_services = ProfissionaisEducacaoServices()
     
     return _Get_services.update(id)
+
+@avaliable_route.route('/AreaDoConhecimento', methods=['GET'])
+def get_AreaDoConhecimento():    
+    from app.services.profissional_educacao import ProfissionaisEducacaoServices
+    
+    _Get_services = ProfissionaisEducacaoServices()
+    
+    return _Get_services.get_area_do_conhecimento()
+
+@avaliable_route.route('/Componente/AreaDoConhecimento/<int:id>', methods=['GET'])
+def get_ComponenteAreaDoConhecimento(id):    
+    from app.services.profissional_educacao import ProfissionaisEducacaoServices
+    
+    _Get_services = ProfissionaisEducacaoServices()
+    
+    return _Get_services.get_componente_by_area_do_conhecimento(id)

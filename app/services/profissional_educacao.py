@@ -23,10 +23,10 @@ class ProfissionaisEducacaoServices(Resource):
 
     @jwt_required()
     def get(self, *args, **kwargs):
-        # try:
+        try:
             return  ProfissionaisEducacaoModel.get_profissionais_educacao(), 200
-        # except:
-        #     return { 'error': 'verifique a requisição !' }, 400
+        except:
+            return { 'error': 'verifique a requisição !' }, 400
         
     @jwt_required()
     def get_by_id(self, *args, **kwargs):
@@ -53,6 +53,20 @@ class ProfissionaisEducacaoServices(Resource):
     #     except:
     #         return { 'error': 'verifique a requisição !' }, 400
 
+    @jwt_required()
+    def get_area_do_conhecimento(self, *args, **kwargs):
+        try:
+            return  ProfissionaisEducacaoModel.get_area_do_conhecimento(), 200
+        except:
+            return { 'error': 'verifique a requisição !' }, 400
+
+    @jwt_required()
+    def get_componente_by_area_do_conhecimento(self, *args, **kwargs):
+        # try:
+            profissional = ProfissionaisEducacaoModel.get_profissionais_escola_componentes_by_cpf(str(args[0]))
+            if profissional != False :
+                  return profissional, 200
+            else : return  {'return':'nao ha registro para esse cpf'}, 200
 
     @jwt_required()
     def post(self, *args, **kwargs):
