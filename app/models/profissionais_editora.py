@@ -29,7 +29,7 @@ class ProfissionaisEditoraModel():
     def get_profissionais_editora(*args, **kwargs):
         cursor = conn.cursor()
  
-        cursor.execute("SELECT profissionais_editora.id , profissionais_editora.endereco, profissionais_editora.FK_user_id, users.nome, users.email, users.telefone, users.cpf, users.accept_lgpd, users.FK_profile_id, users.perfil_ativo, profiles.id ,profiles.profile_name FROM  profissionais_editora INNER JOIN  users ON  profissionais_editora.FK_user_id =  users.id INNER JOIN  profiles ON  users.FK_profile_id =  profiles.id ;")
+        cursor.execute("SELECT profissionais_editora.id , profissionais_editora.endereco, profissionais_editora.FK_user_id, users.nome, users.email, users.telefone, users.cpf, users.accept_lgpd, users.perfil_ativo FROM  profissionais_editora INNER JOIN  users ON  profissionais_editora.FK_user_id =  users.id")
         
         result = cursor.fetchall()
         cursor.close()
@@ -37,18 +37,7 @@ class ProfissionaisEditoraModel():
         listEstadosDict = []
         for estadoTupla in result:
             
-            tup1 = ('id',
-                    'endereco',
-                    'FK_user_id',
-                    'nome',
-                    'email',
-                    'telefone',
-                    'cpf',
-                    'accept_lgpd',
-                    'FK_profile_id',
-                    'perfil_ativo',
-                    'profile_id' ,
-                    'profile_name') 
+            tup1 = ('id' , 'endereco', 'FK_user_id', 'nome', 'email', 'telefone', 'cpf', 'accept_lgpd', 'perfil_ativo') 
             
             tup2 = estadoTupla
            
@@ -59,11 +48,12 @@ class ProfissionaisEditoraModel():
                 listEstadosDict.append(res)   
             
         return listEstadosDict
+    
     @classmethod
     def get_profissionais_editora_by_id(*args, **kwargs):
         cursor = conn.cursor()
         
-        cursor.execute(f"SELECT profissionais_editora.id , profissionais_editora.endereco, profissionais_editora.FK_user_id, users.nome, users.email, users.telefone, users.cpf, users.accept_lgpd, users.FK_profile_id, users.perfil_ativo, profiles.id ,profiles.profile_name FROM  profissionais_editora INNER JOIN  users ON  profissionais_editora.FK_user_id =  users.id INNER JOIN  profiles ON  users.FK_profile_id =  profiles.id WHERE profissionais_editora.id = {args[1]};")
+        cursor.execute(f"SELECT profissionais_editora.id , profissionais_editora.endereco, profissionais_editora.FK_user_id, users.nome, users.email, users.telefone, users.cpf, users.accept_lgpd, users.perfil_ativo FROM  profissionais_editora INNER JOIN  users ON  profissionais_editora.FK_user_id =  users.id WHERE profissionais_editora.id = {args[1]};")
         
         result = cursor.fetchall()
         cursor.close()
@@ -71,18 +61,34 @@ class ProfissionaisEditoraModel():
         listEstadosDict = []
         for estadoTupla in result:
             
-            tup1 = ('id',
-                    'endereco',
-                    'FK_user_id',
-                    'nome',
-                    'email',
-                    'telefone',
-                    'cpf',
-                    'accept_lgpd',
-                    'FK_profile_id',
-                    'perfil_ativo',
-                    'profile_id' ,
-                    'profile_name') 
+            tup1 = ('id' , 'endereco', 'FK_user_id', 'nome', 'email', 'telefone', 'cpf', 'accept_lgpd', 'perfil_ativo') 
+            
+            tup2 = estadoTupla
+           
+            if len(tup1) == len(tup2): 
+                res = dict(zip(tup1, tup2)) 
+                # print(res)
+
+                listEstadosDict.append(res)   
+            
+        if len(listEstadosDict) != 0:
+            return listEstadosDict
+
+        return False
+    
+    @classmethod
+    def get_profissionais_editora_by_cpf(*args, **kwargs):
+        cursor = conn.cursor()
+        
+        cursor.execute(f"SELECT profissionais_editora.id , profissionais_editora.endereco, profissionais_editora.FK_user_id, users.nome, users.email, users.telefone, users.cpf, users.accept_lgpd, users.perfil_ativo FROM  profissionais_editora INNER JOIN  users ON  profissionais_editora.FK_user_id =  users.id WHERE users.cpf = {args[1]};")
+        
+        result = cursor.fetchall()
+        cursor.close()
+
+        listEstadosDict = []
+        for estadoTupla in result:
+            
+            tup1 = ('id' , 'endereco', 'FK_user_id', 'nome', 'email', 'telefone', 'cpf', 'accept_lgpd', 'perfil_ativo') 
             
             tup2 = estadoTupla
            
@@ -93,6 +99,7 @@ class ProfissionaisEditoraModel():
                 listEstadosDict.append(res)   
             
         return listEstadosDict
+
 
         # cursor = conn.cursor()
         

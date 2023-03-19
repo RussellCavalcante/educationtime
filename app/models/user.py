@@ -185,7 +185,7 @@ class UserModel():
 
             conn.autocommit = True
 
-            cursor.execute("insert into users (cpf , nome , email , telefone, FK_profile_id, perfil_ativo) values(?,?,?,?,?,?)",args[1], args[2], args[3], int(args[4]), args[5], args[6])
+            cursor.execute("insert into users (cpf , nome , email , telefone, perfil_ativo) values(?,?,?,?,?)",args[1], args[2], args[3], int(args[4]), args[5])
             
             conn.commit()
             # conn.close()
@@ -205,9 +205,9 @@ class UserModel():
             
             cursor.execute('''
                         UPDATE users
-                        SET cpf = ?, nome = ?, email = ?, telefone = ? , FK_profile_id = ?, perfil_ativo = ?
+                        SET cpf = ?, nome = ?, email = ?, telefone = ? , perfil_ativo = ?
                         WHERE id = ?
-                        ''',args[1], args[2], args[3], args[4], args[5], int(args[6]), int(args[7])
+                        ''',args[1], args[2], args[3], args[4], args[5], int(args[6])
                         )
             
             conn.commit()
@@ -320,6 +320,58 @@ class UserModel():
         # except:
         #     print(TypeError)
         # #     return None
+
+    @classmethod
+    def update_associateUserProfile(*args, **kwargs):
+        # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
+        # try:
+            cursor = conn.cursor()
+            # print(args)
+            # input()
+            
+            cursor.execute('''
+                        UPDATE user_profiles
+                        SET FK_user_id = ?, FK_profile_id = ?
+                        WHERE id = ?
+                        ''',args[1], args[2], args[3], 
+                        )
+            
+            conn.commit()
+            # conn.close()
+            # return 'created'
+            # rows = cursor.fetchall()
+        # except:
+        #     print(TypeError)
+        # #     return None
+    
+    @classmethod
+    def get_user_profiles_by_user_id(*args, **kwargs):
+        cursor = conn.cursor()
+        
+        cursor.execute(f"SELECT id, FK_user_id, FK_profile_id FROM user_profiles WHERE FK_user_id = {args[1]};")
+        
+        result = cursor.fetchall()
+        cursor.close()
+
+        listEstadosDict = []
+        for estadoTupla in result:
+            
+            tup1 = ('id', 'FK_user_id', 'FK_profile_id' ) 
+            
+            tup2 = estadoTupla
+           
+            if len(tup1) == len(tup2): 
+                res = dict(zip(tup1, tup2)) 
+                # print(res)
+
+                listEstadosDict.append(res)   
+            
+        if len(listEstadosDict) != 0:
+            return listEstadosDict
+
+        return False
+
+
 
     @classmethod
     def associateProfissionalEscolaPerfil(*args, **kwargs):

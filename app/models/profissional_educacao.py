@@ -305,6 +305,7 @@ class ProfissionaisEducacaoModel():
         # input()
 
         listEstadosDict = []
+        dictFinal = {}
         for estadoTupla in result:
             tup1 = ('id' ,  'FK_user_id', 
                     'nome', 'email', 'telefone', 'cpf', 'accept_lgpd', 'perfil_ativo',
@@ -315,19 +316,24 @@ class ProfissionaisEducacaoModel():
                     'componente_curricular_nome', 'componente_curricular_FK_area_conhecimento_id', 'area_conhecimento_nome') 
             tup2 = estadoTupla
             if len(tup1) == len(tup2):
-                for i,tupla1 in enumerate(tup1):
-                
-                    
-                    
-                
-                    
-                        if tupla1 == 'escola_id':
-                            print(tup2)
-                            input()
-                        res = dict(zip(tup1, tup2)) 
-                        # print(res)
+                for i, valor in enumerate(tup2):
+                    print(valor)
+                    input()
 
-            listEstadosDict.append(res)   
+                    for i,chave in enumerate(tup1):
+                        print(chave)
+                        input()
+                        
+                    
+                
+                    
+            #             if tupla1 == 'escola_id':
+            #                 print(tup2)
+            #                 input()
+            #             res = dict(zip(tup1, tup2)) 
+            #             # print(res)
+
+            # listEstadosDict.append(res)   
         # print(listEstadosDict)
         # input()
 

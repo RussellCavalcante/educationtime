@@ -689,6 +689,15 @@ def get_ProfissionaisEditora_by(id):
     
     return _Get_services.get_by_id(id)
 
+@avaliable_route.route('/ProfissionaisEditora/<string:cpf>', methods=['GET'])
+
+def get_ProfissionaisEditora_by_cpf(cpf):    
+    from app.services.profissionais_editora import ProfissionaisEditoraServices
+    
+    _Get_services = ProfissionaisEditoraServices()
+    
+    return _Get_services.get_by_cpf(cpf)
+
 
 @avaliable_route.route('/ProfissionaisEditora/Cadastro', methods=['POST'])
 

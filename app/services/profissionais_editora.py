@@ -37,6 +37,13 @@ class ProfissionaisEditoraServices(Resource):
         except:
             return { 'error': 'verifique a requisição !' }, 400
         
+    @jwt_required()
+    def get_by_cpf(self, *args, **kwargs):
+        try:
+            return  ProfissionaisEditoraModel.get_profissionais_editora_by_cpf(args[0]), 200
+        except:
+            return { 'error': 'verifique a requisição !' }, 400
+        
     # @jwt_required()
     # def get_by_muncipio_id(self, *args, **kwargs):
     #     try:
@@ -61,9 +68,14 @@ class ProfissionaisEditoraServices(Resource):
             if UserModel.find_by_login(cpf):
                 return {'error': 'Profissional da editora ja existente'}, 400
             
-            UserModel.create_profissionais_editora(cpf, nome, email, int(telefone), FK_perfil_id, perfil_ativo)
+            UserModel.create_profissionais_editora(cpf, nome, email, int(telefone), perfil_ativo)
 
             user = UserModel.find_by_login(cpf)
+
+            if UserModel.get_user_profiles_by_user_id(user[0]):
+                return {'error':'Usuario ja associado a perfil selecianado'}, 400
+
+            UserModel.associateUserProfile(user[0], FK_perfil_id)
             
             ProfissionaisEditoraModel.create_profissionais_editora(endereco, user[0])
             
@@ -87,13 +99,26 @@ class ProfissionaisEditoraServices(Resource):
             FK_perfil_id = dados['FK_perfil_id']
             perfil_ativo = dados['perfil_ativo']
             endereco = dados['endereco']
+            if ProfissionaisEditoraModel.get_profissionais_editora_by_id(args[0]) == False:
+                return {'error':'profissional não existente'}, 400
             
             profissionaleditora = ProfissionaisEditoraModel.get_profissionais_editora_by_id(args[0])
             
 
-            UserModel.update_profissionais_editora(cpf, nome, email, int(telefone), FK_perfil_id, perfil_ativo ,profissionaleditora[0]['FK_user_id'])
+            UserModel.update_profissionais_editora(cpf, nome, email, int(telefone), perfil_ativo , profissionaleditora[0]['FK_user_id'])
+            
             user = UserModel.find_by_login(cpf)
+
+           
+            if UserModel.get_user_profiles_by_user_id(user[0]) == False:
+                return {'error':'nao existe perfil associado ao usuario cadastrado'}, 400
+            
+            userProfile = UserModel.get_user_profiles_by_user_id(user[0])
+
+
+            UserModel.update_associateUserProfile(user[0], FK_perfil_id, userProfile[0]['id'])
             ProfissionaisEditoraModel.update_profissionais_editora(endereco, user[0] , args[0])
+
             
             return {'updated': nome }, 200
         
