@@ -63,7 +63,7 @@ class ProfissionaisEducacaoServices(Resource):
     @jwt_required()
     def get_componente_by_area_do_conhecimento(self, *args, **kwargs):
         # try:
-            profissional = ProfissionaisEducacaoModel.get_profissionais_escola_componentes_by_cpf(str(args[0]))
+            profissional = ProfissionaisEducacaoModel.get_componente_by_area_do_conhecimento(str(args[0]))
             if profissional != False :
                   return profissional, 200
             else : return  {'return':'nao ha registro para esse cpf'}, 200
