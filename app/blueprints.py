@@ -785,3 +785,48 @@ def get_ComponenteAreaDoConhecimento(id):
     _Get_services = ProfissionaisEducacaoServices()
     
     return _Get_services.get_componente_by_area_do_conhecimento(id)
+
+@avaliable_route.route('/FuncoesEscola', methods=['GET'])
+def get_FuncoesEscola():    
+    from app.services.funcoes_escola import FuncoesEscolaServices
+    # print(request.args.get('email'))
+    # input()
+    _Get_services = FuncoesEscolaServices()
+    
+    return _Get_services.get()
+
+@avaliable_route.route('/FuncoesEscola/<int:id>', methods=['GET'])
+
+def get_FuncoesEscola_by(id):    
+    from app.services.funcoes_escola import FuncoesEscolaServices
+    
+    _Get_services = FuncoesEscolaServices()
+    
+    return _Get_services.get_by_id(id)
+
+@avaliable_route.route('/FuncoesEscola/escola/<int:id>', methods=['GET'])
+
+def get_FuncoesEscola_by_cpf(id):    
+    from app.services.funcoes_escola import FuncoesEscolaServices
+    
+    _Get_services = FuncoesEscolaServices()
+    
+    return _Get_services.get_Funcoes_escola_by_FK_escola_id(id)
+
+
+@avaliable_route.route('/FuncoesEscola/Cadastro', methods=['POST'])
+
+def post_FuncoesEscola():    
+    from app.services.funcoes_escola import FuncoesEscolaServices
+    
+    _Get_services = FuncoesEscolaServices()
+    
+    return _Get_services.post()
+
+@avaliable_route.route('/FuncoesEscola/Update/<int:id>', methods=['PUT'])
+
+def update_FuncoesEscola(id):    
+    from app.services.funcoes_escola import FuncoesEscolaServices
+    _Get_services = FuncoesEscolaServices()
+    
+    return _Get_services.update(id)
