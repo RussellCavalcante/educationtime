@@ -25,6 +25,24 @@ class EnturmarModel():
     #     self.salt = salt
     
     @classmethod
+    def get_FK_turma_id_enturmar(*args, **kwargs):
+        cursor = conn.cursor()
+ 
+        cursor.execute(f"SELECT FK_estudante_id FROM enturmar WHERE FK_turma_id = {args[1]};")
+        
+        result = cursor.fetchall()
+        cursor.close()
+
+        # print(result)
+        # input()
+        listEstadosDict = []
+        for estadoTupla in result:
+
+                listEstadosDict.append(estadoTupla[0])   
+            
+        return listEstadosDict
+
+    @classmethod
     def create_enturmar(*args, **kwargs):
         # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
         # try:
@@ -40,6 +58,28 @@ class EnturmarModel():
         #     print(TypeError)
         # #     return None
     
+    @classmethod
+    def delete_enturmar(*args, **kwargs):
+        # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
+        # try:
+            cursor = conn.cursor()
+                # print(args)
+                # input()
+            
+            cursor.execute('''
+                            DELETE FROM enturmar WHERE Fk_estudante_id = ?;
+                            
+                            ''', args[1])
+                        
+            
+            conn.commit()
+            # conn.close()
+            # return 'created'
+            # rows = cursor.fetchall()
+        # except:
+        #     print(TypeError)
+        # #     return None
+
     @classmethod
     def update_enturmar(*args, **kwargs):
         # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id

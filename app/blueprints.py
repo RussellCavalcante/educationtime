@@ -635,14 +635,14 @@ def post_enturmar():
     
     return _Get_services.post()
 
-@avaliable_route.route('/Enturmar/Update/<int:id>', methods=['PUT'])
+@avaliable_route.route('/Enturmar/Update', methods=['PUT'])
 
-def update_enturmar(id):    
+def update_enturmar():    
     from app.services.enturmar import EnturmarServices
 
     _Get_services = EnturmarServices()
     
-    return _Get_services.update(id)
+    return _Get_services.update()
 
 @avaliable_route.route('/estudante/turma/<int:id>', methods=['GET'])
 
@@ -729,7 +729,8 @@ def get_estudante_nome(nome):
 @avaliable_route.route('/ProfissionaisEducacao', methods=['GET'])
 def get_ProfissionaisEducacao():    
     from app.services.profissional_educacao import ProfissionaisEducacaoServices
-    
+    # print(request.args.get('email'))
+    # input()
     _Get_services = ProfissionaisEducacaoServices()
     
     return _Get_services.get()
