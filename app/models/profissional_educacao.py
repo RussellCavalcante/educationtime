@@ -226,6 +226,8 @@ class ProfissionaisEducacaoModel():
         #     print(TypeError)
         # #     return None 
 
+    
+
     @classmethod
     def update_profissionais_educacao(*args, **kwargs):
         # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
@@ -347,6 +349,27 @@ class ProfissionaisEducacaoModel():
 
         return False
 
+    @classmethod
+    def delete_profissionais_escola_componentes(*args, **kwargs):
+        # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
+        # try:
+            cursor = conn.cursor()
+                # print(args)
+                # input()
+            
+            cursor.execute('''
+                            DELETE FROM enturmar WHERE Fk_estudante_id = ?;
+                            
+                            ''', args[1])
+                        
+            
+            conn.commit()
+            # conn.close()
+            # return 'created'
+            # rows = cursor.fetchall()
+        # except:
+        #     print(TypeError)
+        # #     return None
 
     @classmethod
     def get_profissionais_escola_componentes(*args, **kwargs):

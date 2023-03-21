@@ -62,6 +62,41 @@ class EscolaridadeEducadoresModel():
         return False
 
     @classmethod
+    def get_escolaridade_educador_by_id(*args, **kwargs):
+        cursor = conn.cursor()
+ 
+        cursor.execute(f"""SELECT escolaridade_educador.id , FK_user_id, users.cpf, users.nome, FK_escola_id, escola.nome_escola, escolaridade, ano_conclusao, nome_instituicao, municipio.nome ,estado.nome, estado.uf  FROM escolaridade_educador
+                        INNER JOIN users on escolaridade_educador.FK_user_id = users.id
+                        INNER JOIN escola on escolaridade_educador.FK_escola_id = escola.id
+                        INNER JOIN municipio on escola.FK_municipio_id = municipio.id
+                        INNER JOIN estado on municipio.FK_UF_id = estado.id WHERE escolaridade_educador.id = {args[1]};""")
+        
+        result = cursor.fetchall()
+        cursor.close()
+
+        # print(result)
+        # input()
+        listEstadosDict = []
+        for estadoTupla in result:
+            
+            tup1 = ('id' , 'FK_user_id', 'cpf', 'nome', 'FK_escola_id', 
+                    'nome_escola', 'escolaridade', 'ano_conclusao', 'nome_instituicao', 'municipio_nome' , 
+                    'estado_nome', 'estado_uf') 
+            
+            tup2 = estadoTupla
+           
+            if len(tup1) == len(tup2): 
+                res = dict(zip(tup1, tup2)) 
+                # print(res)
+
+                listEstadosDict.append(res)   
+            
+        if len(listEstadosDict) != 0:
+            return listEstadosDict
+
+        return False
+
+    @classmethod
     def get_escolaridade_educador_by_educadores(*args, **kwargs):
         cursor = conn.cursor()
  

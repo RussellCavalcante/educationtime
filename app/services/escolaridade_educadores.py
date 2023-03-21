@@ -24,21 +24,21 @@ class EscolaridadeEducadoresaServices(Resource):
         except:
             return { 'error': 'verifique a requisição !' }, 400
         
-    # @jwt_required()
-    # def get_escolaridade_educador_by_id(self, *args, **kwargs):
-    #     try:
+    @jwt_required()
+    def get_escolaridade_educador_by_id(self, *args, **kwargs):
+        try:
                     
-    #         return  EscolaridadeEducadoresModel.get_escolaridade_educador_by_educadores(args[0]), 200
-    #     except:
-    #         return { 'error': 'verifique a requisição !' }, 400
+            return  EscolaridadeEducadoresModel.get_escolaridade_educador_by_id(args[0]), 200
+        except:
+            return { 'error': 'verifique a requisição !' }, 400
         
     @jwt_required()
     def get_escolaridade_educador_by_educador(self, *args, **kwargs):
-        # try:
+        try:
                     
             return  EscolaridadeEducadoresModel.get_escolaridade_educador_by_educadores(args[0]), 200
-        # except:
-        #     return { 'error': 'verifique a requisição !' }, 400
+        except:
+            return { 'error': 'verifique a requisição !' }, 400
         
     @jwt_required()
     def post(self, *args, **kwargs):

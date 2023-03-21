@@ -849,6 +849,15 @@ def get_EscolaridadeEducador_by_cpf(id):
     
     return _Get_services.get_escolaridade_educador_by_educador(id)
 
+@avaliable_route.route('/EscolaridadeEducador/<int:id>', methods=['GET'])
+
+def get_EscolaridadeEducador_by_id(id):    
+    from app.services.escolaridade_educadores import EscolaridadeEducadoresaServices
+    
+    _Get_services = EscolaridadeEducadoresaServices()
+    
+    return _Get_services.get_escolaridade_educador_by_id(id)
+
 
 @avaliable_route.route('/EscolaridadeEducador/Cadastro', methods=['POST'])
 
