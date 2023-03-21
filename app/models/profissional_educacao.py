@@ -58,6 +58,35 @@ class ProfissionaisEducacaoModel():
                 listEstadosDict.append(res)   
             
         return listEstadosDict
+    
+    @classmethod
+    def get_profissionais_educacao_nome(*args, **kwargs):
+        cursor = conn.cursor()
+ 
+        cursor.execute(f"""SELECT profissionais_educacao.id, users.nome FROM profissionais_educacao 
+        INNER JOIN users ON profissionais_educacao.FK_user_id = users.id 
+        WHERE users.nome like '%{args[1]}%';""")
+                                    
+        result = cursor.fetchall()
+        cursor.close()
+
+        # print(result)
+        # input()
+        listEstadosDict = []
+        for estadoTupla in result:
+            
+            tup1 = ('id', 'nome') 
+            tup2 = estadoTupla
+           
+            if len(tup1) == len(tup2): 
+                res = dict(zip(tup1, tup2))
+                # print(res)
+
+                listEstadosDict.append(res)   
+            
+        return listEstadosDict
+
+
     @classmethod
     def get_profissionais_educacao_by_id(*args, **kwargs):
         cursor = conn.cursor()

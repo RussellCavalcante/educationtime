@@ -752,6 +752,15 @@ def get_ProfissionaisEducacao_by_cpf(cpf):
     
     return _Get_services.get_profissional_educador_by_cpf(cpf)
 
+@avaliable_route.route('/ProfissionaisEducacao/nome/<string:nome>', methods=['GET'])
+
+def get_ProfissionaisEducacao_by_nome(nome):    
+    from app.services.profissional_educacao import ProfissionaisEducacaoServices
+    
+    _Get_services = ProfissionaisEducacaoServices()
+    
+    return _Get_services.get_profissional_educador_by_nome(nome)
+
 
 @avaliable_route.route('/ProfissionaisEducacao/Cadastro', methods=['POST'])
 

@@ -38,13 +38,13 @@ class ProfissionaisEducacaoServices(Resource):
 
     @jwt_required()
     def get_profissional_educador_by_cpf(self, *args, **kwargs):
-        # try:
+        try:
             profissional = ProfissionaisEducacaoModel.get_profissionais_escola_componentes_by_cpf(str(args[0]))
             if profissional != False :
                   return profissional, 200
             else : return  {'return':'nao ha registro para esse cpf'}, 200
-        # except:
-        #     return { 'error': 'verifique a requisição !' }, 400
+        except:
+            return { 'error': 'verifique a requisição !' }, 400
         
     # @jwt_required()
     # def get_by_muncipio_id(self, *args, **kwargs):
@@ -62,15 +62,27 @@ class ProfissionaisEducacaoServices(Resource):
 
     @jwt_required()
     def get_componente_by_area_do_conhecimento(self, *args, **kwargs):
-        # try:
+        try:
             profissional = ProfissionaisEducacaoModel.get_componente_by_area_do_conhecimento(str(args[0]))
             if profissional != False :
                   return profissional, 200
-            else : return  {'return':'nao ha registro para esse cpf'}, 200
+            else : return  {'return':'nao ha registro para esse cpf'}, 400
+        except:
+            return { 'error': 'verifique a requisição !' }, 400
+
+    @jwt_required()
+    def get_profissional_educador_by_nome(self, *args, **kwargs):
+        # try:
+            profissional = ProfissionaisEducacaoModel.get_profissionais_educacao_nome(str(args[0]))
+            if profissional != False :
+                  return profissional, 200
+            else : return  {'return':'nao ha registro para esse cpf'}, 400
+        # except:
+        #     return { 'error': 'verifique a requisição !' }, 400
 
     @jwt_required()
     def post(self, *args, **kwargs):
-        # try:
+        try:
                 
             dados = atributos.parse_args()
             cpf = dados['cpf']
@@ -125,8 +137,8 @@ class ProfissionaisEducacaoServices(Resource):
 
             return  {'created': nome}, 201
         
-        # except:
-        #     return { 'error': 'verifique a requisição !' }, 400
+        except:
+            return { 'error': 'verifique a requisição !' }, 400
         
         
 
