@@ -830,3 +830,39 @@ def update_FuncoesEscola(id):
     _Get_services = FuncoesEscolaServices()
     
     return _Get_services.update(id)
+
+@avaliable_route.route('/EscolaridadeEducador', methods=['GET'])
+def get_EscolaridadeEducador():    
+    from app.services.escolaridade_educadores import EscolaridadeEducadoresaServices
+    # print(request.args.get('email'))
+    # input()
+    _Get_services = EscolaridadeEducadoresaServices()
+    
+    return _Get_services.get()
+
+@avaliable_route.route('/EscolaridadeEducador/educador/<int:id>', methods=['GET'])
+
+def get_EscolaridadeEducador_by_cpf(id):    
+    from app.services.escolaridade_educadores import EscolaridadeEducadoresaServices
+    
+    _Get_services = EscolaridadeEducadoresaServices()
+    
+    return _Get_services.get_escolaridade_educador_by_educador(id)
+
+
+@avaliable_route.route('/EscolaridadeEducador/Cadastro', methods=['POST'])
+
+def post_EscolaridadeEducador():    
+    from app.services.escolaridade_educadores import EscolaridadeEducadoresaServices
+    
+    _Get_services = EscolaridadeEducadoresaServices()
+    
+    return _Get_services.post()
+
+@avaliable_route.route('/EscolaridadeEducador/Update/<int:id>', methods=['PUT'])
+
+def update_EscolaridadeEducador(id):    
+    from app.services.escolaridade_educadores import EscolaridadeEducadoresaServices
+    _Get_services = EscolaridadeEducadoresaServices()
+    
+    return _Get_services.update(id)
