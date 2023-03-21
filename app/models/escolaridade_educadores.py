@@ -28,7 +28,7 @@ class EscolaridadeEducadoresModel():
     def get_escolaridade_educador(*args, **kwargs):
         cursor = conn.cursor()
  
-        cursor.execute(f"""SELECT FK_user_id, users.cpf, FK_escola_id, escola.nome_escola, escolaridade, ano_conclusao, nome_instituicao FROM escolaridade_educador 
+        cursor.execute(f"""SELECT escolaridade_educador.id , FK_user_id, users.cpf, FK_escola_id, escola.nome_escola, escolaridade, ano_conclusao, nome_instituicao FROM escolaridade_educador 
                         INNER JOIN users on escolaridade_educador.FK_user_id = users.id
                         INNER JOIN escola on escolaridade_educador.FK_escola_id = escola.id;""")
         
@@ -40,7 +40,7 @@ class EscolaridadeEducadoresModel():
         listEstadosDict = []
         for estadoTupla in result:
             
-            tup1 = ('FK_user_id', 'cpf', 'escola_id', 'nome_escola', 'escolaridade', 'ano_conclusao', 'nome_instituicao') 
+            tup1 = ('id', 'FK_user_id', 'cpf', 'escola_id', 'nome_escola', 'escolaridade', 'ano_conclusao', 'nome_instituicao') 
             
             tup2 = estadoTupla
            
@@ -59,7 +59,7 @@ class EscolaridadeEducadoresModel():
     def get_escolaridade_educador_by_educadores(*args, **kwargs):
         cursor = conn.cursor()
  
-        cursor.execute(f"""SELECT FK_user_id, users.cpf, FK_escola_id, escola.nome_escola, escolaridade, ano_conclusao, nome_instituicao FROM escolaridade_educador 
+        cursor.execute(f"""SELECT escolaridade_educador.id , FK_user_id, users.cpf, FK_escola_id, escola.nome_escola, escolaridade, ano_conclusao, nome_instituicao FROM escolaridade_educador 
                         INNER JOIN users on escolaridade_educador.FK_user_id = users.id
                         INNER JOIN escola on escolaridade_educador.FK_escola_id = escola.id WHERE FK_user_id = {args[1]};""")
         
@@ -71,7 +71,7 @@ class EscolaridadeEducadoresModel():
         listEstadosDict = []
         for estadoTupla in result:
             
-            tup1 = ('FK_user_id', 'cpf', 'escola_id', 'nome_escola', 'escolaridade', 'ano_conclusao', 'nome_instituicao') 
+            tup1 = ('id','FK_user_id', 'cpf', 'escola_id', 'nome_escola', 'escolaridade', 'ano_conclusao', 'nome_instituicao') 
             
             tup2 = estadoTupla
            
