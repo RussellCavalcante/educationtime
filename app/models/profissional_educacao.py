@@ -33,7 +33,6 @@ class ProfissionaisEducacaoModel():
                         users.email, users.telefone , users.cpf, 
                         users.accept_lgpd, users.perfil_ativo
                         FROM  profissionais_educacao 
-                        INNER JOIN  profissonal_escola_perfil ON  profissionais_educacao.FK_user_id =  profissonal_escola_perfil.FK_user_id 
                         INNER JOIN  users ON  profissionais_educacao.FK_user_id =  users.id """)
         
         result = cursor.fetchall()
@@ -86,6 +85,41 @@ class ProfissionaisEducacaoModel():
             
         return listEstadosDict
 
+    @classmethod
+    def get_profissionais_educacao_by_FK_user_id(*args, **kwargs):
+        cursor = conn.cursor()
+        
+        cursor.execute(f"""SELECT profissionais_educacao.id ,  profissionais_educacao.FK_user_id, users.nome, 
+                        users.email, users.telefone , users.cpf, 
+                        users.accept_lgpd, users.perfil_ativo
+                        FROM  profissionais_educacao 
+                        INNER JOIN  profissonal_escola_perfil ON  profissionais_educacao.FK_user_id =  profissonal_escola_perfil.FK_user_id 
+                        INNER JOIN  users ON  profissionais_educacao.FK_user_id =  users.id WHERE profissionais_educacao.FK_user_id = {args[1]};""")
+        
+        result = cursor.fetchall()
+        cursor.close()
+
+        listEstadosDict = []
+        for estadoTupla in result:
+            
+            tup1 = ('id' ,  'FK_user_id', 'nome', 
+                        'email', 'telefone' , 'cpf', 
+                        'accept_lgpd', 'perfil_ativo' ) 
+            
+            tup2 = estadoTupla
+           
+            if len(tup1) == len(tup2): 
+                res = dict(zip(tup1, tup2)) 
+                # print(res)
+
+                listEstadosDict.append(res)   
+        # print(listEstadosDict)
+        # input()
+
+        if len(listEstadosDict) != 0:
+            return listEstadosDict
+
+        return False
 
     @classmethod
     def get_profissionais_educacao_by_id(*args, **kwargs):
@@ -95,7 +129,6 @@ class ProfissionaisEducacaoModel():
                         users.email, users.telefone , users.cpf, 
                         users.accept_lgpd, users.perfil_ativo
                         FROM  profissionais_educacao 
-                        INNER JOIN  profissonal_escola_perfil ON  profissionais_educacao.FK_user_id =  profissonal_escola_perfil.FK_user_id 
                         INNER JOIN  users ON  profissionais_educacao.FK_user_id =  users.id WHERE profissionais_educacao.id = {args[1]};""")
         
         result = cursor.fetchall()
@@ -373,10 +406,64 @@ class ProfissionaisEducacaoModel():
         # print(listEstadosDict)
         # input()
 
+    @classmethod
+    def get_componentes_by_profissional(*args, **kwargs):
+        cursor = conn.cursor()
+        # print(args)
+        # input()
+ 
+        cursor.execute(f"""SELECT  profissional_escola_componente.id, profissional_escola_componente.FK_user_id ,users.nome , escola.nome_escola, componente_curricular.id, componente_curricular.nome FROM profissional_escola_componente 
+                            INNER JOIN componente_curricular ON profissional_escola_componente.FK_componente_id = componente_curricular.id
+                            INNER JOIN users ON profissional_escola_componente.FK_user_id = users.id
+                            INNER JOIN escola ON profissional_escola_componente.FK_escola_id = escola.id WHERE profissional_escola_componente.FK_user_id = {args[1]} ; """)
+        
+        result = cursor.fetchall()
+        cursor.close()
+
+        # print(result)
+        # input()
+        listEstadosDict = []
+        for estadoTupla in result:
+            
+            tup1 = ('id', 'FK_user_id' ,'nome' , 'nome_escola', 'componente_curricular_id', 'componente_curricular_nome' ) 
+            
+            tup2 = estadoTupla
+           
+            if len(tup1) == len(tup2): 
+                res = dict(zip(tup1, tup2)) 
+                # print(res)
+
+                listEstadosDict.append(res)   
+        # print(listEstadosDict)
+        # input()
+
         if len(listEstadosDict) != 0:
             return listEstadosDict
 
         return False
+    
+    
+
+    @classmethod
+    def get_componentes_id_by_FK_turma_id(*args, **kwargs):
+        cursor = conn.cursor()
+        # print(args)
+        # input()
+ 
+        cursor.execute(f"""SELECT FK_componente_id FROM profissional_escola_componente WHERE FK_escola_id = {args[1]} ; """)
+        
+        result = cursor.fetchall()
+        cursor.close()
+
+        # print(result)
+        # input()
+    
+        listEstadosDict = []
+        for estadoTupla in result:
+
+                listEstadosDict.append(estadoTupla[0])   
+            
+        return listEstadosDict
 
     @classmethod
     def delete_profissionais_escola_componentes(*args, **kwargs):
@@ -387,7 +474,7 @@ class ProfissionaisEducacaoModel():
                 # input()
             
             cursor.execute('''
-                            DELETE FROM enturmar WHERE Fk_estudante_id = ?;
+                            DELETE FROM profissional_escola_componente WHERE FK_componente_id = ?;
                             
                             ''', args[1])
                         
@@ -454,10 +541,13 @@ class ProfissionaisEducacaoModel():
         return False
     
     @classmethod
-    def get_componentes_by_profissional(*args, **kwargs):
+    def get_componentes_by_profissional_and_escola(*args, **kwargs):
         cursor = conn.cursor()
  
-        cursor.execute(f"""SELECT id , FK_user_id, FK_escola_id, FK_componente_id FROM profissional_escola_componente WHERE FK_user_id = {args[1]} AND FK_componente_id = {args[2]} AND FK_escola_id = {args[3]}; """)
+        cursor.execute(f"""SELECT  profissional_escola_componente.id, profissional_escola_componente.FK_user_id ,users.nome , escola.nome_escola, componente_curricular.id, componente_curricular.nome FROM profissional_escola_componente 
+                            INNER JOIN componente_curricular ON profissional_escola_componente.FK_componente_id = componente_curricular.id
+                            INNER JOIN users ON profissional_escola_componente.FK_user_id = users.id
+                            INNER JOIN escola ON profissional_escola_componente.FK_escola_id = escola.id WHERE FK_user_id = {args[1]}  AND FK_escola_id = {args[2]}; """)
         
         result = cursor.fetchall()
         cursor.close()
@@ -468,7 +558,7 @@ class ProfissionaisEducacaoModel():
         listEstadosDict = []
         for estadoTupla in result:
             
-            tup1 = ('id' , 'FK_user_id', 'FK_escola_id', 'FK_componente_id' ) 
+            tup1 = ('id', 'FK_user_id' ,'nome' , 'nome_escola', 'componente_curricular_id', 'componente_curricular_nome' ) 
             
             tup2 = estadoTupla
            

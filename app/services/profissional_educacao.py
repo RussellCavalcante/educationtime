@@ -46,12 +46,26 @@ class ProfissionaisEducacaoServices(Resource):
         except:
             return { 'error': 'verifique a requisição !' }, 400
         
-    # @jwt_required()
-    # def get_by_muncipio_id(self, *args, **kwargs):
-    #     try:
-    #         return  ProfissionaisEditoraModel.get_dirigente_municipal_by_secretaria_id(args[0]), 200
-    #     except:
-    #         return { 'error': 'verifique a requisição !' }, 400
+    @jwt_required()
+    def get_componentes_by_profissional(self, *args, **kwargs):
+        try:
+            profissional = ProfissionaisEducacaoModel.get_componentes_by_profissional(args[0])
+            if profissional != False :
+                  return profissional, 200
+            else : return  {'return':'nao ha componentes para esse usuario'}, 200
+        except:
+            return { 'error': 'verifique a requisição !' }, 400
+        
+    @jwt_required()
+    def get_componentes_by_profissional_and_escola(self, *args, **kwargs):
+        try:
+            profissional = ProfissionaisEducacaoModel.get_componentes_by_profissional_and_escola(args[0], args[1])
+            if profissional != False :
+                  return profissional, 200
+            else : return  {'return':'nao ha componentes para esse usuario'}, 200
+        except:
+            return { 'error': 'verifique a requisição !' }, 400
+    
 
     @jwt_required()
     def get_area_do_conhecimento(self, *args, **kwargs):
@@ -72,13 +86,13 @@ class ProfissionaisEducacaoServices(Resource):
 
     @jwt_required()
     def get_profissional_educador_by_nome(self, *args, **kwargs):
-        # try:
+        try:
             profissional = ProfissionaisEducacaoModel.get_profissionais_educacao_nome(str(args[0]))
             if profissional != False :
                   return profissional, 200
             else : return  {'return':'nao ha registro para esse cpf'}, 400
-        # except:
-        #     return { 'error': 'verifique a requisição !' }, 400
+        except:
+            return { 'error': 'verifique a requisição !' }, 400
 
     @jwt_required()
     def post(self, *args, **kwargs):
@@ -100,18 +114,41 @@ class ProfissionaisEducacaoServices(Resource):
                     # print('entrou')
                     # input()
                     user = UserModel.find_by_login(cpf)
+                    
+                    if ProfissionaisEducacaoModel.get_profissionais_educacao_by_FK_user_id(user[0]) == False:
+                        ProfissionaisEducacaoModel.create_profissionais_educacao( user[0])
 
                     UserModel.associateProfissionalEscolaPerfil(user[0], FK_escola_id, FK_perfil_id)
 
+                    componentizar = ProfissionaisEducacaoModel.get_componentes_id_by_FK_turma_id(FK_escola_id)
+
+                    # print(componentizar)
+                    # input()
+                    manter = []
+                    excluirAssociacao = []
+                    novos = []
                     # UserModel.associateUserProfile(user[0], FK_perfil_id)
-                    
-                    for i , componentes in enumerate(componentes_curriculares['componentes']):
-                        # print(componentes, ProfissionaisEducacaoModel.get_profissionais_escola_componentes(componentes, FK_escola_id))
-                        # input()
-                        if ProfissionaisEducacaoModel.get_profissionais_escola_componentes(componentes, FK_escola_id) != False:
-                             return {'error':f'componente curricular com id {componentes} ja existe a esta escola '}, 400
+                    for element in componentizar:
+                        if element not in componentes_curriculares['componentes']:
+                            excluirAssociacao.append(element)
+                            ProfissionaisEducacaoModel.delete_profissionais_escola_componentes(element)
+                        else:
+                            manter.append(element) 
+
+                    for adicionar in componentes_curriculares['componentes']:
+            
+                        if adicionar not in manter:
+                            novos.append(adicionar)
+                            if ProfissionaisEducacaoModel.get_profissionais_escola_componentes(adicionar, FK_escola_id) != False:
+                                    return {'error':f'componente curricular com id{adicionar} ja existe a esta escola '}
+                            UserModel.associateProfissionalEscolaComponentes(user[0], FK_escola_id, adicionar)
+                    # for i , componentes in enumerate(componentes_curriculares['componentes']):
+                    #     # print(componentes, ProfissionaisEducacaoModel.get_profissionais_escola_componentes(componentes, FK_escola_id))
+                    #     # input()
+                    #     if ProfissionaisEducacaoModel.get_profissionais_escola_componentes(componentes, FK_escola_id) != False:
+                    #          return {'error':f'componente curricular com id {componentes} ja existe a esta escola '}, 400
                         
-                        UserModel.associateProfissionalEscolaComponentes(user[0], FK_escola_id, componentes)
+                    #     UserModel.associateProfissionalEscolaComponentes(user[0], FK_escola_id, componentes)
 
                     return  {'created': nome}, 201
                 
@@ -129,11 +166,33 @@ class ProfissionaisEducacaoServices(Resource):
             UserModel.associateUserProfile(user[0], FK_perfil_id)
             
             ProfissionaisEducacaoModel.create_profissionais_educacao( user[0])
-            
-            for i , componentes in enumerate(componentes_curriculares['componentes']):
-                        if ProfissionaisEducacaoModel.get_profissionais_escola_componentes(componentes, FK_escola_id) != False:
-                             return {'error':f'componente curricular com id{componentes} ja existe a esta escola '}
-                        UserModel.associateProfissionalEscolaComponentes(user[0], FK_escola_id, componentes)
+
+            componentizar = ProfissionaisEducacaoModel.get_componentes_id_by_FK_turma_id(FK_escola_id)
+
+            # print(componentizar)
+            # input()
+            manter = []
+            excluirAssociacao = []
+            novos = []
+            for element in componentizar:
+                if element not in componentes_curriculares['componentes']:
+                    excluirAssociacao.append(element)
+                    ProfissionaisEducacaoModel.delete_profissionais_escola_componentes(element)
+                else:
+                    manter.append(element) 
+
+            for adicionar in componentes_curriculares['componentes']:
+    
+                if adicionar not in manter:
+                    novos.append(adicionar)
+                    if ProfissionaisEducacaoModel.get_profissionais_escola_componentes(adicionar, FK_escola_id) != False:
+                            return {'error':f'componente curricular com id{adicionar} ja existe a esta escola '}
+                    UserModel.associateProfissionalEscolaComponentes(user[0], FK_escola_id, adicionar)
+
+            # for i , componentes in enumerate(componentes_curriculares['componentes']):
+            #             if ProfissionaisEducacaoModel.get_profissionais_escola_componentes(componentes, FK_escola_id) != False:
+            #                  return {'error':f'componente curricular com id{componentes} ja existe a esta escola '}
+            #             UserModel.associateProfissionalEscolaComponentes(user[0], FK_escola_id, componentes)
 
             return  {'created': nome}, 201
         
@@ -166,13 +225,31 @@ class ProfissionaisEducacaoServices(Resource):
 
             ProfissionaisEducacaoModel.update_profissionais_educacao(FK_escola_id, user[0] , args[0])
             
-            for i , componentes in enumerate(componentes_curriculares['componentes']):
-                        componenteId = ProfissionaisEducacaoModel.get_componentes_by_profissional(user[0], componentes, FK_escola_id) 
-                        # print(componenteId)
-                        # input()
-                            # != False:
-                            #  return {'error':f'componente curricular com id {componentes} nao foi encontrado'}
-                        UserModel.update_profissionais_educacao_componentes(user[0], FK_escola_id, componentes, componenteId[0]['id'])
+            componentizar = ProfissionaisEducacaoModel.get_componentes_id_by_FK_turma_id(FK_escola_id)
+
+            manter = []
+            excluirAssociacao = []
+            novos = []
+            for element in componentizar:
+                if element not in componentes_curriculares['componentes']:
+                    excluirAssociacao.append(element)
+                    ProfissionaisEducacaoModel.delete_profissionais_escola_componentes(element)
+                else:
+                    manter.append(element) 
+
+            for adicionar in componentes_curriculares['componentes']:
+    
+                if adicionar not in manter:
+                    novos.append(adicionar)
+                    UserModel.associateProfissionalEscolaComponentes(user[0], FK_escola_id, adicionar)
+
+            # for i , componentes in enumerate(componentes_curriculares['componentes']):
+            #             componenteId = ProfissionaisEducacaoModel.get_componentes_by_profissional(user[0], componentes, FK_escola_id) 
+            #             # print(componenteId)
+            #             # input()
+            #                 # != False:
+            #                 #  return {'error':f'componente curricular com id {componentes} nao foi encontrado'}
+            #             UserModel.update_profissionais_educacao_componentes(user[0], FK_escola_id, componentes, componenteId[0]['id'])
 
             return {'updated': nome }, 200
         
