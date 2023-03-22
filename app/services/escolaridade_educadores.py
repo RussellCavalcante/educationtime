@@ -42,7 +42,7 @@ class EscolaridadeEducadoresaServices(Resource):
         
     @jwt_required()
     def post(self, *args, **kwargs):
-        # try:
+        try:
 
             dados = atributos.parse_args()
             
@@ -55,8 +55,8 @@ class EscolaridadeEducadoresaServices(Resource):
             EscolaridadeEducadoresModel.create_EscolaridadeEducadores(FK_user_id,  FK_escola_id, escolaridade, ano_conclusao, nome_instituicao)
             
             return  {'created_escolaridade': escolaridade}, 200
-        # except:
-        #     return { 'error': 'verifique a requisição !' }, 400
+        except:
+            return { 'error': 'verifique a requisição !' }, 400
     
     @jwt_required()
     def update(self, *args, **kwargs):

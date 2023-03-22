@@ -62,7 +62,7 @@ class ProfissionaisEducacaoModel():
     def get_profissionais_educacao_nome(*args, **kwargs):
         cursor = conn.cursor()
  
-        cursor.execute(f"""SELECT profissionais_educacao.id, users.nome FROM profissionais_educacao 
+        cursor.execute(f"""SELECT profissionais_educacao.FK_user_id, users.nome FROM profissionais_educacao 
         INNER JOIN users ON profissionais_educacao.FK_user_id = users.id 
         WHERE users.nome like '%{args[1]}%';""")
                                     
