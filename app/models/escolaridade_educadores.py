@@ -45,7 +45,7 @@ class EscolaridadeEducadoresModel():
         for estadoTupla in result:
             
             tup1 = ('id' , 'FK_user_id', 'cpf', 'nome', 'FK_escola_id', 
-                       'nome_escola', 'escolaridade', 'ano_conclusao', 'nome_instituicao', 'municipio_id','municipio_nome' ,'estado_id', 
+                       'nome_escola', 'escolaridade', 'ano_conclusao', 'nome_instituicao', 'FK_municipio_id','municipio_nome' ,'FK_UF_id', 
                         'estado_nome', 'estado_uf') 
             
             tup2 = estadoTupla
@@ -82,7 +82,7 @@ class EscolaridadeEducadoresModel():
         for estadoTupla in result:
             
             tup1 = ('id' , 'FK_user_id', 'cpf', 'nome', 'FK_escola_id', 
-                       'nome_escola', 'escolaridade', 'ano_conclusao', 'nome_instituicao', 'municipio_id','municipio_nome' ,'estado_id', 
+                       'nome_escola', 'escolaridade', 'ano_conclusao', 'nome_instituicao', 'FK_municipio_id','municipio_nome' ,'FK_UF_id', 
                         'estado_nome', 'estado_uf') 
             
             tup2 = estadoTupla
