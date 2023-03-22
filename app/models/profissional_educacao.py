@@ -359,17 +359,11 @@ class ProfissionaisEducacaoModel():
         # print(args)
         # input()
  
-        cursor.execute(f"""SELECT profissonal_escola_perfil.id ,  profissonal_escola_perfil.FK_user_id, users.cpf,
-                        profissonal_escola_perfil.FK_perfil_id, profiles.profile_name, escola.id, escola.nome_escola ,
-                        profissional_escola_componente.FK_componente_id , 
-                        componente_curricular.nome, componente_curricular.FK_area_conhecimento_id, area_conhecimento.nome
-                        FROM profissonal_escola_perfil 
-                        INNER JOIN  users ON  profissonal_escola_perfil.FK_user_id =  users.id 
-                        INNER JOIN  escola ON  profissonal_escola_perfil.FK_escola_id =  escola.id 
-                        INNER JOIN  profiles ON  profissonal_escola_perfil.FK_perfil_id = profiles.id 
-                        INNER JOIN  profissional_escola_componente ON  profissonal_escola_perfil.FK_user_id = profissional_escola_componente.FK_user_id 
-                        INNER JOIN  componente_curricular ON  profissional_escola_componente.FK_componente_id = componente_curricular.id 
-                        INNER JOIN  area_conhecimento ON  componente_curricular.FK_area_conhecimento_id = area_conhecimento.id WHERE users.cpf = {args[1]} ; """)
+        cursor.execute(f"""SELECT profissionais_educacao.id ,  profissionais_educacao.FK_user_id, users.nome, 
+                        users.email, users.telefone , users.cpf, 
+                        users.accept_lgpd, users.perfil_ativo
+                        FROM  profissionais_educacao 
+                        INNER JOIN  users ON  profissionais_educacao.FK_user_id =  users.id WHERE users.cpf = {args[1]} ; """)
         
         result = cursor.fetchall()
         cursor.close()
@@ -378,34 +372,21 @@ class ProfissionaisEducacaoModel():
         # input()
 
         listEstadosDict = []
-        dictFinal = {}
         for estadoTupla in result:
-            tup1 = ('id' , 'FK_user_id', 'cpf',
-                    'FK_perfil_id', 'profile_name', 'escola_id', 'nome_escola' ,
-                    'FK_componente_id' , 'componente_curricular_nome', 'componente_curricular_FK_area_conhecimento_id', 'area_conhecimento_nome') 
+            tup1 = ('id' ,  'FK_user_id', 'nome', 
+                    'email', 'telefone', 'cpf', 
+                    'accept_lgpd', 'perfil_ativo') 
             tup2 = estadoTupla
             if len(tup1) == len(tup2):
-                for i, valor in enumerate(tup2):
-                    print(valor)
-                    input()
+                res = dict(zip(tup1, tup2)) 
 
-                    for i,chave in enumerate(tup1):
-                        print(chave)
-                        input()
-                        
-                    
-                
-                    
-            #             if tupla1 == 'escola_id':
-            #                 print(tup2)
-            #                 input()
-            #             res = dict(zip(tup1, tup2)) 
-            #             # print(res)
+                listEstadosDict.append(res)   
 
-            # listEstadosDict.append(res)   
-        # print(listEstadosDict)
-        # input()
+        if len(listEstadosDict) != 0:
+            return listEstadosDict
 
+        return False
+    
     @classmethod
     def get_componentes_by_profissional(*args, **kwargs):
         cursor = conn.cursor()
