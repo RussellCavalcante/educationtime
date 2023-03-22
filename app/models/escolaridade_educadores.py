@@ -29,7 +29,7 @@ class EscolaridadeEducadoresModel():
         cursor = conn.cursor()
  
         cursor.execute(f"""SELECT escolaridade_educador.id , FK_user_id, users.cpf, users.nome, FK_escola_id, 
-                        escola.nome_escola, escolaridade, ano_conclusao, nome_instituicao, municipio.nome , 
+                        escola.nome_escola, escolaridade, ano_conclusao, nome_instituicao, municipio.id , municipio.nome , estado.id, 
                         estado.nome, estado.uf  FROM escolaridade_educador
                         INNER JOIN users on escolaridade_educador.FK_user_id = users.id
                         INNER JOIN escola on escolaridade_educador.FK_escola_id = escola.id
@@ -45,7 +45,7 @@ class EscolaridadeEducadoresModel():
         for estadoTupla in result:
             
             tup1 = ('id' , 'FK_user_id', 'cpf', 'nome', 'FK_escola_id', 
-                       'nome_escola', 'escolaridade', 'ano_conclusao', 'nome_instituicao', 'municipio_nome' , 
+                       'nome_escola', 'escolaridade', 'ano_conclusao', 'nome_instituicao', 'municipio_id','municipio_nome' ,'estado_id', 
                         'estado_nome', 'estado_uf') 
             
             tup2 = estadoTupla
@@ -65,7 +65,9 @@ class EscolaridadeEducadoresModel():
     def get_escolaridade_educador_by_id(*args, **kwargs):
         cursor = conn.cursor()
  
-        cursor.execute(f"""SELECT escolaridade_educador.id , FK_user_id, users.cpf, users.nome, FK_escola_id, escola.nome_escola, escolaridade, ano_conclusao, nome_instituicao, municipio.nome ,estado.nome, estado.uf  FROM escolaridade_educador
+        cursor.execute(f"""SELECT escolaridade_educador.id , FK_user_id, users.cpf, users.nome, FK_escola_id, 
+                        escola.nome_escola, escolaridade, ano_conclusao, nome_instituicao, municipio.id , municipio.nome , estado.id, 
+                        estado.nome, estado.uf  FROM escolaridade_educador
                         INNER JOIN users on escolaridade_educador.FK_user_id = users.id
                         INNER JOIN escola on escolaridade_educador.FK_escola_id = escola.id
                         INNER JOIN municipio on escola.FK_municipio_id = municipio.id
@@ -80,8 +82,8 @@ class EscolaridadeEducadoresModel():
         for estadoTupla in result:
             
             tup1 = ('id' , 'FK_user_id', 'cpf', 'nome', 'FK_escola_id', 
-                    'nome_escola', 'escolaridade', 'ano_conclusao', 'nome_instituicao', 'municipio_nome' , 
-                    'estado_nome', 'estado_uf') 
+                       'nome_escola', 'escolaridade', 'ano_conclusao', 'nome_instituicao', 'municipio_id','municipio_nome' ,'estado_id', 
+                        'estado_nome', 'estado_uf') 
             
             tup2 = estadoTupla
            
