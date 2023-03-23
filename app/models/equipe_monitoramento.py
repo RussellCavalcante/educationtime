@@ -23,14 +23,72 @@ class EquipeMonitoramentoModel():
     #     self.email = email
     #     self.phone = phone
     #     self.salt = salt
-    
+    @classmethod
+    def get_equipe_monitoramento(*args, **kwargs):
+        cursor = conn.cursor()
+ 
+        cursor.execute("""SELECT equipe_monitoramento.id, FK_user_id , FK_escola_id, escola.nome_escola, Fk_profile_id, 
+                                profiles.profile_name , data_inicio, data_fim 
+                            FROM equipe_monitoramento 
+                            INNER JOIN escola ON equipe_monitoramento.FK_escola_id = escola.id
+                            INNER JOIN profiles ON equipe_monitoramento.Fk_profile_id = profiles.id""")
+        
+        result = cursor.fetchall()
+        cursor.close()
+
+        # print(result)
+        # input()
+        listEstadosDict = []
+        for estadoTupla in result:
+            
+            tup1 = ('id', 'FK_user_id' , 'FK_escola_id', 'nome_escola', 
+                    'Fk_profile_id', 'profile_name' , 'data_inicio', 'data_fim') 
+            tup2 = estadoTupla
+           
+            if len(tup1) == len(tup2): 
+                res = dict(zip(tup1, tup2))
+                # print(res)
+
+                listEstadosDict.append(res)   
+            
+        return listEstadosDict
+
+    @classmethod
+    def get_equipe_monitoramento_by_id(*args, **kwargs):
+        cursor = conn.cursor()
+        
+        cursor.execute(f"""SELECT equipe_monitoramento.id, FK_user_id , FK_escola_id, escola.nome_escola, Fk_profile_id, 
+                            profiles.profile_name , data_inicio, data_fim 
+                            FROM equipe_monitoramento 
+                            INNER JOIN escola ON equipe_monitoramento.FK_escola_id = escola.id
+                            INNER JOIN profiles ON equipe_monitoramento.Fk_profile_id = profiles.id WHERE equipe_monitoramento.id ={args[1]};""")
+        
+        result = cursor.fetchall()
+        cursor.close()
+
+     
+        listEstadosDict = []
+        for estadoTupla in result:
+            
+            tup1 = ('id', 'FK_user_id' , 'FK_escola_id', 'nome_escola', 
+                    'Fk_profile_id', 'profile_name' , 'data_inicio', 'data_fim') 
+            tup2 = estadoTupla
+           
+            if len(tup1) == len(tup2): 
+                res = dict(zip(tup1, tup2)) 
+                # print(res)
+
+                listEstadosDict.append(res)   
+            
+        return listEstadosDict
+
     @classmethod
     def create_equipe_monitoramento(*args, **kwargs):
         # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
         # try:
             cursor = conn.cursor()
     
-            cursor.execute("insert into equipe_monitoramento ( FK_user_id , FK_escola_id, Fk_profile_id, data_inicio, data_fim) values(?,?,?,?,?)", args[1], args[2], args[3], args[4], [5])
+            cursor.execute("insert into equipe_monitoramento ( FK_user_id , FK_escola_id, Fk_profile_id, data_inicio, data_fim) values(?,?,?,?,?)", args[1], args[2], args[3], args[4], args[5])
             
             conn.commit()
             # conn.close()
@@ -41,7 +99,7 @@ class EquipeMonitoramentoModel():
         # #     return None
     
     @classmethod
-    def delete_enturmar(*args, **kwargs):
+    def delete_create_equipe_monitoramento(*args, **kwargs):
         # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
         # try:
             cursor = conn.cursor()
@@ -49,7 +107,7 @@ class EquipeMonitoramentoModel():
                 # input()
             
             cursor.execute('''
-                            DELETE FROM enturmar WHERE Fk_estudante_id = ?;
+                            DELETE FROM create_equipe_monitoramento WHERE Fk_estudante_id = ?;
                             
                             ''', args[1])
                         
@@ -63,7 +121,7 @@ class EquipeMonitoramentoModel():
         # #     return None
 
     @classmethod
-    def update_enturmar(*args, **kwargs):
+    def update_equipe_monitoramento(*args, **kwargs):
         # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
         # try:
             cursor = conn.cursor()
@@ -71,10 +129,10 @@ class EquipeMonitoramentoModel():
                 # input()
             
             cursor.execute('''
-                        UPDATE enturmar
-                        SET FK_turma_id = ?, Fk_estudante_id = ?
+                        UPDATE equipe_monitoramento
+                        SET FK_user_id = ?, FK_escola_id = ?, Fk_profile_id = ? , data_inicio = ?, data_fim = ?
                         WHERE id = ?
-                        ''',args[1], args[2], int(args[3])
+                        ''',args[1], args[2], args[3], args[4], args[5], args[6]
                         )
             
             conn.commit()

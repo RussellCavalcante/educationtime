@@ -897,3 +897,39 @@ def update_EscolaridadeEducador(id):
     _Get_services = EscolaridadeEducadoresaServices()
     
     return _Get_services.update(id)
+
+@avaliable_route.route('/EquipeMonitoramento', methods=['GET'])
+
+def get_EquipeMonitoramento():    
+    from app.services.equipe_monitoramento import EquipeMonitoramentoServices
+    
+    _Get_services = EquipeMonitoramentoServices()
+    
+    return _Get_services.get()
+
+@avaliable_route.route('/EquipeMonitoramento/<int:id>', methods=['GET'])
+
+def get_EquipeMonitoramento_by_id(id):    
+    from app.services.equipe_monitoramento import EquipeMonitoramentoServices
+    
+    _Get_services = EquipeMonitoramentoServices()
+    
+    return _Get_services.get_by_id(id)
+
+
+@avaliable_route.route('/EquipeMonitoramento/Cadastro', methods=['POST'])
+
+def post_EquipeMonitoramento():    
+    from app.services.equipe_monitoramento import EquipeMonitoramentoServices
+    
+    _Get_services = EquipeMonitoramentoServices()
+    
+    return _Get_services.post()
+
+@avaliable_route.route('/EquipeMonitoramento/Update/<int:id>', methods=['PUT'])
+
+def update_EquipeMonitoramento(id):    
+    from app.services.equipe_monitoramento import EquipeMonitoramentoServices
+    _Get_services = EquipeMonitoramentoServices()
+    
+    return _Get_services.update(id)
