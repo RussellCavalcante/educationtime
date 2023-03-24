@@ -45,7 +45,17 @@ class ProfissionaisEducacaoServices(Resource):
             else : return  {'return':'nao ha registro para esse cpf'}, 200
         except:
             return { 'error': 'verifique a requisição !' }, 400
-        
+    
+    @jwt_required()
+    def get_componentes_by_profissional_escola(self, *args, **kwargs):
+        try:
+            profissional = ProfissionaisEducacaoModel.get_componentes_profissional_escola(args[0])
+            if profissional != False :
+                  return profissional, 200
+            else : return  {'return':'nao ha componentes para esse usuario'}, 200
+        except:
+            return { 'error': 'verifique a requisição !' }, 400
+
     @jwt_required()
     def get_componentes_by_profissional(self, *args, **kwargs):
         try:
@@ -59,7 +69,17 @@ class ProfissionaisEducacaoServices(Resource):
     @jwt_required()
     def get_componentes_by_profissional_and_escola(self, *args, **kwargs):
         try:
-            profissional = ProfissionaisEducacaoModel.get_componentes_by_profissional_and_escola(args[0], args[1])
+            profissional = ProfissionaisEducacaoModel.get_componentes_profissional_escola(args[0])
+            if profissional != False :
+                  return profissional, 200
+            else : return  {'return':'nao ha componentes para esse usuario'}, 200
+        except:
+            return { 'error': 'verifique a requisição !' }, 400
+
+    @jwt_required()
+    def get_profisisonal_componentes(self, *args, **kwargs):
+        try:
+            profissional = ProfissionaisEducacaoModel.get_profisisonal_componentes()
             if profissional != False :
                   return profissional, 200
             else : return  {'return':'nao ha componentes para esse usuario'}, 200

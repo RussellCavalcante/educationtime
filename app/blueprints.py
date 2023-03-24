@@ -765,6 +765,19 @@ def get_componentes_by_profissional(id):
 
     return _Get_services.get_componentes_by_profissional(id)
 
+@avaliable_route.route('/ProfissionaisEducacao/Componentes/Profissional', methods=['GET'])
+
+def get_componentes_by_profissional_escola():    
+    from app.services.profissional_educacao import ProfissionaisEducacaoServices
+    
+    _Get_services = ProfissionaisEducacaoServices()
+   
+    if request.args.get('FK_escola_id'):
+        return _Get_services.get_componentes_by_profissional_and_escola(request.args.get('FK_escola_id'))
+
+
+    return _Get_services.get_profisisonal_componentes()
+
 @avaliable_route.route('/ProfissionaisEducacao/<string:cpf>', methods=['GET'])
 
 def get_ProfissionaisEducacao_by_cpf(cpf):    
