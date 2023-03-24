@@ -27,11 +27,12 @@ class EquipeMonitoramentoModel():
     def get_equipe_monitoramento(*args, **kwargs):
         cursor = conn.cursor()
  
-        cursor.execute("""SELECT equipe_monitoramento.id, FK_user_id , FK_escola_id, escola.nome_escola, Fk_profile_id, 
+        cursor.execute("""SELECT equipe_monitoramento.id, FK_user_id, users.nome , FK_escola_id, escola.nome_escola, Fk_profile_id, 
                                 profiles.profile_name , data_inicio, data_fim 
                             FROM equipe_monitoramento 
                             INNER JOIN escola ON equipe_monitoramento.FK_escola_id = escola.id
-                            INNER JOIN profiles ON equipe_monitoramento.Fk_profile_id = profiles.id""")
+                            INNER JOIN profiles ON equipe_monitoramento.Fk_profile_id = profiles.id
+                            INNER JOIN users ON equipe_monitoramento.FK_user_id = users.id""")
         
         result = cursor.fetchall()
         cursor.close()
@@ -41,7 +42,7 @@ class EquipeMonitoramentoModel():
         listEstadosDict = []
         for estadoTupla in result:
             
-            tup1 = ('id', 'FK_user_id' , 'FK_escola_id', 'nome_escola', 
+            tup1 = ('id', 'FK_user_id' ,  'users_nome'  , 'FK_escola_id', 'nome_escola', 
                     'Fk_profile_id', 'profile_name' , 'data_inicio', 'data_fim') 
             tup2 = estadoTupla
            
@@ -57,11 +58,13 @@ class EquipeMonitoramentoModel():
     def get_equipe_monitoramento_by_id(*args, **kwargs):
         cursor = conn.cursor()
         
-        cursor.execute(f"""SELECT equipe_monitoramento.id, FK_user_id , FK_escola_id, escola.nome_escola, Fk_profile_id, 
-                            profiles.profile_name , data_inicio, data_fim 
+        cursor.execute(f"""SELECT equipe_monitoramento.id, FK_user_id, users.nome , FK_escola_id, escola.nome_escola, Fk_profile_id, 
+                                profiles.profile_name , data_inicio, data_fim 
                             FROM equipe_monitoramento 
                             INNER JOIN escola ON equipe_monitoramento.FK_escola_id = escola.id
-                            INNER JOIN profiles ON equipe_monitoramento.Fk_profile_id = profiles.id WHERE equipe_monitoramento.id ={args[1]};""")
+                            INNER JOIN profiles ON equipe_monitoramento.Fk_profile_id = profiles.id
+                            INNER JOIN users ON equipe_monitoramento.FK_user_id = users.id
+                              WHERE equipe_monitoramento.id = {args[1]};""")
         
         result = cursor.fetchall()
         cursor.close()
@@ -70,7 +73,7 @@ class EquipeMonitoramentoModel():
         listEstadosDict = []
         for estadoTupla in result:
             
-            tup1 = ('id', 'FK_user_id' , 'FK_escola_id', 'nome_escola', 
+            tup1 = ('id', 'FK_user_id' ,  'users_nome'  , 'FK_escola_id', 'nome_escola', 
                     'Fk_profile_id', 'profile_name' , 'data_inicio', 'data_fim') 
             tup2 = estadoTupla
            
