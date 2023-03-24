@@ -942,3 +942,39 @@ def update_EquipeMonitoramento(id):
     _Get_services = EquipeMonitoramentoServices()
     
     return _Get_services.update(id)
+
+@avaliable_route.route('/TurmaComponenteEducador', methods=['GET'])
+
+def get_TurmaComponenteEducador():    
+    from app.services.turma_componente_educador import TurmaComponentesEducadoresServices
+    
+    _Get_services = TurmaComponentesEducadoresServices()
+    
+    return _Get_services.get()
+
+@avaliable_route.route('/TurmaComponenteEducador/<int:id>', methods=['GET'])
+
+def get_TurmaComponenteEducador_by_id(id):    
+    from app.services.turma_componente_educador import TurmaComponentesEducadoresServices
+    
+    _Get_services = TurmaComponentesEducadoresServices()
+    
+    return _Get_services.get_by_id(id)
+
+
+@avaliable_route.route('/TurmaComponenteEducador/Cadastro', methods=['POST'])
+
+def post_TurmaComponenteEducador():    
+    from app.services.turma_componente_educador import TurmaComponentesEducadoresServices
+    
+    _Get_services = TurmaComponentesEducadoresServices()
+    
+    return _Get_services.post()
+
+@avaliable_route.route('/TurmaComponenteEducador/Update/<int:id>', methods=['PUT'])
+
+def update_TurmaComponenteEducador(id):    
+    from app.services.turma_componente_educador import TurmaComponentesEducadoresServices
+    _Get_services = TurmaComponentesEducadoresServices()
+    
+    return _Get_services.update(id)
