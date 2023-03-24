@@ -43,14 +43,16 @@ class ProfissionaisEditoraServices(Resource):
             return  ProfissionaisEditoraModel.get_profissionais_editora_by_cpf(args[0]), 200
         except:
             return { 'error': 'verifique a requisição !' }, 400
-        
-    # @jwt_required()
-    # def get_by_muncipio_id(self, *args, **kwargs):
-    #     try:
-    #         return  ProfissionaisEditoraModel.get_dirigente_municipal_by_secretaria_id(args[0]), 200
-    #     except:
-    #         return { 'error': 'verifique a requisição !' }, 400
-
+    
+    @jwt_required()
+    def get_profissional_editora_by_nome(self, *args, **kwargs):
+        try:
+            profissional = ProfissionaisEditoraModel.get_profissionais_editora_nome(str(args[0]))
+            if profissional != False :
+                  return profissional, 200
+            else : return  {'return':'nao ha registro para esse cpf'}, 400
+        except:
+            return { 'error': 'verifique a requisição !' }, 400
 
     @jwt_required()
     def post(self, *args, **kwargs):

@@ -29,7 +29,10 @@ class ProfissionaisEditoraModel():
     def get_profissionais_editora(*args, **kwargs):
         cursor = conn.cursor()
  
-        cursor.execute("SELECT profissionais_editora.id , profissionais_editora.endereco, profissionais_editora.FK_user_id, users.nome, users.email, users.telefone, users.cpf, users.accept_lgpd, users.perfil_ativo FROM  profissionais_editora INNER JOIN  users ON  profissionais_editora.FK_user_id =  users.id")
+        cursor.execute("""SELECT profissionais_editora.id , profissionais_editora.endereco, profissionais_editora.FK_user_id,
+          users.nome, users.email, users.telefone, users.cpf, users.accept_lgpd, users.perfil_ativo 
+          FROM  profissionais_editora 
+          INNER JOIN  users ON  profissionais_editora.FK_user_id =  users.id""")
         
         result = cursor.fetchall()
         cursor.close()
@@ -76,6 +79,35 @@ class ProfissionaisEditoraModel():
 
         return False
     
+    @classmethod
+    def get_profissionais_editora_nome(*args, **kwargs):
+        cursor = conn.cursor()
+ 
+        cursor.execute(f"""SELECT profissionais_editora.id , profissionais_editora.FK_user_id,
+          users.nome
+          FROM  profissionais_editora 
+          INNER JOIN  users ON  profissionais_editora.FK_user_id =  users.id
+        WHERE users.nome like '%{args[1]}%';""")
+                                    
+        result = cursor.fetchall()
+        cursor.close()
+
+        # print(result)
+        # input()
+        listEstadosDict = []
+        for estadoTupla in result:
+            
+            tup1 = ('id' , 'FK_user_id','nome') 
+            tup2 = estadoTupla
+           
+            if len(tup1) == len(tup2): 
+                res = dict(zip(tup1, tup2))
+                # print(res)
+
+                listEstadosDict.append(res)   
+            
+        return listEstadosDict
+
     @classmethod
     def get_profissionais_editora_by_cpf(*args, **kwargs):
         cursor = conn.cursor()
