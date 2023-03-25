@@ -100,6 +100,39 @@ class estudanteModel():
                 listEstadosDict.append(res)   
             
         return listEstadosDict
+    
+    @classmethod
+    def get_estudante_by_turma_by_escola_id(*args, **kwargs):
+        cursor = conn.cursor()
+ 
+        cursor.execute(f"""SELECT
+                                enturmar.FK_turma_id,
+                                turma.nome_turma,
+                                COUNT(enturmar.FK_turma_id) as "num_estudantes"
+                                FROM enturmar
+                                INNER JOIN turma ON
+                                enturmar.FK_turma_id = turma.id
+                                WHERE turma.FK_escola_id = {args[1]}
+                                GROUP BY enturmar.FK_turma_id, turma.nome_turma ;""")
+        
+        result = cursor.fetchall()
+        cursor.close()
+
+        # print(result)
+        # input()
+        listEstadosDict = []
+        for estadoTupla in result:
+            
+            tup1 = ('FK_turma_id', 'nome_turma', 'num_estudantes') 
+            tup2 = estadoTupla
+           
+            if len(tup1) == len(tup2): 
+                res = dict(zip(tup1, tup2))
+                # print(res)
+
+                listEstadosDict.append(res)   
+            
+        return listEstadosDict
 
     @classmethod
     def get_estudante_nome(*args, **kwargs):

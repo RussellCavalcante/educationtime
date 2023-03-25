@@ -671,6 +671,15 @@ def get_estudante_cod(id):
     
     return _Get_services.get_by_cod(id)
 
+@avaliable_route.route('/Estudante/Turma/Escola/<int:id>', methods=['GET'])
+
+def get_estudante_by_turma_by_escola_id(id):    
+    from app.services.estudante import GetEstudante
+    
+    _Get_services = GetEstudante()
+    
+    return _Get_services.get_estudante_by_turma_by_escola_id(id)
+
 @avaliable_route.route('/ProfissionaisEditora', methods=['GET'])
 
 def get_ProfissionaisEditora():    

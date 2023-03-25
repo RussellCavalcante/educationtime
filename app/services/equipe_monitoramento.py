@@ -15,7 +15,7 @@ class EquipeMonitoramentoServices(Resource):
     @jwt_required()
     def get_by_id(self, *args, **kwargs):
         try:
-                
+
             return  EquipeMonitoramentoModel.get_equipe_monitoramento_by_id(args[0]), 200
         except:
             return { 'error': 'verifique a requisição !' }, 400
@@ -23,7 +23,7 @@ class EquipeMonitoramentoServices(Resource):
     @jwt_required()
     def get(self, *args, **kwargs):
         try:
-                
+
             return  EquipeMonitoramentoModel.get_equipe_monitoramento(), 200
         except:
             return { 'error': 'verifique a requisição !' }, 400
@@ -39,58 +39,69 @@ class EquipeMonitoramentoServices(Resource):
     def post(self, *args, **kwargs):
         try:
             dados = atributos.parse_args()
-            
+
             FK_user_id = dados['FK_user_id']
             Escolas = dados['Escolas']
             Fk_profile_id = dados['Fk_profile_id']
 
-            
+
             for i , monitoramento in enumerate(Escolas['escolas']):
-            
+
                 EquipeMonitoramentoModel.create_equipe_monitoramento(FK_user_id, monitoramento['FK_escola_id'], Fk_profile_id, monitoramento['data_inicio'], monitoramento['data_fim'])
-            
+
             return  {'created_equipe_monitoramento': FK_user_id}, 201
-        
+
         except:
             return { 'error': 'verifique a requisição !' }, 400
 
     @jwt_required()
     def update(self, *args, **kwargs):
-        try:
+        # try:
             dados = atributos.parse_args()
-            
+
+
             FK_user_id = dados['FK_user_id']
             Escolas = dados['Escolas']
             Fk_profile_id = dados['Fk_profile_id']
             monitorar = []
-            
-            for i , monitoramento in enumerate(Escolas['escolas']):
-                monitorar.append(EquipeMonitoramentoModel.get_equipe_monitoramento_FK_escola_id_(monitoramento['FK_escola_id']))
-            
-            print(monitorar)
-            input()
-
-
             manter = []
             excluirAssociacao = []
             novos = []
-            for element in enturmar:
-                if element not in FK_profissionais_componentes_id['profissionais_componentes_id']:
-                    excluirAssociacao.append(element)
-                    EquipeMonitoramentoModel.delete_turma_componente_educador(element)
-                else:
-                    manter.append(element) 
 
-            for adicionar in FK_profissionais_componentes_id['profissionais_componentes_id']:
+            for i , monitoramento in enumerate(Escolas['escolas']):
+
+                # print()
                 
+                equipe =  EquipeMonitoramentoModel.get_equipe_monitoramento_FK_escola_id_and_user_id(monitoramento['FK_escola_id'], FK_user_id)
+                # print('equipe',equipe[0])
+                # input()
+                if equipe != False:
+                    monitorar.append(equipe[0])
 
-                if adicionar not in manter:
-                    novos.append(adicionar)
-                    EquipeMonitoramentoModel.create_turma_componente_educador(adicionar, FK_turma_id)
+            print('monitorar',monitorar)
+            input()
 
-            EquipeMonitoramentoModel.update_equipe_monitoramento(FK_user_id, FK_escola_id, Fk_profile_id, data_inicio, data_fim ,args[0])
+
+            for monitoramento in Escolas['escolas']:
+                for element in monitorar:
+                    
+
+                        if element not in monitoramento['FK_escola_id']:
+                            excluirAssociacao.append(element)
+                            EquipeMonitoramentoModel.delete_equipe_monitoramento(element)
+                        else:
+                            manter.append(element)
+
+                for adicionar in monitoramento['FK_escola_id']:
+
+
+                    if adicionar not in manter:
+                        novos.append(adicionar)
+                        EquipeMonitoramentoModel.create_equipe_monitoramento(FK_user_id, monitoramento['FK_escola_id'], Fk_profile_id, monitoramento['data_inicio'], monitoramento['data_fim'])
+
+            # EquipeMonitoramentoModel.update_equipe_monitoramento(FK_user_id, FK_escola_id, Fk_profile_id, data_inicio, data_fim ,args[0])
             return {'updated': FK_user_id }, 200
-        
-        except:
-            return { 'error': 'verifique a requisição !' }, 400
+
+        # except:
+        #     return { 'error': 'verifique a requisição !' }, 400
 

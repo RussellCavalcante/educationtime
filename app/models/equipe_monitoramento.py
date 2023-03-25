@@ -86,22 +86,30 @@ class EquipeMonitoramentoModel():
         return listEstadosDict
 
     @classmethod
-    def get_equipe_monitoramento_FK_escola_id_(*args, **kwargs):
+    def get_equipe_monitoramento_FK_escola_id_and_user_id(*args, **kwargs):
         cursor = conn.cursor()
- 
-        cursor.execute(f"SELECT FK_escola_id FROM equipe_monitoramento WHERE FK_escola_id = {args[1]};")
+
+        # print(args)
+        # input()
+
+        cursor.execute(f"SELECT FK_escola_id FROM equipe_monitoramento WHERE FK_escola_id = {args[1]} AND FK_user_id = {args[2]};")
         
         result = cursor.fetchall()
         cursor.close()
 
-        # print(result)
+        # print(  'result', result)
         # input()
+        
         listEstadosDict = []
         for estadoTupla in result:
 
                 listEstadosDict.append(estadoTupla[0])   
-            
-        return listEstadosDict
+        
+        if len(listEstadosDict) != 0:
+            return listEstadosDict
+
+        return False
+        
 
 
     @classmethod
@@ -121,7 +129,7 @@ class EquipeMonitoramentoModel():
         # #     return None
     
     @classmethod
-    def delete_create_equipe_monitoramento(*args, **kwargs):
+    def delete_equipe_monitoramento(*args, **kwargs):
         # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
         # try:
             cursor = conn.cursor()
@@ -129,7 +137,7 @@ class EquipeMonitoramentoModel():
                 # input()
             
             cursor.execute('''
-                            DELETE FROM create_equipe_monitoramento WHERE Fk_estudante_id = ?;
+                            DELETE FROM equipe_monitoramento WHERE FK_escola_id = ?;
                             
                             ''', args[1])
                         

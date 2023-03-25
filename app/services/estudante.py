@@ -41,6 +41,14 @@ class GetEstudante(Resource):
             return { 'error': 'verifique a requisição !' }, 400
         
     @jwt_required()
+    def get_estudante_by_turma_by_escola_id(self, *args, **kwargs):
+        try:
+                    
+            return  estudanteModel.get_estudante_by_turma_by_escola_id(args[0]), 200
+        except:
+            return { 'error': 'verifique a requisição !' }, 400
+        
+    @jwt_required()
     def get_by_nome(self, *args, **kwargs):
         try:
                     
