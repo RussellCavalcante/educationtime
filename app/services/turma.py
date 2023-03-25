@@ -58,8 +58,10 @@ class GetTurma(Resource):
             FK_escola_id = dados['FK_escola_id']
 
             TurmaModel.create_turma(nome_turma, FK_etapa_ensino_id, ano_letivo, FK_modalidade_id, FK_turno_id, FK_grau_etapa_ensino_id, FK_escola_id)
-            
-            return  {'created': nome_turma}, 201
+            idturma = TurmaModel.get_turma_id_by_escola(FK_escola_id, nome_turma)
+            # print(idturma)
+            # input()
+            return  {'created_turma_id': idturma[0]}, 201
         except:
             return { 'error': 'verifique a requisição !' }, 400
     

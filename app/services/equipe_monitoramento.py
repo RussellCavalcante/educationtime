@@ -41,12 +41,13 @@ class EquipeMonitoramentoServices(Resource):
             dados = atributos.parse_args()
             
             FK_user_id = dados['FK_user_id']
-            FK_escola_id = dados['FK_escola_id']
+            Escolas = dados['Escolas']
             Fk_profile_id = dados['Fk_profile_id']
-            data_inicio = dados['data_inicio'].strip()
-            data_fim = dados['data_fim'].strip()
 
-            EquipeMonitoramentoModel.create_equipe_monitoramento(FK_user_id, FK_escola_id, Fk_profile_id, data_inicio, data_fim)
+            
+            for i , monitoramento in enumerate(Escolas['escolas']):
+            
+                EquipeMonitoramentoModel.create_equipe_monitoramento(FK_user_id, monitoramento['FK_escola_id'], Fk_profile_id, monitoramento['data_inicio'], monitoramento['data_fim'])
             
             return  {'created_equipe_monitoramento': FK_user_id}, 201
         
@@ -59,11 +60,33 @@ class EquipeMonitoramentoServices(Resource):
             dados = atributos.parse_args()
             
             FK_user_id = dados['FK_user_id']
-            FK_escola_id = dados['FK_escola_id']
+            Escolas = dados['Escolas']
             Fk_profile_id = dados['Fk_profile_id']
-            data_inicio = dados['data_inicio'].strip()
-            data_fim = dados['data_fim'].strip()
-          
+            monitorar = []
+            
+            for i , monitoramento in enumerate(Escolas['escolas']):
+                monitorar.append(EquipeMonitoramentoModel.get_equipe_monitoramento_FK_escola_id_(monitoramento['FK_escola_id']))
+            
+            print(monitorar)
+            input()
+
+
+            manter = []
+            excluirAssociacao = []
+            novos = []
+            for element in enturmar:
+                if element not in FK_profissionais_componentes_id['profissionais_componentes_id']:
+                    excluirAssociacao.append(element)
+                    EquipeMonitoramentoModel.delete_turma_componente_educador(element)
+                else:
+                    manter.append(element) 
+
+            for adicionar in FK_profissionais_componentes_id['profissionais_componentes_id']:
+                
+
+                if adicionar not in manter:
+                    novos.append(adicionar)
+                    EquipeMonitoramentoModel.create_turma_componente_educador(adicionar, FK_turma_id)
 
             EquipeMonitoramentoModel.update_equipe_monitoramento(FK_user_id, FK_escola_id, Fk_profile_id, data_inicio, data_fim ,args[0])
             return {'updated': FK_user_id }, 200

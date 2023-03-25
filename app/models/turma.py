@@ -146,6 +146,24 @@ class TurmaModel():
                 listEstadosDict.append(res)   
             
         return listEstadosDict
+    
+    @classmethod
+    def get_turma_id_by_escola(*args, **kwargs):
+        cursor = conn.cursor()
+ 
+        cursor.execute(f"""select id
+                        FROM turma 
+                        WHERE FK_escola_id = {args[1]} AND nome_turma = '{str(args[2])}';""")
+        result = cursor.fetchall()
+        cursor.close()
+
+        listEstadosDict = []
+        for estadoTupla in result:
+        
+
+                listEstadosDict.append(estadoTupla[0])   
+            
+        return listEstadosDict
 
     @classmethod
     def create_turma(*args, **kwargs):

@@ -86,6 +86,25 @@ class EquipeMonitoramentoModel():
         return listEstadosDict
 
     @classmethod
+    def get_equipe_monitoramento_FK_escola_id_(*args, **kwargs):
+        cursor = conn.cursor()
+ 
+        cursor.execute(f"SELECT FK_escola_id FROM equipe_monitoramento WHERE FK_escola_id = {args[1]};")
+        
+        result = cursor.fetchall()
+        cursor.close()
+
+        # print(result)
+        # input()
+        listEstadosDict = []
+        for estadoTupla in result:
+
+                listEstadosDict.append(estadoTupla[0])   
+            
+        return listEstadosDict
+
+
+    @classmethod
     def create_equipe_monitoramento(*args, **kwargs):
         # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
         # try:
