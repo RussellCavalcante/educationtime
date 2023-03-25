@@ -8,11 +8,8 @@ from app.blacklist import BLACKLIST
 
 atributos = reqparse.RequestParser()
 atributos.add_argument('FK_user_id', type=int, help="campo de nome do FK_user_id")
-atributos.add_argument('FK_escola_id', type=int, help="campo de FK_escola_id e obrigatorio")
 atributos.add_argument('Fk_profile_id', type=int, help="campo de Fk_profile_id")
-atributos.add_argument('data_inicio', type=str, help="email data_inicio")
-atributos.add_argument('data_fim', type=str, help="campo de data_fim")
-
+atributos.add_argument('Escolas', type=dict, help="email data_inicio")
 
 class EquipeMonitoramentoServices(Resource):
     @jwt_required()
@@ -48,7 +45,6 @@ class EquipeMonitoramentoServices(Resource):
             Fk_profile_id = dados['Fk_profile_id']
             data_inicio = dados['data_inicio'].strip()
             data_fim = dados['data_fim'].strip()
-          
 
             EquipeMonitoramentoModel.create_equipe_monitoramento(FK_user_id, FK_escola_id, Fk_profile_id, data_inicio, data_fim)
             

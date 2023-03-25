@@ -96,6 +96,61 @@ class TurmaComponenteEducadorModel():
                 listEstadosDict.append(res)   
             
         return listEstadosDict
+    
+    @classmethod
+    def get_componente_educador_FK_turma_id_(*args, **kwargs):
+        cursor = conn.cursor()
+ 
+        cursor.execute(f"SELECT FK_profissional_componente_id FROM turma_componente_educador WHERE FK_turma_id = {args[1]};")
+        
+        result = cursor.fetchall()
+        cursor.close()
+
+        # print(result)
+        # input()
+        listEstadosDict = []
+        for estadoTupla in result:
+
+                listEstadosDict.append(estadoTupla[0])   
+            
+        return listEstadosDict
+
+
+    @classmethod
+    def get_turma_componente_educador_by_turma_id(*args, **kwargs):
+        cursor = conn.cursor()
+        
+        cursor.execute(f"""SELECT turma_componente_educador.id , turma_componente_educador.FK_profissional_componente_id, users.nome,
+                            turma_componente_educador.FK_turma_id , turma.nome_turma,
+                            profissional_escola_componente.FK_componente_id , componente_curricular.nome,
+                            profissional_escola_componente.FK_escola_id, escola.nome_escola
+                            FROM turma_componente_educador 
+                            INNER JOIN profissional_escola_componente ON turma_componente_educador.FK_profissional_componente_id = profissional_escola_componente.id
+                            INNER JOIN componente_curricular ON profissional_escola_componente.FK_componente_id = componente_curricular.id
+                            INNER JOIN turma ON turma_componente_educador.FK_turma_id = turma.id
+                            INNER JOIN users ON profissional_escola_componente.FK_user_id = users.id
+                            INNER JOIN escola ON profissional_escola_componente.FK_escola_id = escola.id WHERE turma.id ={args[1]};""")
+        
+        result = cursor.fetchall()
+        cursor.close()
+
+     
+        listEstadosDict = []
+        for estadoTupla in result:
+            
+            tup1 = ('id' , 'FK_profissional_componente_id', 'nome',
+                            'FK_turma_id' , 'nome_turma',
+                            'FK_componente_id' , 'componente_curricular_nome',
+                            'FK_escola_id', 'nome_escola') 
+            tup2 = estadoTupla
+           
+            if len(tup1) == len(tup2): 
+                res = dict(zip(tup1, tup2)) 
+                # print(res)
+
+                listEstadosDict.append(res)   
+            
+        return listEstadosDict
 
     @classmethod
     def create_turma_componente_educador(*args, **kwargs):
@@ -114,7 +169,7 @@ class TurmaComponenteEducadorModel():
         # #     return None
     
     @classmethod
-    def delete_create_turma_componente_educador(*args, **kwargs):
+    def delete_turma_componente_educador(*args, **kwargs):
         # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
         # try:
             cursor = conn.cursor()
@@ -122,7 +177,7 @@ class TurmaComponenteEducadorModel():
                 # input()
             
             cursor.execute('''
-                            DELETE FROM turma_componente_educador WHERE FK_turma_id = ?;
+                            DELETE FROM turma_componente_educador WHERE FK_profissional_componente_id = ?;
                             
                             ''', args[1])
                         

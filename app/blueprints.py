@@ -974,6 +974,15 @@ def get_TurmaComponenteEducador_by_id(id):
     
     return _Get_services.get_by_id(id)
 
+@avaliable_route.route('/TurmaComponenteEducador/Turma/<int:id>', methods=['GET'])
+
+def get_TurmaComponenteEducador_by_turma_id(id):    
+    from app.services.turma_componente_educador import TurmaComponentesEducadoresServices
+    
+    _Get_services = TurmaComponentesEducadoresServices()
+    
+    return _Get_services.get_by_turma_id(id)
+
 
 @avaliable_route.route('/TurmaComponenteEducador/Cadastro', methods=['POST'])
 
