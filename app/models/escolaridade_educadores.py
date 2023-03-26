@@ -133,6 +133,40 @@ class EscolaridadeEducadoresModel():
 
         return False
     
+    @classmethod
+    def get_escolaridade_educadores(*args, **kwargs):
+        cursor = conn.cursor()
+ 
+        cursor.execute(f"""SELECT
+                            escolaridade,
+                            COUNT(escolaridade) as "num_escolaridade"
+                            FROM escolaridade_educador
+                            WHERE FK_escola_id = {args[1]}
+                            GROUP BY escolaridade ;""")
+        
+        result = cursor.fetchall()
+        cursor.close()
+
+        # print(result)
+        # input()
+        listEstadosDict = []
+        for estadoTupla in result:
+            
+            tup1 = ('escolaridade' , 'num_escolaridade') 
+            
+            tup2 = estadoTupla
+           
+            if len(tup1) == len(tup2): 
+                res = dict(zip(tup1, tup2)) 
+                # print(res)
+
+                listEstadosDict.append(res)   
+            
+        if len(listEstadosDict) != 0:
+            return listEstadosDict
+
+        return False
+    
 
     @classmethod
     def create_EscolaridadeEducadores(*args, **kwargs):
