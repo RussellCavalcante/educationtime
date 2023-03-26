@@ -29,11 +29,18 @@ class ProfissionaisEducacaoModel():
     def get_profissionais_educacao(*args, **kwargs):
         cursor = conn.cursor()
  
-        cursor.execute("""SELECT profissionais_educacao.id ,  profissionais_educacao.FK_user_id, users.nome, 
-                        users.email, users.telefone , users.cpf, 
-                        users.accept_lgpd, users.perfil_ativo
-                        FROM  profissionais_educacao 
-                        INNER JOIN  users ON  profissionais_educacao.FK_user_id =  users.id """)
+        cursor.execute("""SELECT profissonal_escola_perfil.id ,  profissonal_escola_perfil.FK_user_id, 
+                        users.nome, users.email, users.telefone, users.cpf, users.accept_lgpd, users.perfil_ativo,
+                        profissonal_escola_perfil.FK_perfil_id, profiles.profile_name, escola.id, escola.nome_escola ,
+                        escola.FK_municipio_id, municipio.id, municipio.nome, estado.id, estado.nome, estado.uf
+                        FROM profissonal_escola_perfil 
+                        INNER JOIN  users ON  profissonal_escola_perfil.FK_user_id =  users.id 
+                        INNER JOIN  escola ON  profissonal_escola_perfil.FK_escola_id =  escola.id 
+                        INNER JOIN  municipio ON  escola.FK_municipio_id =  municipio.id 
+                        INNER JOIN  estado ON  municipio.FK_UF_id =  estado.id 
+                        INNER JOIN  profiles ON  profissonal_escola_perfil.FK_perfil_id = profiles.id 
+                        INNER JOIN  profissional_escola_componente ON  profissonal_escola_perfil.FK_user_id = profissional_escola_componente.FK_user_id 
+                        """)
         
         result = cursor.fetchall()
         cursor.close()
@@ -44,9 +51,9 @@ class ProfissionaisEducacaoModel():
         listEstadosDict = []
         for estadoTupla in result:
             
-            tup1 = ('id' ,  'FK_user_id', 'nome', 
-                    'email', 'telefone', 'cpf', 
-                    'accept_lgpd', 'perfil_ativo' ) 
+            tup1 = ('id' , 'FK_user_id', 'nome', 'email', 'telefone', 'cpf', 'accept_lgpd', 'perfil_ativo',
+                        'FK_perfil_id', 'profile_name', 'escola_id', 'nome_escola' ,
+                        'FK_municipio_id', 'municipio_id', 'municipio_nome', 'estado_id', 'estado_nome', 'estado_uf' ) 
             
             tup2 = estadoTupla
            
@@ -125,11 +132,18 @@ class ProfissionaisEducacaoModel():
     def get_profissionais_educacao_by_id(*args, **kwargs):
         cursor = conn.cursor()
         
-        cursor.execute(f"""SELECT profissionais_educacao.id ,  profissionais_educacao.FK_user_id, users.nome, 
-                        users.email, users.telefone , users.cpf, 
-                        users.accept_lgpd, users.perfil_ativo
-                        FROM  profissionais_educacao 
-                        INNER JOIN  users ON  profissionais_educacao.FK_user_id =  users.id WHERE profissionais_educacao.id = {args[1]};""")
+        cursor.execute(f"""SELECT profissonal_escola_perfil.id ,  profissonal_escola_perfil.FK_user_id, 
+                        users.nome, users.email, users.telefone, users.cpf, users.accept_lgpd, users.perfil_ativo,
+                        profissonal_escola_perfil.FK_perfil_id, profiles.profile_name, escola.id, escola.nome_escola ,
+                        escola.FK_municipio_id, municipio.id, municipio.nome, estado.id, estado.nome, estado.uf
+                        FROM profissonal_escola_perfil 
+                        INNER JOIN  users ON  profissonal_escola_perfil.FK_user_id =  users.id 
+                        INNER JOIN  escola ON  profissonal_escola_perfil.FK_escola_id =  escola.id 
+                        INNER JOIN  municipio ON  escola.FK_municipio_id =  municipio.id 
+                        INNER JOIN  estado ON  municipio.FK_UF_id =  estado.id 
+                        INNER JOIN  profiles ON  profissonal_escola_perfil.FK_perfil_id = profiles.id 
+                        INNER JOIN  profissional_escola_componente ON  profissonal_escola_perfil.FK_user_id = profissional_escola_componente.FK_user_id 
+                         WHERE profissonal_escola_perfil.id = {args[1]};""")
         
         result = cursor.fetchall()
         cursor.close()
@@ -137,9 +151,9 @@ class ProfissionaisEducacaoModel():
         listEstadosDict = []
         for estadoTupla in result:
             
-            tup1 = ('id' ,  'FK_user_id', 'nome', 
-                    'email', 'telefone', 'cpf', 
-                    'accept_lgpd', 'perfil_ativo') 
+            tup1 = ('id' , 'FK_user_id', 'nome', 'email', 'telefone', 'cpf', 'accept_lgpd', 'perfil_ativo',
+                        'FK_perfil_id', 'profile_name', 'escola_id', 'nome_escola' ,
+                        'FK_municipio_id', 'municipio_id', 'municipio_nome', 'estado_id', 'estado_nome', 'estado_uf') 
             
             tup2 = estadoTupla
            
