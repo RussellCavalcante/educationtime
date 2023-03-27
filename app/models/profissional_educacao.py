@@ -38,8 +38,7 @@ class ProfissionaisEducacaoModel():
                         INNER JOIN  escola ON  profissonal_escola_perfil.FK_escola_id =  escola.id 
                         INNER JOIN  municipio ON  escola.FK_municipio_id =  municipio.id 
                         INNER JOIN  estado ON  municipio.FK_UF_id =  estado.id 
-                        INNER JOIN  profiles ON  profissonal_escola_perfil.FK_perfil_id = profiles.id 
-                        INNER JOIN  profissional_escola_componente ON  profissonal_escola_perfil.FK_user_id = profissional_escola_componente.FK_user_id 
+                        INNER JOIN  profiles ON  profissonal_escola_perfil.FK_perfil_id = profiles.id  
                         """)
         
         result = cursor.fetchall()
@@ -142,8 +141,7 @@ class ProfissionaisEducacaoModel():
                         INNER JOIN  municipio ON  escola.FK_municipio_id =  municipio.id 
                         INNER JOIN  estado ON  municipio.FK_UF_id =  estado.id 
                         INNER JOIN  profiles ON  profissonal_escola_perfil.FK_perfil_id = profiles.id 
-                        INNER JOIN  profissional_escola_componente ON  profissonal_escola_perfil.FK_user_id = profissional_escola_componente.FK_user_id 
-                         WHERE profissonal_escola_perfil.id = {args[1]};""")
+                        WHERE profissonal_escola_perfil.id = {args[1]};""")
         
         result = cursor.fetchall()
         cursor.close()
