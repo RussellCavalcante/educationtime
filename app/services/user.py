@@ -35,6 +35,19 @@ class User(Resource):
             return user.json()
         return {"message": 'Usuario nao encontrado'}, 404 # not found
 
+    @jwt_required()
+    def get_convite_by_hashconvite(self, *args, **kwargs):
+        try:
+            convite = UserModel.get_hash_by_hash(str(args[0]))
+            if convite != False :
+                    conviteId = UserModel.get_convite_by_id(convite[0]['id'])
+                    return conviteId, 200
+            
+            elif convite == False : return  {'return':'convite invalido'}, 200
+
+
+        except:
+            return { 'error': 'verifique a requisição !' }, 400
 
     @jwt_required
     def delete(self, user_id):

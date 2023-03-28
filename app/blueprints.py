@@ -1018,3 +1018,12 @@ def update_TurmaComponenteEducador(id):
     _Get_services = TurmaComponentesEducadoresServices()
     
     return _Get_services.update(id)
+
+@avaliable_route.route('/convite/<string:convite>', methods=['GET'])
+
+def get_convite_by_hashconvite(convite):    
+    from app.services.user import User
+    
+    _Get_services = User()
+    
+    return _Get_services.get_convite_by_hashconvite(convite)

@@ -393,6 +393,70 @@ class UserModel():
 
         return False
 
+    @classmethod
+    def get_hash_by_hash(*args, **kwargs):
+        cursor = conn.cursor()
+ 
+        cursor.execute(f"SELECT id , data_envio, data_aceito, link, salt, status FROM convite_acesso WHERE link = '{args[1]}';")
+        
+        result = cursor.fetchall()
+        cursor.close()
+
+        # print(result)
+        # input()
+        listEstadosDict = []
+        for estadoTupla in result:
+            tup1 = ('id' , 'data_envio', 'data_aceito', 'link', 'salt', 'status') 
+            
+            tup2 = estadoTupla
+           
+            if len(tup1) == len(tup2): 
+                res = dict(zip(tup1, tup2)) 
+                # print(res)
+
+                listEstadosDict.append(res)   
+            
+        if len(listEstadosDict) != 0:
+            return listEstadosDict
+
+        return False
+    
+    @classmethod
+    def get_convite_by_id(*args, **kwargs):
+        cursor = conn.cursor()
+ 
+        cursor.execute(f"""SELECT convite_acesso.id , convite_acesso.FK_user_id, users.nome , profiles.profile_name ,
+                        users.telefone, users.email, cpf
+                        FROM convite_acesso 
+                        INNER JOIN users ON convite_acesso.FK_user_id = users.id
+                        INNER JOIN user_profiles ON convite_acesso.FK_user_id = user_profiles.FK_user_id
+                        INNER JOIN profiles ON user_profiles.FK_profile_id = profiles.id
+                        WHERE convite_acesso.id ='{args[1]}';""")
+        
+        result = cursor.fetchall()
+        cursor.close()
+
+        # print(result)
+        # input()
+        listEstadosDict = []
+        for estadoTupla in result:
+            tup1 = ('id' , 'FK_user_id', 'nome' , 'profile_name' ,
+                        'telefone', 'email', 'cpf') 
+            
+            tup2 = estadoTupla
+           
+            if len(tup1) == len(tup2): 
+                res = dict(zip(tup1, tup2)) 
+                # print(res)
+
+                listEstadosDict.append(res)   
+            
+        if len(listEstadosDict) != 0:
+            return listEstadosDict
+
+        return False
+
+
 
 
     @classmethod
