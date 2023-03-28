@@ -185,7 +185,7 @@ class UserModel():
 
             conn.autocommit = True
 
-            cursor.execute("insert into users (cpf , nome , email , telefone, perfil_ativo) values(?,?,?,?,?)",args[1], args[2], args[3], int(args[4]), args[5])
+            cursor.execute("insert into users (cpf , nome , email , telefone, perfil_ativo, convite) values(?,?,?,?,?,?)",args[1], args[2], args[3], int(args[4]), args[5], args[6])
             
             conn.commit()
             # conn.close()
@@ -194,6 +194,28 @@ class UserModel():
         # except:
         #     print(TypeError)
         # #     return None
+
+    @classmethod
+    def create_convite_acesso(*args, **kwargs):
+        # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
+        # try:
+            cursor = conn.cursor()
+            # print(args)
+            # input()
+
+            conn.autocommit = True
+
+            cursor.execute("insert into convite_acesso (FK_user_id , data_envio , link, salt) values(?,?,?,?)",args[1], args[2], args[3], args[4])
+            
+            conn.commit()
+            # conn.close()
+            # return 'created'
+            # rows = cursor.fetchall()
+        # except:
+        #     print(TypeError)
+        # #     return None
+
+    
 
     @classmethod
     def update_profissionais_editora(*args, **kwargs):

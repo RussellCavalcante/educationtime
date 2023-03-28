@@ -70,11 +70,11 @@ class UserRegister(Resource):
             salt = UserModel.get_new_salt()
 
             encrypted_password = UserModel.password_encrypted(password, salt)
-            print(encrypted_password)
+            # print(encrypted_password)
 
-            print(salt)
+            # print(salt)
 
-            input()
+            # input()
 
             if not UserModel.email_validator(dados['email']):
                 return {'message': "Email '{}' esta invalido.".format(dados["email"])}, 400
