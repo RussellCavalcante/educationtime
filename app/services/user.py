@@ -48,6 +48,18 @@ class User(Resource):
 
         except:
             return { 'error': 'verifique a requisição !' }, 400
+        
+    @jwt_required()
+    def get_all_hash_convites(self, *args, **kwargs):
+        try:
+            convite = UserModel.get_all_hash_convites()
+            if convite != False : 
+                    return convite, 200
+            elif convite == False : return  {'return':'convite invalido'}, 200
+
+
+        except:
+            return { 'error': 'verifique a requisição !' }, 400
 
     @jwt_required
     def delete(self, user_id):

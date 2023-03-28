@@ -1027,3 +1027,12 @@ def get_convite_by_hashconvite(convite):
     _Get_services = User()
     
     return _Get_services.get_convite_by_hashconvite(convite)
+
+@avaliable_route.route('/convites', methods=['GET'])
+
+def get_all_hash_convites():    
+    from app.services.user import User
+    
+    _Get_services = User()
+    
+    return _Get_services.get_all_hash_convites()

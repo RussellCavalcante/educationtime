@@ -422,6 +422,42 @@ class UserModel():
         return False
     
     @classmethod
+    def get_all_hash_convites(*args, **kwargs):
+        cursor = conn.cursor()
+ 
+        cursor.execute(f"""SELECT convite_acesso.id , convite_acesso.FK_user_id, users.nome , 
+                        profiles.profile_name , convite_acesso.data_envio, 
+                        convite_acesso.data_aceito, convite_acesso.status
+                        FROM convite_acesso 
+                        INNER JOIN users ON convite_acesso.FK_user_id = users.id
+                        INNER JOIN user_profiles ON convite_acesso.FK_user_id = user_profiles.FK_user_id
+                        INNER JOIN profiles ON user_profiles.FK_profile_id = profiles.id """)
+        
+        result = cursor.fetchall()
+        cursor.close()
+
+        # print(result)
+        # input()
+        listEstadosDict = []
+        for estadoTupla in result:
+            tup1 = ('id' , 'FK_user_id', 'nome' , 
+                        'profile_name' , 'data_envio', 
+                        'data_aceito', 'status') 
+            
+            tup2 = estadoTupla
+           
+            if len(tup1) == len(tup2): 
+                res = dict(zip(tup1, tup2)) 
+                # print(res)
+
+                listEstadosDict.append(res)   
+            
+        if len(listEstadosDict) != 0:
+            return listEstadosDict
+
+        return False
+    
+    @classmethod
     def get_convite_by_id(*args, **kwargs):
         cursor = conn.cursor()
  
