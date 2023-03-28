@@ -35,7 +35,6 @@ class User(Resource):
             return user.json()
         return {"message": 'Usuario nao encontrado'}, 404 # not found
 
-    @jwt_required()
     def get_convite_by_hashconvite(self, *args, **kwargs):
         try:
             convite = UserModel.get_hash_by_hash(str(args[0]))
