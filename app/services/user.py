@@ -55,7 +55,7 @@ class User(Resource):
             convite = UserModel.get_all_hash_convites()
             if convite != False : 
                     return convite, 200
-            elif convite == False : return  {'return':'convite invalido'}, 200
+            elif convite == False : return  {'return':'nao possui registros'}, 200
 
 
         except:
