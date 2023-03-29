@@ -1,6 +1,7 @@
 from flask_restful import Resource, reqparse
 from app.models.user import UserModel
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt
+from datetime import date
 # from flask import Flask
 from flask import jsonify
 # from flask import request
@@ -16,11 +17,11 @@ from flask import jsonify
 from app.blacklist import BLACKLIST
 
 atributos = reqparse.RequestParser()
-atributos.add_argument('username', type=str, required=True, help="campo de nome do usuario e obrigatorio")
+atributos.add_argument('cpf', type=str, required=True, help="campo de nome do usuario e obrigatorio")
 atributos.add_argument('password', type=str, help="campo de senha e obrigatorio")
 atributos.add_argument('nome', type=str, help="campo obrigatorio")
 atributos.add_argument('email', type=str, help="campo de email e obrigatorio")
-atributos.add_argument('phone', type=str, help="campo de telefone")
+atributos.add_argument('telefone', type=str, help="campo de telefone")
 atributos.add_argument('FK_perfil_id', type=int, help="campo de perfil_id")
 
 
@@ -39,6 +40,8 @@ class User(Resource):
         try:
             convite = UserModel.get_hash_by_hash(str(args[0]))
             if convite != False :
+                    if convite[0]['status'] == 'aceito':
+                        return {"erro":"convite ja aceito"}
                     conviteId = UserModel.get_convite_by_id(convite[0]['id'])
                     return conviteId, 200
             
@@ -182,8 +185,48 @@ class UserLogin(Resource):
 
 class UserLogout(Resource):
     
+    
     @jwt_required()
     def post(self):
         jwt_id = get_jwt()['jti']
         BLACKLIST.add(jwt_id)
         return jsonify({'message' : 'Deslogado com sucesso!'}), 200  
+    
+class UserEdit(Resource):
+
+
+    @classmethod
+    def update(cls, *args, **kwargs):
+        try:
+            dados = atributos.parse_args()
+
+            cpf = dados['cpf']
+            password = dados['password']
+            nome = dados['nome']
+            email = dados['email']
+            telefone = dados['telefone']
+            # FK_perfil_id = dados['FK_perfil_id']
+
+            # if UserModel.find_by_login(dados['cpf']):
+            #     return {'message': "Esse usuario '{}' ja existe.".format(dados['cpf'])}
+            
+            salt = UserModel.get_new_salt()
+
+            encrypted_password = UserModel.password_encrypted(password, salt)
+
+            if not UserModel.email_validator(dados['email']):
+                return {'message': "Email '{}' esta invalido.".format(dados["email"])}, 400
+
+            UserModel.update_user(cpf, nome , email ,telefone ,encrypted_password, salt, args[0])
+ 
+            # id = UserModel.find_by_login(dados['username'])
+           
+            # UserModel.associateUserProfile(id[0], FK_perfil_id) 
+            today = date.today()
+
+            UserModel.update_convite_acesso(str(today), 'aceito', args[0])
+
+            return {'message':f'Usuario {nome} atualizado com sucesso!'}, 201
+        
+        except:
+            return { 'error': 'verifique a requisição !' }, 400

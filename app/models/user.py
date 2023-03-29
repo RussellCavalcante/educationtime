@@ -133,6 +133,29 @@ class UserModel():
         # #     return None
 
     @classmethod
+    def update_user(*args, **kwargs):
+        # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
+        # try:
+            cursor = conn.cursor()
+                # print(args)
+                # input()
+            
+            cursor.execute('''
+                        UPDATE users
+                        SET cpf = ?, nome = ?, email = ?, telefone = ? , password = ?, salt = ?
+                        WHERE id = ?
+                        ''',args[1], args[2], args[3], args[4], args[5], args[6], args[7])
+                        
+            
+            conn.commit()
+            # conn.close()
+            # return 'created'
+            # rows = cursor.fetchall()
+        # except:
+        #     print(TypeError)
+        # #     return None
+
+    @classmethod
     def create_dirigente_municipal(*args, **kwargs):
         # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
         # try:
@@ -421,6 +444,30 @@ class UserModel():
 
         return False
     
+    @classmethod
+    def update_convite_acesso(*args, **kwargs):
+        # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
+        # try:
+            cursor = conn.cursor()
+                # print(args)
+                # input()
+            
+            cursor.execute('''
+                        UPDATE convite_acesso
+                        SET data_aceito = ?, status = ?
+                        WHERE FK_user_id = ?
+                        ''',args[1], args[2], args[3])
+                        
+            
+            conn.commit()
+            # conn.close()
+            # return 'created'
+            # rows = cursor.fetchall()
+        # except:
+        #     print(TypeError)
+        # #     return None
+
+
     @classmethod
     def get_all_hash_convites(*args, **kwargs):
         cursor = conn.cursor()

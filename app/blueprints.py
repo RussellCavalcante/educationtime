@@ -1036,3 +1036,11 @@ def get_all_hash_convites():
     _Get_services = User()
     
     return _Get_services.get_all_hash_convites()
+
+@avaliable_route.route('/convites/UserEdit/<int:id>', methods=['PUT'])
+
+def user_update_by(id):    
+    from app.services.user import UserEdit
+    _Get_services = UserEdit()
+    
+    return _Get_services.update(id)
