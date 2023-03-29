@@ -41,11 +41,11 @@ class User(Resource):
             convite = UserModel.get_hash_by_hash(str(args[0]))
             if convite != False :
                     if convite[0]['status'] == 'aceito':
-                        return {"erro":"convite ja aceito"}
+                        return {"erro":"convite ja aceito"}, 400
                     conviteId = UserModel.get_convite_by_id(convite[0]['id'])
                     return conviteId, 200
             
-            elif convite == False : return  {'return':'convite invalido'}, 200
+            elif convite == False : return  {'return':'convite invalido'}, 400
 
 
         except:
