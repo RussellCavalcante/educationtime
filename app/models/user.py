@@ -467,6 +467,29 @@ class UserModel():
         #     print(TypeError)
         # #     return None
 
+    @classmethod
+    def update_status_convite_acesso(*args, **kwargs):
+        # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
+        # try:
+            cursor = conn.cursor()
+                # print(args)
+                # input()
+            
+            cursor.execute('''
+                        UPDATE convite_acesso
+                        SET status = ?
+                        WHERE id = ?
+                        ''',args[1], args[2])
+                        
+            
+            conn.commit()
+            # conn.close()
+            # return 'created'
+            # rows = cursor.fetchall()
+        # except:
+        #     print(TypeError)
+        # #     return None
+
 
     @classmethod
     def get_all_hash_convites(*args, **kwargs):

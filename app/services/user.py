@@ -2,6 +2,7 @@ from flask_restful import Resource, reqparse
 from app.models.user import UserModel
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt
 from datetime import date
+from datetime import datetime
 # from flask import Flask
 from flask import jsonify
 # from flask import request
@@ -40,12 +41,30 @@ class User(Resource):
         try:
             convite = UserModel.get_hash_by_hash(str(args[0]))
             if convite != False :
+                    if convite[0]['status'] == 'expirado':
+                        return {"error":"convite expirado"}, 400
+                    
+                    data_envio = convite[0]['data_envio'].split('-')
+                    today = str(date.today()).split('-')
+                    
+                    data1 = datetime(int(data_envio[0]), int(data_envio[1]), int(data_envio[2]))
+                    data2 = datetime(int(today[0]), int(today[1]), int(today[2]))
+
+                    difdata = data2 - data1
+                    diashora = '{0}:{2}'.format(*str(difdata).split())
+                
+                    if int(diashora.split(':')[0]) > 30:
+                        UserModel.update_status_convite_acesso('expirado',convite[0]['id'])
+                        return{'error':'convite expirado'}
+
                     if convite[0]['status'] == 'aceito':
-                        return {"erro":"convite ja aceito"}, 400
+                        return {"error":"convite ja aceito"}, 400
+
+                    
                     conviteId = UserModel.get_convite_by_id(convite[0]['id'])
                     return conviteId, 200
             
-            elif convite == False : return  {'return':'convite invalido'}, 400
+            elif convite == False : return  {'error':'convite invalido'}, 400
 
 
         except:
