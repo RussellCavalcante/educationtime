@@ -62,7 +62,16 @@ class MonitoramentoModel():
         cursor = conn.cursor()
         
  
-        cursor.execute(f"SELECT * FROM escola INNER JOIN municipio ON escola.FK_municipio_id = municipio.id INNER JOIN estado ON municipio.FK_UF_id = estado.id WHERE escola.id= {args[1]};")
+        cursor.execute(f"""SELECT  monitoramento_fatores.id, monitoramento.FK_user_id , monitoramento.FK_escola_id, monitoramento.ano, monitoramento.data, monitoramento.tipo,
+                            monitoramento_fatores.FK_fatores, fatores.nome, monitoramento_fatores.score
+                            FROM monitoramento_fatores
+                            INNER JOIN monitoramento ON monitoramento_fatores.FK_monitoramento = monitoramento.id
+                            INNER JOIN escola ON monitoramento.FK_escola_id = escola.id
+                            INNER JOIN users ON monitoramento.FK_user_id = users.id
+                            INNER JOIN user_profiles ON users.id = user_profiles.FK_user_id
+                            INNER JOIN profiles ON user_profiles.FK_profile_id = profiles.id
+                            INNER JOIN fatores ON monitoramento_fatores.FK_fatores = fatores.id
+                            WHERE monitoramento_fatores.FK_monitoramento = {args[1]};""")
         
         result = cursor.fetchall()
         cursor.close()
@@ -70,7 +79,8 @@ class MonitoramentoModel():
         listEstadosDict = []
         for estadoTupla in result:
             
-            tup1 = ('id', 'nome_escola','endereco', 'email_escola', 'telefone', 'cod_inep', 'FK_municipio_id', 'idMunicipio', 'codigo_ibge', 'nomemunicipio', 'FK_UF_id', 'iduf', 'nomeuf', 'uf') 
+            tup1 = ('id', 'FK_user_id' , 'FK_escola_id', 'ano', 'data', 'tipo',
+                            'FK_fatores_id', 'nome', 'score') 
             tup2 = estadoTupla
            
             if len(tup1) == len(tup2): 
