@@ -1044,3 +1044,38 @@ def user_update_by(id):
     _Get_services = UserEdit()
     
     return _Get_services.update(id)
+
+@avaliable_route.route('/Monitoramento', methods=['GET'])
+
+def get_Monitoramento():    
+    from app.services.monitoramento import MonitoramentoServices
+    
+    _Get_services = MonitoramentoServices()
+    
+    return _Get_services.get()
+
+@avaliable_route.route('/Monitoramento/<int:id>', methods=['GET'])
+
+def get_Monitoramento_by_id(id):    
+    from app.services.monitoramento import MonitoramentoServices
+    
+    _Get_services = MonitoramentoServices()
+    
+    return _Get_services.get_by_id(id)
+
+@avaliable_route.route('/Monitoramento/Cadastro', methods=['POST'])
+
+def post_Monitoramento():    
+    from app.services.monitoramento import MonitoramentoServices
+    
+    _Get_services = MonitoramentoServices()
+    
+    return _Get_services.post()
+
+@avaliable_route.route('/Monitoramento/Update/<int:id>', methods=['PUT'])
+
+def update_Monitoramento(id):    
+    from app.services.monitoramento import MonitoramentoServices
+    _Get_services = MonitoramentoServices()
+    
+    return _Get_services.update(id)

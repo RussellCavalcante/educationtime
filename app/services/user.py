@@ -104,14 +104,14 @@ class UserRegister(Resource):
         try:
             dados = atributos.parse_args()
 
-            username = dados['username']
+            cpf = dados['cpf']
             password = dados['password']
             nome = dados['nome']
             email = dados['email']
             FK_perfil_id = dados['FK_perfil_id']
 
-            if UserModel.find_by_login(dados['username']):
-                return {'message': "Esse usuario '{}' ja existe.".format(dados['username'])}
+            if UserModel.find_by_login(dados['cpf']):
+                return {'message': "Esse usuario '{}' ja existe.".format(dados['cpf'])}
             
             salt = UserModel.get_new_salt()
 
@@ -125,9 +125,9 @@ class UserRegister(Resource):
             if not UserModel.email_validator(dados['email']):
                 return {'message': "Email '{}' esta invalido.".format(dados["email"])}, 400
 
-            UserModel.create_user(nome , email ,username ,encrypted_password, salt)
+            UserModel.create_user(nome , email ,cpf ,encrypted_password, salt)
  
-            id = UserModel.find_by_login(dados['username'])
+            id = UserModel.find_by_login(dados['cpf'])
            
             UserModel.associateUserProfile(id[0], FK_perfil_id) 
 
@@ -142,18 +142,18 @@ class ProfissionalEducacaoRegister(Resource):
 
             dados = atributos.parse_args()
 
-            username = dados['username']
+            cpf = dados['cpf']
             password = dados['password']
             nome = dados['nome']
             email = dados['email']
             roles = dados['funcao']
             
-            if UserModel.find_by_login(dados['username']):
-                return {'message': "Esse usuario '{}' ja existe.".format(dados['username'])}
+            if UserModel.find_by_login(dados['cpf']):
+                return {'message': "Esse usuario '{}' ja existe.".format(dados['cpf'])}
             
             salt = UserModel.get_new_salt()
 
-            # print(username, password)
+            # print(cpf, password)
             # input()
             
 
@@ -166,7 +166,7 @@ class ProfissionalEducacaoRegister(Resource):
 
             # user = UserModel(**dados)
 
-            UserModel.create_profissional_educacao_(nome , email ,username ,encrypted_password, salt, roles)
+            UserModel.create_profissional_educacao_(nome , email ,cpf ,encrypted_password, salt, roles)
             # user.save_user()
 
             return {'message':'Usuario Criado com sucesso!'}, 201
@@ -181,13 +181,13 @@ class UserLogin(Resource):
     @classmethod
     def post(cls):
         try:
+        
             dados = atributos.parse_args()
 
-            username = dados['username'].strip()
+            cpf = dados['cpf'].strip()
             password = dados['password'].strip()
 
-
-            user = UserModel.find_by_login(username)
+            user = UserModel.find_by_login(cpf)
             
             salt = UserModel.find_salt_by_id(user)
 
@@ -197,7 +197,7 @@ class UserLogin(Resource):
             token_de_acesso = create_access_token(identity=1)
             
             return {'acess_token': token_de_acesso,
-                    'cpf': username,
+                    'cpf': cpf,
                     'id': user[0]}, 200
         except:
             return { 'error': 'verifique a requisição !' }, 400   
@@ -238,7 +238,7 @@ class UserEdit(Resource):
 
             UserModel.update_user(cpf, nome , email ,telefone ,encrypted_password, salt, args[0])
  
-            # id = UserModel.find_by_login(dados['username'])
+            # id = UserModel.find_by_login(dados['cpf'])
            
             # UserModel.associateUserProfile(id[0], FK_perfil_id) 
             today = date.today()
