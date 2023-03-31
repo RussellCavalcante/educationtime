@@ -38,7 +38,7 @@ class SecretariaMunicipalModel():
         listEstadosDict = []
         for estadoTupla in result:
             
-            tup1 = ('id', 'nome', 'cnpj', 'endereco', 'telefone', 'email',  'FK_secretaria_municipio_id', 'idMunicipio', 'codigo_ibge', 'nomemunicipio', 'FK_UF_id', 'iduf', 'nomeuf', 'uf' ) 
+            tup1 = ('id', 'nome', 'cnpj', 'endereco', 'telefone', 'email', 'status', 'FK_secretaria_municipio_id', 'idMunicipio', 'codigo_ibge', 'nomemunicipio', 'FK_UF_id', 'iduf', 'nomeuf', 'uf' ) 
             tup2 = estadoTupla
            
             if len(tup1) == len(tup2): 
@@ -86,7 +86,7 @@ class SecretariaMunicipalModel():
         listEstadosDict = []
         for estadoTupla in result:
             
-            tup1 = ('id', 'nome', 'cnpj', 'endereco', 'telefone', 'email',  'FK_secretaria_municipio_id', 'idMunicipio', 'codigo_ibge', 'nomemunicipio', 'FK_UF_id', 'iduf', 'nomeuf', 'uf') 
+            tup1 = ('id', 'nome', 'cnpj', 'endereco', 'telefone', 'email',  'status', 'FK_secretaria_municipio_id', 'idMunicipio', 'codigo_ibge', 'nomemunicipio', 'FK_UF_id', 'iduf', 'nomeuf', 'uf') 
             tup2 = estadoTupla
            
             if len(tup1) == len(tup2): 
@@ -103,7 +103,7 @@ class SecretariaMunicipalModel():
         # try:
             cursor = conn.cursor()
     
-            cursor.execute("insert into secretaria_municipal ( nome, cnpj, endereco, telefone, email, FK_secretaria_municipio_id) values(?,?,?,?,?,?)",args[1], int(args[2]), args[3], int(args[4]), args[5], int(args[6]))
+            cursor.execute("insert into secretaria_municipal ( nome, cnpj, endereco, telefone, email,  status, FK_secretaria_municipio_id) values(?,?,?,?,?,?,?)",args[1], int(args[2]), args[3], int(args[4]), args[5], args[6], args[7])
             
             conn.commit()
             # conn.close()
@@ -123,9 +123,9 @@ class SecretariaMunicipalModel():
             
             cursor.execute('''
                         UPDATE secretaria_municipal
-                        SET nome = ?, cnpj = ?, endereco = ?,telefone = ?,email =  ?, FK_secretaria_municipio_id=?
+                        SET nome = ?, cnpj = ?, endereco = ?,telefone = ?,email =  ?, status = ? ,FK_secretaria_municipio_id=?
                         WHERE id = ?
-                        ''',args[1], int(args[2]), args[3], int(args[4]), args[5], int(args[6]), int(args[7])
+                        ''',args[1], int(args[2]), args[3], int(args[4]), args[5], args[6], int(args[7]), int(args[8])
                         )
             
             conn.commit()
