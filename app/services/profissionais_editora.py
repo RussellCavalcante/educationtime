@@ -82,7 +82,7 @@ class ProfissionaisEditoraServices(Resource):
 
             hashconvite = UserModel.password_encrypted(cpf, salt)
 
-            # sendEmail(hashconvite, email)
+            sendEmail(hashconvite, email)
 
             UserModel.create_convite_acesso(user[0], str(today), hashconvite, salt)
 

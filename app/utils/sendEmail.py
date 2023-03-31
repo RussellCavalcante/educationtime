@@ -1,27 +1,42 @@
+# import the smtplib module. It should be included in Python by default
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 import win32com.client as win32
 
 # criar a integração com o outlook
 def sendEmail(hash, emailSend):
-    outlook = win32.Dispatch('outlook.application')
 
-    # criar um email
-    email = outlook.CreateItem(0)
+    
+    
 
-    # configurar as informações do seu e-mail
-    email.To = f"{emailSend};"
-    email.Subject = "E-mail automático do Python"
-    email.HTMLBody = f"""
-                <p>Olá Lira, aqui é o código Python</p>
+    # set up the SMTP server
 
-                <p>O faturamento da loja foi de R$</p>
-                <p>Vendemos produtos</p>
-                <p>O ticket Médio foi de R${hash}</p>
+    myemail='russell.cavalcante@poncetech.com.br'
+    MY_ADDRESS = 'editoraponce@outlook.com'
+    password = '@rus312519PONCE'
+    PASSWORD = 'k3@UqUWWZ96u'
+    s = smtplib.SMTP(host='smtp.office365.com', port=587)
+    s.starttls()
+    s.login(MY_ADDRESS, PASSWORD)
 
-                <p>Abs,</p>
-                <p>Código Python</p>
-                """
+    # print(s)
 
-    # anexo = "C://Users/joaop/Downloads/arquivo.xlsx"
-    # email.Attachments.Add(anexo)
+    msg = MIMEMultipart()       # create a message
 
-    email.Send()
+    # add in the actual person name to the message template
+    # message = PERSON_NAME=name.title()
+
+    # setup the parameters of the message
+    msg['From']=MY_ADDRESS
+    msg['To']= emailSend
+    msg['Subject']="This is TEST"
+
+    # add in the message body
+    msg.attach(MIMEText(f'convite para acessar o sistema{hash}', 'plain'))
+
+    # send the message via the server set up earlier.
+    s.send_message(msg)
+
+    del msg
+        

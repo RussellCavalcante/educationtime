@@ -38,7 +38,7 @@ class User(Resource):
         return {"message": 'Usuario nao encontrado'}, 404 # not found
 
     def get_convite_by_hashconvite(self, *args, **kwargs):
-        try:
+        # try:
             convite = UserModel.get_hash_by_hash(str(args[0]))
             if convite != False :
                     if convite[0]['status'] == 'expirado':
@@ -51,9 +51,8 @@ class User(Resource):
                     data2 = datetime(int(today[0]), int(today[1]), int(today[2]))
 
                     difdata = data2 - data1
-                    diashora = '{0}:{2}'.format(*str(difdata).split())
                 
-                    if int(diashora.split(':')[0]) > 30:
+                    if int(str(difdata).split(':')[0]) > 30:
                         UserModel.update_status_convite_acesso('expirado',convite[0]['id'])
                         return{'error':'convite expirado'}
 
@@ -67,8 +66,8 @@ class User(Resource):
             elif convite == False : return  {'error':'convite invalido'}, 400
 
 
-        except:
-            return { 'error': 'verifique a requisição !' }, 400
+        # except:
+        #     return { 'error': 'verifique a requisição !' }, 400
         
     @jwt_required()
     def get_all_hash_convites(self, *args, **kwargs):
