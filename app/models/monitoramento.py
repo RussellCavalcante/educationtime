@@ -62,7 +62,7 @@ class MonitoramentoModel():
         cursor = conn.cursor()
         
  
-        cursor.execute(f"""SELECT  monitoramento_fatores.id, monitoramento.FK_user_id , monitoramento.FK_escola_id, monitoramento.ano, monitoramento.data, monitoramento.tipo,
+        cursor.execute(f"""SELECT  monitoramento_fatores.FK_monitoramento, monitoramento.FK_user_id , monitoramento.FK_escola_id, monitoramento.ano, monitoramento.data, monitoramento.tipo,
                             monitoramento_fatores.FK_fatores, fatores.nome, monitoramento_fatores.score
                             FROM monitoramento_fatores
                             INNER JOIN monitoramento ON monitoramento_fatores.FK_monitoramento = monitoramento.id
@@ -75,21 +75,49 @@ class MonitoramentoModel():
         
         result = cursor.fetchall()
         cursor.close()
-
+        dictFinal = {}
         listEstadosDict = []
         for estadoTupla in result:
             
             tup1 = ('id', 'FK_user_id' , 'FK_escola_id', 'ano', 'data', 'tipo',
                             'FK_fatores_id', 'nome', 'score') 
             tup2 = estadoTupla
-           
+
             if len(tup1) == len(tup2): 
                 res = dict(zip(tup1, tup2))
-                # print(res)
-
                 listEstadosDict.append(res)   
             
-        return listEstadosDict
+
+        for Dict in listEstadosDict:
+        
+            dictFatores = {}
+            for chave in Dict:
+                
+                if 'Itens' not in dictFinal.keys():
+                    if chave == 'FK_fatores_id':
+                        
+                        dictFinal['Itens'] = {'itens':[]}
+                        dictFatores[chave] = Dict[chave]
+                       
+                else:
+                    if chave == 'FK_fatores_id' or chave == 'nome' or chave == 'score':
+                      
+                        dictFatores[chave] = Dict[chave]
+                   
+                    if chave == 'score':
+                        dictFinal['Itens']['itens'].append(dictFatores)
+                        
+                if chave in dictFinal.keys():
+                    continue
+
+                    
+                if chave != 'FK_fatores_id':
+                    if chave != 'nome':
+                        if chave != 'score':
+                            dictFinal[chave] = Dict[chave] 
+
+                
+        return dictFinal
     
     @classmethod
     def get_monitoramento_fatores_by_last_id(*args, **kwargs):

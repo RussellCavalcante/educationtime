@@ -19,10 +19,10 @@ atributos.add_argument('Itens', type=dict, help="campo de cod_inep")
 class MonitoramentoServices(Resource):
     @jwt_required()
     def get_by_id(self, *args, **kwargs):
-        try:
+        # try:
             return  MonitoramentoModel.get_monitoramento_by_id(args[0]), 200
-        except:
-            return { 'error': 'verifique a requisição !' }, 400
+        # except:
+        #     return { 'error': 'verifique a requisição !' }, 400
 
     @jwt_required()
     def get(self, *args, **kwargs):
