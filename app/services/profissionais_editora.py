@@ -57,7 +57,7 @@ class ProfissionaisEditoraServices(Resource):
 
     @jwt_required()
     def post(self, *args, **kwargs):
-        # try:
+        try:
                 
             dados = atributos.parse_args()
             cpf = dados['cpf']
@@ -95,8 +95,8 @@ class ProfissionaisEditoraServices(Resource):
             
             return  {'created': nome}, 201
         
-        # except:
-        #     return { 'error': 'verifique a requisição !' }, 400
+        except:
+            return { 'error': 'verifique a requisição !' }, 400
         
         
 
