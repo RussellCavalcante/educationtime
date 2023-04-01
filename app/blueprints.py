@@ -1079,3 +1079,38 @@ def update_Monitoramento(id):
     _Get_services = MonitoramentoServices()
     
     return _Get_services.update(id)
+
+@avaliable_route.route('/AgendaDiretoria', methods=['GET'])
+
+def get_AgendaDiretoria():    
+    from app.services.agenda_diretoria import AgendaDiretoriaServices
+    
+    _Get_services = AgendaDiretoriaServices()
+    
+    return _Get_services.get()
+
+@avaliable_route.route('/AgendaDiretoria/<int:id>', methods=['GET'])
+
+def get_AgendaDiretoria_by_id(id):    
+    from app.services.agenda_diretoria import AgendaDiretoriaServices
+    
+    _Get_services = AgendaDiretoriaServices()
+    
+    return _Get_services.get_by_id(id)
+
+@avaliable_route.route('/AgendaDiretoria/Cadastro', methods=['POST'])
+
+def post_AgendaDiretoria():    
+    from app.services.agenda_diretoria import AgendaDiretoriaServices
+    
+    _Get_services = AgendaDiretoriaServices()
+    
+    return _Get_services.post()
+
+@avaliable_route.route('/AgendaDiretoria/Update/<int:id>', methods=['PUT'])
+
+def update_AgendaDiretoria(id):    
+    from app.services.agenda_diretoria import AgendaDiretoriaServices
+    _Get_services = AgendaDiretoriaServices()
+    
+    return _Get_services.update(id)
