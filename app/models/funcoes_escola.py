@@ -61,9 +61,11 @@ class FuncoesEscolaModel():
         cursor = conn.cursor()
  
         cursor.execute(f"""SELECT funcoes_escola.id, funcoes_escola.nome, funcoes_escola.FK_escola_id, escola.nome_escola , 
-                        funcoes_escola.FK_profile_id , profiles.profile_name  
+                        funcoes_escola.FK_profile_id , profiles.profile_name , escola.nome_escola, municipio.FK_UF_id, municipio.nome, escola.FK_municipio_id
                         FROM funcoes_escola 
                         INNER JOIN escola ON funcoes_escola.FK_escola_id = escola.id 
+                        INNER JOIN municipio ON escola.FK_municipio_id = municipio.id
+                        INNER JOIN estado ON municipio.FK_UF_id = estado.id
                         INNER JOIN profiles ON funcoes_escola.FK_profile_id = profiles.id WHERE funcoes_escola.id= {args[1]};""")
         
         result = cursor.fetchall()
@@ -75,7 +77,7 @@ class FuncoesEscolaModel():
         for estadoTupla in result:
             
             tup1 = ('id', 'nome', 'FK_escola_id', 'nome_escola' , 
-                        'FK_profile_id' , 'profile_name') 
+                        'FK_profile_id' , 'profile_name', 'nome_escola' 'uf', 'FK_UF_id', 'municipio', 'FK_municipio_id') 
             tup2 = estadoTupla
            
             if len(tup1) == len(tup2): 
