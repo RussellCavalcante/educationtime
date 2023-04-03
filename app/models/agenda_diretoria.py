@@ -217,6 +217,29 @@ class AgendaDiretoriaModel():
         # except:
         #     print(TypeError)
         # #     return None 
+
+    @classmethod
+    def update_agenda_analise(*args, **kwargs):
+        # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
+        # try:
+            cursor = conn.cursor()
+                # print(args)
+                # input()
+            
+            cursor.execute('''
+                        UPDATE agenda_analise
+                        SET resultado = ?, titulo = ?, mensagem = ?
+                        WHERE FK_agenda_diretoria_id = ?
+                        ''',args[1], args[2], args[3], args[4])
+                        
+            
+            conn.commit()
+            # conn.close()
+            # return 'created'
+            # rows = cursor.fetchall()
+        # except:
+        #     print(TypeError)
+        # #     return None
     
     @classmethod
     def update_agenda_diretoria(*args, **kwargs):
@@ -242,7 +265,7 @@ class AgendaDiretoriaModel():
         # #     return None
 
     @classmethod
-    def delete_agenda_diretoria_fatores(*args, **kwargs):
+    def delete_agenda_equipe(*args, **kwargs):
         # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
         # try:
             cursor = conn.cursor()
@@ -250,7 +273,7 @@ class AgendaDiretoriaModel():
                 # input()
             
             cursor.execute('''
-                            DELETE FROM agenda_diretoria_fatores WHERE id = ?;
+                            DELETE FROM agenda_equipe WHERE FK_agenda_diretoria_id = ?;
                             
                             ''', args[1])
                         

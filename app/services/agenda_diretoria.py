@@ -12,7 +12,7 @@ atributos.add_argument('nome', type=str, help="campo de telefone")
 atributos.add_argument('prazo', type=str, help="email obrigatorio")
 atributos.add_argument('recursos', type=str, help="campo de cod_inep")
 atributos.add_argument('equipe', type=dict, help="campo de cod_inep")
-atributos.add_argument('resultado', type=str, help="campo de telefone")
+atributos.add_argument('resultado', type=int, help="campo de telefone")
 atributos.add_argument('titulo', type=str, help="campo email obrigatorio")
 atributos.add_argument('mensagem', type=str, help="campo email obrigatorio")
 
@@ -67,14 +67,23 @@ class AgendaDiretoriaServices(Resource):
             dados = atributos.parse_args()
             
             FK_escola_id = dados['FK_escola_id']
-            FK_user_id = dados['FK_user_id']
-            ano = dados['ano']
-            data = dados['data'].strip()
-            tipo = dados['tipo']
-            Itens = dados['Itens']
+            nome = dados['nome']
+            prazo = dados['prazo']
+            recursos = dados['recursos'].strip()
+            equipe = dados['equipe']
+            resultado = dados['resultado']
+            titulo = dados['titulo'].strip()
+            mensagem = dados['mensagem'].strip()
 
-            AgendaDiretoriaModel.update_agenda_diretoria(FK_user_id, FK_escola_id, ano, data ,args[0])
 
+            AgendaDiretoriaModel.update_agenda_diretoria(FK_escola_id, nome, prazo, recursos,args[0])
+
+            AgendaDiretoriaModel.delete_agenda_equipe(args[0])
+            for i , agenda_diretoria in enumerate(equipe['itens']):
+                AgendaDiretoriaModel.associate_agenda_diretorias_equipe(agenda_diretoria['Nome'], args[0])
+
+
+            AgendaDiretoriaModel.update_agenda_analise(resultado, titulo, mensagem, args[0])
             # manter = []
             # excluirAssociacao = []
             # novos = []
@@ -97,7 +106,7 @@ class AgendaDiretoriaServices(Resource):
             #         # if MonitoramentoModel.get_profissionais_escola_componentes(adicionar, FK_escola_id) != False:
             #         #         return {'error':f'componente curricular com id{adicionar} ja existe a esta escola '}
             #         MonitoramentoModel.associate_monitoramentos_fatores(adicionar['FK_monitoramento'], adicionar['FK_fatores'], adicionar)
-            return {'updated': FK_escola_id }, 200
+            return {'updated': args[0] }, 200
         
         except:
             return { 'error': 'verifique a requisição !' }, 400
