@@ -63,7 +63,7 @@ class MonitoramentoModel():
         
  
         cursor.execute(f"""SELECT monitoramento_fatores.FK_monitoramento, monitoramento.FK_user_id , monitoramento.FK_escola_id, monitoramento.ano, monitoramento.data, monitoramento.tipo,
-                            monitoramento_fatores.FK_fatores, fatores.nome, monitoramento_fatores.score, estado.nome, municipio.FK_UF_id, municipio.nome, escola.FK_municipio_id
+                            monitoramento_fatores.FK_fatores, fatores.nome, monitoramento_fatores.score, estado.nome, escola.nome_escola, municipio.FK_UF_id, municipio.nome, escola.FK_municipio_id
                             FROM monitoramento_fatores
                             INNER JOIN monitoramento ON monitoramento_fatores.FK_monitoramento = monitoramento.id
                             INNER JOIN escola ON monitoramento.FK_escola_id = escola.id
@@ -76,13 +76,13 @@ class MonitoramentoModel():
                             WHERE monitoramento_fatores.FK_monitoramento = {args[1]};""")
         
         result = cursor.fetchall()
-        cursor.close()
+        cursor.close() 
         dictFinal = {}
         listEstadosDict = [] 
         for estadoTupla in result:
             
             tup1 = ('id', 'FK_user_id' , 'FK_escola_id', 'ano', 'data', 'tipo',
-                            'FK_fatores_id', 'nome', 'score', 'uf', 'FK_UF_id', 'municipio', 'FK_municipio_id') 
+                            'FK_fatores_id', 'nome', 'score', 'nome_escola' ,'estado_nome', 'FK_UF_id', 'municipio_nome', 'FK_municipio_id') 
             tup2 = estadoTupla
 
             if len(tup1) == len(tup2): 

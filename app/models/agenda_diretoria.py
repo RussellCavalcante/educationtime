@@ -78,7 +78,7 @@ class AgendaDiretoriaModel():
         for estadoTupla in result:
             
             tup1 = ('id', 'FK_escola_id' , 'nome' , 
-                    'prazo', 'resultado', 'recursos', 'agenda_equipe_nome', 'nome_escola' 'uf', 'FK_UF_id', 'municipio', 'FK_municipio_id') 
+                    'prazo', 'resultado', 'recursos', 'agenda_equipe_nome',  'nome_escola' ,'estado_nome', 'FK_UF_id', 'municipio_nome', 'FK_municipio_id') 
             tup2 = estadoTupla
 
             if len(tup1) == len(tup2): 

@@ -67,7 +67,7 @@ class FuncoesEscolaModel():
                         INNER JOIN municipio ON escola.FK_municipio_id = municipio.id
                         INNER JOIN estado ON municipio.FK_UF_id = estado.id
                         INNER JOIN profiles ON funcoes_escola.FK_profile_id = profiles.id WHERE funcoes_escola.id= {args[1]};""")
-        
+         
         result = cursor.fetchall()
         cursor.close()
 
@@ -77,7 +77,7 @@ class FuncoesEscolaModel():
         for estadoTupla in result:
             
             tup1 = ('id', 'nome', 'FK_escola_id', 'nome_escola' , 
-                        'FK_profile_id' , 'profile_name', 'nome_escola' 'uf', 'FK_UF_id', 'municipio', 'FK_municipio_id') 
+                        'FK_profile_id' , 'profile_name', 'nome_escola' ,'estado_nome', 'FK_UF_id', 'municipio_nome', 'FK_municipio_id') 
             tup2 = estadoTupla
            
             if len(tup1) == len(tup2): 
