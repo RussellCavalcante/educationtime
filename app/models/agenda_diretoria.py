@@ -62,7 +62,7 @@ class AgendaDiretoriaModel():
     def get_agenda_diretoria_by_id(*args, **kwargs):
         cursor = conn.cursor()
         cursor.execute(f"""SELECT  agenda_diretoria.id, agenda_diretoria.FK_escola_id , agenda_diretoria.nome , 
-                            agenda_diretoria.prazo, agenda_analise.resultado, agenda_diretoria.recursos, agenda_equipe.nome, estado.nome, escola.nome_escola, municipio.FK_UF_id, municipio.nome, escola.FK_municipio_id
+                            agenda_diretoria.prazo, agenda_analise.resultado, agenda_diretoria.recursos, agenda_equipe.nome, escola.nome_escola, estado.nome,  municipio.FK_UF_id, municipio.nome, escola.FK_municipio_id
                             FROM agenda_equipe  
                             INNER JOIN agenda_diretoria ON agenda_equipe.FK_agenda_diretoria_id = agenda_diretoria.id
                             INNER JOIN agenda_analise ON agenda_diretoria.id = agenda_analise.FK_agenda_diretoria_id

@@ -61,7 +61,7 @@ class FuncoesEscolaModel():
         cursor = conn.cursor()
  
         cursor.execute(f"""SELECT funcoes_escola.id, funcoes_escola.nome, funcoes_escola.FK_escola_id, escola.nome_escola , 
-                        funcoes_escola.FK_profile_id , profiles.profile_name , escola.nome_escola, municipio.FK_UF_id, municipio.nome, escola.FK_municipio_id
+                        funcoes_escola.FK_profile_id , profiles.profile_name , escola.nome_escola, estado.nome, municipio.FK_UF_id, municipio.nome, escola.FK_municipio_id
                         FROM funcoes_escola 
                         INNER JOIN escola ON funcoes_escola.FK_escola_id = escola.id 
                         INNER JOIN municipio ON escola.FK_municipio_id = municipio.id

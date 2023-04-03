@@ -63,7 +63,7 @@ class MonitoramentoModel():
         
  
         cursor.execute(f"""SELECT monitoramento_fatores.FK_monitoramento, monitoramento.FK_user_id , monitoramento.FK_escola_id, monitoramento.ano, monitoramento.data, monitoramento.tipo,
-                            monitoramento_fatores.FK_fatores, fatores.nome, monitoramento_fatores.score, estado.nome, escola.nome_escola, municipio.FK_UF_id, municipio.nome, escola.FK_municipio_id
+                            monitoramento_fatores.FK_fatores, fatores.nome, monitoramento_fatores.score, escola.nome_escola, estado.nome, municipio.FK_UF_id, municipio.nome, escola.FK_municipio_id
                             FROM monitoramento_fatores
                             INNER JOIN monitoramento ON monitoramento_fatores.FK_monitoramento = monitoramento.id
                             INNER JOIN escola ON monitoramento.FK_escola_id = escola.id
