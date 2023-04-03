@@ -62,11 +62,13 @@ class MonitoramentoModel():
         cursor = conn.cursor()
         
  
-        cursor.execute(f"""SELECT  monitoramento_fatores.FK_monitoramento, monitoramento.FK_user_id , monitoramento.FK_escola_id, monitoramento.ano, monitoramento.data, monitoramento.tipo,
-                            monitoramento_fatores.FK_fatores, fatores.nome, monitoramento_fatores.score
+        cursor.execute(f"""SELECT monitoramento_fatores.FK_monitoramento, monitoramento.FK_user_id , monitoramento.FK_escola_id, monitoramento.ano, monitoramento.data, monitoramento.tipo,
+                            monitoramento_fatores.FK_fatores, fatores.nome, monitoramento_fatores.score, estado.nome, municipio.FK_UF_id, municipio.nome, escola.FK_municipio_id
                             FROM monitoramento_fatores
                             INNER JOIN monitoramento ON monitoramento_fatores.FK_monitoramento = monitoramento.id
                             INNER JOIN escola ON monitoramento.FK_escola_id = escola.id
+                            INNER JOIN municipio ON escola.FK_municipio_id = municipio.id
+                            INNER JOIN estado ON municipio.FK_UF_id = estado.id
                             INNER JOIN users ON monitoramento.FK_user_id = users.id
                             INNER JOIN user_profiles ON users.id = user_profiles.FK_user_id
                             INNER JOIN profiles ON user_profiles.FK_profile_id = profiles.id
@@ -80,7 +82,7 @@ class MonitoramentoModel():
         for estadoTupla in result:
             
             tup1 = ('id', 'FK_user_id' , 'FK_escola_id', 'ano', 'data', 'tipo',
-                            'FK_fatores_id', 'nome', 'score') 
+                            'FK_fatores_id', 'nome', 'score', 'uf', 'FK_UF_id', 'municipio', 'FK_municipio_id') 
             tup2 = estadoTupla
 
             if len(tup1) == len(tup2): 
