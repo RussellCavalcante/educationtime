@@ -82,30 +82,8 @@ class AgendaDiretoriaServices(Resource):
             for i , agenda_diretoria in enumerate(equipe['itens']):
                 AgendaDiretoriaModel.associate_agenda_diretorias_equipe(agenda_diretoria['Nome'], args[0])
 
-
             AgendaDiretoriaModel.update_agenda_analise(resultado, titulo, mensagem, args[0])
-            # manter = []
-            # excluirAssociacao = []
-            # novos = []
-            # for element in monitorar:
-            #     if element not in Itens['itens']:
-            #         excluirAssociacao.append(element)
-            #         MonitoramentoModel.delete_monitoramento_fatores(element)
-            #     else:
-            #         manter.append(element) 
 
-            # for adicionar in Itens['itens']:
-                
-            #     print(adicionar)
-            #     input()
-
-            #     if adicionar not in manter:
-
-                    
-            #         novos.append(adicionar)
-            #         # if MonitoramentoModel.get_profissionais_escola_componentes(adicionar, FK_escola_id) != False:
-            #         #         return {'error':f'componente curricular com id{adicionar} ja existe a esta escola '}
-            #         MonitoramentoModel.associate_monitoramentos_fatores(adicionar['FK_monitoramento'], adicionar['FK_fatores'], adicionar)
             return {'updated': args[0] }, 200
         
         except:
