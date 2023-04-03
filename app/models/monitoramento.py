@@ -78,7 +78,7 @@ class MonitoramentoModel():
         result = cursor.fetchall()
         cursor.close()
         dictFinal = {}
-        listEstadosDict = []
+        listEstadosDict = [] 
         for estadoTupla in result:
             
             tup1 = ('id', 'FK_user_id' , 'FK_escola_id', 'ano', 'data', 'tipo',
