@@ -62,8 +62,9 @@ class AgendaDiretoriaModel():
     def get_agenda_diretoria_by_id(*args, **kwargs):
         cursor = conn.cursor()
         cursor.execute(f"""SELECT  agenda_diretoria.id, agenda_diretoria.FK_escola_id , agenda_diretoria.nome , 
-                            agenda_diretoria.prazo, agenda_analise.resultado, agenda_diretoria.recursos, agenda_equipe.nome, estado.nome, municipio.FK_UF_id, municipio.nome, escola.FK_municipio_id
+                            agenda_diretoria.prazo, agenda_analise.resultado, agenda_diretoria.recursos, agenda_equipe.nome, escola.nome_escola, estado.nome, municipio.FK_UF_id, municipio.nome, escola.FK_municipio_id
                             FROM agenda_equipe  
+                            INNER JOIN escola ON agenda_diretoria.FK_escola_id = escola.id
                             INNER JOIN municipio ON escola.FK_municipio_id = municipio.id
                             INNER JOIN estado ON municipio.FK_UF_id = estado.id
                             INNER JOIN agenda_diretoria ON agenda_equipe.FK_agenda_diretoria_id = agenda_diretoria.id
@@ -77,7 +78,7 @@ class AgendaDiretoriaModel():
         for estadoTupla in result:
             
             tup1 = ('id', 'FK_escola_id' , 'nome' , 
-                    'prazo', 'resultado', 'recursos', 'agenda_equipe_nome', 'uf', 'FK_UF_id', 'municipio', 'FK_municipio_id') 
+                    'prazo', 'resultado', 'recursos', 'agenda_equipe_nome', 'nome_escola', 'uf', 'FK_UF_id', 'municipio', 'FK_municipio_id') 
             tup2 = estadoTupla
 
             if len(tup1) == len(tup2): 
