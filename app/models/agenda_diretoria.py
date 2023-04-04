@@ -59,6 +59,31 @@ class AgendaDiretoriaModel():
         return listEstadosDict
     
     @classmethod
+    def get_agenda_diretoria_resultado(*args, **kwargs):
+        cursor = conn.cursor()
+ 
+        cursor.execute("""SELECT resultado, COUNT(resultado) as 'resultado_contagem' FROM agenda_analise GROUP BY resultado;""")
+        
+        result = cursor.fetchall()
+        cursor.close()
+
+        # print(result)
+        # input()
+        listEstadosDict = []
+        for estadoTupla in result:
+            
+            tup1 = ('resultado', 'resultado_contagem') 
+            tup2 = estadoTupla
+           
+            if len(tup1) == len(tup2): 
+                res = dict(zip(tup1, tup2))
+                # print(res)
+
+                listEstadosDict.append(res)   
+            
+        return listEstadosDict
+    
+    @classmethod
     def get_agenda_diretoria_by_id(*args, **kwargs):
         cursor = conn.cursor()
         cursor.execute(f"""SELECT  agenda_diretoria.id, agenda_diretoria.FK_escola_id , agenda_diretoria.nome , 

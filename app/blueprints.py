@@ -1098,6 +1098,15 @@ def get_AgendaDiretoria_by_id(id):
     
     return _Get_services.get_by_id(id)
 
+@avaliable_route.route('/AgendaDiretoria/resultado', methods=['GET'])
+
+def get_AgendaDiretoria_resultado():    
+    from app.services.agenda_diretoria import AgendaDiretoriaServices
+    
+    _Get_services = AgendaDiretoriaServices()
+    
+    return _Get_services.get_contar_resultado()
+
 @avaliable_route.route('/AgendaDiretoria/Cadastro', methods=['POST'])
 
 def post_AgendaDiretoria():    
