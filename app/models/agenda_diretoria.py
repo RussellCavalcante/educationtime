@@ -62,7 +62,7 @@ class AgendaDiretoriaModel():
     def get_agenda_diretoria_resultado(*args, **kwargs):
         cursor = conn.cursor()
  
-        cursor.execute("""SELECT resultado, COUNT(resultado) as "resultado_contagem" FROM agenda_analise GROUP BY resultado;""")
+        cursor.execute("""SELECT resultado, COUNT(resultado) as 'resultado_contagem' FROM agenda_analise GROUP BY resultado;""")
         
         result = cursor.fetchall()
         cursor.close()
