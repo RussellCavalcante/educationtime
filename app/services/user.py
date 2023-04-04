@@ -201,7 +201,7 @@ class UserLogin(Resource):
         
             token_de_acesso = create_access_token(identity=1)
 
-            dateNow = date.today()
+            dateNow = datetime.today()
 
             UserModel.create_log_login(user[0], dateNow, navegador, ip)
 
@@ -218,7 +218,7 @@ class UserLogout(Resource):
     def post(self,*args, **kwargs):
         jwt_id = get_jwt()['jti']
         BLACKLIST.add(jwt_id)
-        dateNow = date.today()
+        dateNow = datetime.today()
         UserModel.update_log_login( dateNow, args[0] )
         return jsonify({'message' : 'Deslogado com sucesso!'}), 200  
     
