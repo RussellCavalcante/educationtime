@@ -72,13 +72,18 @@ class GetPlanoAula(Resource):
 
             dados = atributos.parse_args()
             
-            bimestre_escolar = dados['bimestre_escolar'].strip()
+            FK_escola_id = dados['FK_escola_id']
             ano = dados['ano'].strip()
             bimestre_escolar = dados['bimestre_escolar'].strip()
-            FK_unidade_tematica_id = dados['FK_unidade_tematica_id']
+            FK_etapa_ensino = dados['FK_etapa_ensino']
+            FK_turma_id = dados['FK_turma_id']
+            FK_componente_escola_profissional = dados['FK_componente_escola_profissional']
+            unidade_tematica = dados['unidade_tematica'].strip()
             conteudo = dados['conteudo'].strip()
+            resultado = dados['resultado']
+            sub_conteudo = dados['sub_conteudo']
             
-            planoAulaModel.update_planoaula(bimestre_escolar ,etapa_ensino, ano, FK_unidade_tematica_id, conteudo, args[0])
+            planoAulaModel.update_planoaula(FK_escola_id ,ano, bimestre_escolar, FK_etapa_ensino, FK_turma_id, FK_componente_escola_profissional, unidade_tematica, conteudo, resultado, args[0])
             return {'updated': bimestre_escolar }, 200
         except:
             return { 'error': 'verifique a requisição !' }, 400
