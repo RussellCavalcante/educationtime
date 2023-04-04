@@ -85,6 +85,13 @@ class GetPlanoAula(Resource):
             sub_conteudo = dados['sub_conteudo']
             
             planoAulaModel.update_planoaula(FK_escola_id ,ano, bimestre_escolar, FK_etapa_ensino, FK_turma_id, FK_componente_escola_profissional, unidade_tematica, conteudo, resultado, args[0])
+
+            planoAulaModel.delete_conteudo_plano_aula(args[0])
+            
+            for i , planoaula in enumerate(sub_conteudo['itens']):
+                planoAulaModel.create_conteudo_planoaula(planoaula['nome'], args[0])
+
+
             return {'updated': bimestre_escolar }, 200
         except:
             return { 'error': 'verifique a requisição !' }, 400
