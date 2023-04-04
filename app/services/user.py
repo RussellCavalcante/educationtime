@@ -24,6 +24,10 @@ atributos.add_argument('nome', type=str, help="campo obrigatorio")
 atributos.add_argument('email', type=str, help="campo de email e obrigatorio")
 atributos.add_argument('telefone', type=str, help="campo de telefone")
 atributos.add_argument('FK_perfil_id', type=int, help="campo de perfil_id")
+# atributos.add_argument('date', type=str, help="campo obrigatorio")
+atributos.add_argument('navegador', type=str, help="campo de email e obrigatorio")
+atributos.add_argument('ip', type=str, help="campo de telefone")
+atributos.add_argument('date_logout', type=str, help="campo de email e obrigatorio")
 
 
 class User(Resource):
@@ -184,7 +188,9 @@ class UserLogin(Resource):
             dados = atributos.parse_args()
 
             cpf = dados['cpf'].strip()
-            password = dados['password'].strip()
+            password = dados['password']
+            navegador = dados['navegador']
+            ip = dados['ip']
 
             user = UserModel.find_by_login(cpf)
             
@@ -194,7 +200,11 @@ class UserLogin(Resource):
                 return {'status': "login incorreto por favor refazer login"}, 400
         
             token_de_acesso = create_access_token(identity=1)
-            
+
+            dateNow = date.today()
+
+            UserModel.create_log_login(user[0], dateNow, navegador, ip)
+
             return {'acess_token': token_de_acesso,
                     'cpf': cpf,
                     'id': user[0]}, 200
@@ -205,9 +215,11 @@ class UserLogout(Resource):
     
     
     @jwt_required()
-    def post(self):
+    def post(self,*args, **kwargs):
         jwt_id = get_jwt()['jti']
         BLACKLIST.add(jwt_id)
+        dateNow = date.today()
+        UserModel.update_log_login( dateNow, args[0] )
         return jsonify({'message' : 'Deslogado com sucesso!'}), 200  
     
 class UserEdit(Resource):

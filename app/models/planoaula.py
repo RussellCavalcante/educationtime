@@ -74,6 +74,33 @@ class planoAulaModel():
                 listEstadosDict.append(res)   
             
         return listEstadosDict
+    
+    @classmethod
+    def get_agenda_plano_aula_by_last_id(*args, **kwargs):
+        cursor = conn.cursor()
+        
+ 
+        cursor.execute(f"SELECT TOP 1 * from plano_aula ORDER BY id DESC;")
+        
+        result = cursor.fetchall()
+        cursor.close()
+
+        listEstadosDict = []
+        for estadoTupla in result:
+            
+            tup1 = ('id', 'FK_escola_id', 'ano', 'bimestre_escolar', 'FK_etapa_ensino', 'FK_turma_id', 'FK_componente_escola_profissional_id', 'unidade_tematica', 'conteudo', 'resultado') 
+            tup2 = estadoTupla
+           
+            if len(tup1) == len(tup2): 
+                res = dict(zip(tup1, tup2))
+                # print(res)
+
+                listEstadosDict.append(res)   
+            
+        if len(listEstadosDict) != 0:
+            return listEstadosDict
+
+        return False
 
     @classmethod
     def create_planoaula(*args, **kwargs):
@@ -83,7 +110,25 @@ class planoAulaModel():
             # print(args[1], args[2], args[3])
             # input()
             
-            cursor.execute("insert into plano_aula ( bimestre_escolar, etapa_ensino, ano, FK_unidade_tematica_id, conteudo) values(?,?,?,?,?)",args[1], args[2], args[3], int(args[4]), args[5])
+            cursor.execute("insert into plano_aula ( FK_escola_id, ano, bimestre_escolar, FK_etapa_ensino, FK_turma_id, FK_componente_escola_profissional_id, unidade_tematica, conteudo, resultado) values(?,?,?,?,?,?,?,?,?)",args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8], args[9])
+            
+            conn.commit()
+            # conn.close()
+            # return 'created'
+            # rows = cursor.fetchall()
+        # except:
+        #     print(TypeError)
+        # #     return None
+
+    @classmethod
+    def create_conteudo_planoaula(*args, **kwargs):
+        # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
+        # try:
+            cursor = conn.cursor()
+            # print(args[1], args[2], args[3])
+            # input()
+            
+            cursor.execute("insert into conteudo_plano_aula ( nome, FK_plano_aula_id) values(?,?)",args[1], args[2])
             
             conn.commit()
             # conn.close()
