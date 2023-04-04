@@ -21,13 +21,13 @@ def Login():
 
 
 
-@avaliable_route.route('/Logout', methods=['POST'])
-def Logout():
+@avaliable_route.route('/Logout/<int:id>', methods=['POST'])
+def Logout(id):
     from app.services.user import UserLogout
 
     _logout_service = UserLogout()
 
-    return _logout_service.post()    
+    return _logout_service.post(id)    
 
 @avaliable_route.route('/Login/Cadastro', methods=['POST'])
 def register():
@@ -333,7 +333,7 @@ def get_planoaula_by(id):
     return _Get_services.get_by_id(id)
 
 
-@avaliable_route.route('/planoaula/inserir', methods=['POST'])
+@avaliable_route.route('/PlanoaAula/Cadastro', methods=['POST'])
 
 def post_plano_aula():    
     from app.services.planoaula import GetPlanoAula

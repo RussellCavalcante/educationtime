@@ -8,11 +8,16 @@ from app.blacklist import BLACKLIST
 
 atributos = reqparse.RequestParser()
 
+atributos.add_argument('FK_escola_id', type=int, help="campo obrigatorio ")
+atributos.add_argument('ano', type=str, help="campo obrigatorio")
 atributos.add_argument('bimestre_escolar', type=str, help="campo obrigatorio ")
-atributos.add_argument('etapa_ensino', type=str, help="campo obrigatorio")
-atributos.add_argument('ano', type=str, help="campo obrigatorio ")
-atributos.add_argument('FK_unidade_tematica_id', type=int, help="campo obrigatorio ")
+atributos.add_argument('FK_etapa_ensino', type=int, help="campo obrigatorio ")
+atributos.add_argument('FK_turma_id', type=int, help="campo obrigatorio ")
+atributos.add_argument('FK_componente_escola_profissional', type=int, help="campo obrigatorio ")
+atributos.add_argument('unidade_tematica', type=str, help="campo obrigatorio ")
 atributos.add_argument('conteudo', type=str, help="campo obrigatorio ")
+atributos.add_argument('resultado', type=str, help="campo obrigatorio ")
+atributos.add_argument('sub_conteudo', type=dict, help="campo obrigatorio ")
 
 
 class GetPlanoAula(Resource):
@@ -39,15 +44,25 @@ class GetPlanoAula(Resource):
 
             dados = atributos.parse_args()
             
-            bimestre_escolar = dados['bimestre_escolar'].strip()
-            etapa_ensino = dados['etapa_ensino'].strip()
+            FK_escola_id = dados['FK_escola_id']
             ano = dados['ano'].strip()
-            FK_unidade_tematica_id = dados['FK_unidade_tematica_id']
+            bimestre_escolar = dados['bimestre_escolar'].strip()
+            FK_etapa_ensino = dados['FK_etapa_ensino']
+            FK_turma_id = dados['FK_turma_id']
+            FK_componente_escola_profissional = dados['FK_componente_escola_profissional']
+            unidade_tematica = dados['unidade_tematica'].strip()
             conteudo = dados['conteudo'].strip()
+            resultado = dados['resultado']
+            sub_conteudo = dados['sub_conteudo']
             
-            planoAulaModel.create_planoaula(bimestre_escolar ,etapa_ensino, ano, FK_unidade_tematica_id, conteudo)
+            planoAulaModel.create_planoaula(FK_escola_id ,ano, bimestre_escolar, FK_etapa_ensino, FK_turma_id, FK_componente_escola_profissional, unidade_tematica, conteudo, resultado)
             
-            return  {'created': bimestre_escolar}, 201
+            planoaula = planoAulaModel.get_agenda_plano_aula_by_last_id(FK_escola_id)
+
+            for i , sub_conteudo in enumerate(sub_conteudo['itens']):
+                    planoAulaModel.create_conteudo_planoaula(sub_conteudo['nome'], planoaula[0]['id'])
+
+            return  {'created_plano_aula': bimestre_escolar}, 201
         except:
             return { 'error': 'verifique a requisição !' }, 400
     
@@ -58,8 +73,8 @@ class GetPlanoAula(Resource):
             dados = atributos.parse_args()
             
             bimestre_escolar = dados['bimestre_escolar'].strip()
-            etapa_ensino = dados['etapa_ensino'].strip()
             ano = dados['ano'].strip()
+            bimestre_escolar = dados['bimestre_escolar'].strip()
             FK_unidade_tematica_id = dados['FK_unidade_tematica_id']
             conteudo = dados['conteudo'].strip()
             

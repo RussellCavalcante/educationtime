@@ -285,6 +285,47 @@ class UserModel():
         # #     return None
 
     @classmethod
+    def create_log_login(*args, **kwargs):
+   
+            cursor = conn.cursor()
+            
+
+            conn.autocommit = True
+
+            cursor.execute("insert into log_autenticacao (FK_user_id , date , navegador , ip ) values(?,?,?,?)",args[1], args[2], args[3],args[4])
+            
+            conn.commit()
+            # conn.close()
+            # return 'created'
+            # rows = cursor.fetchall()
+        # except:
+        #     print(TypeError)
+        # #     return None
+
+    @classmethod
+    def update_log_login(*args, **kwargs):
+        # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
+        # try:
+            cursor = conn.cursor()
+            # print(args)
+            # input()
+            
+            cursor.execute('''
+                        UPDATE log_autenticacao
+                        SET date_logout = ?
+                        WHERE FK_user_id = ?
+                        ''', args[1], args[2]
+                        )
+            
+            conn.commit()
+            # conn.close()
+            # return 'created'
+            # rows = cursor.fetchall()
+        # except:
+        #     print(TypeError)
+        # #     return None
+
+    @classmethod
     def update_profissionais_educacao(*args, **kwargs):
         # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
         # try:
