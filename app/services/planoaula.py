@@ -34,7 +34,8 @@ class GetPlanoAula(Resource):
     def get_by_id(self, *args, **kwargs):
         try:
                 
-            return  planoAulaModel.get_planoaula_by_id(args[0]), 200
+            return  planoAulaModel.get_plano_aula_by_id(args[0]), 200
+        
         except:
             return { 'error': 'verifique a requisição !' }, 400
         

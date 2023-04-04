@@ -60,24 +60,25 @@ class planoAulaModel():
     @classmethod
     def get_plano_aula_by_id(*args, **kwargs):
         cursor = conn.cursor()
-        cursor.execute(f"""SELECT  agenda_diretoria.id, agenda_diretoria.FK_escola_id , agenda_diretoria.nome , 
-                            agenda_diretoria.prazo, agenda_analise.resultado, agenda_analise.titulo, agenda_analise.mensagem, agenda_diretoria.recursos, agenda_equipe.nome, escola.nome_escola, estado.nome,  municipio.FK_UF_id, municipio.nome, escola.FK_municipio_id
-                            FROM agenda_equipe  
-                            INNER JOIN agenda_diretoria ON agenda_equipe.FK_agenda_diretoria_id = agenda_diretoria.id
-                            INNER JOIN agenda_analise ON agenda_diretoria.id = agenda_analise.FK_agenda_diretoria_id
-                            INNER JOIN escola ON agenda_diretoria.FK_escola_id = escola.id 
-                            INNER JOIN municipio ON escola.FK_municipio_id = municipio.id
+        cursor.execute(f"""SELECT conteudo_plano_aula.FK_plano_aula_id, plano_aula.FK_escola_id, municipio.id  ,municipio.nome, estado.id, 
+                            estado.nome, estado.uf , ano, bimestre_escolar, FK_etapa_ensino , FK_turma_id, 
+                            plano_aula.FK_componente_escola_profissional_id, unidade_tematica, conteudo, resultado, conteudo_plano_aula.nome
+                            FROM conteudo_plano_aula 
+                            INNER JOIN plano_aula ON conteudo_plano_aula.FK_plano_aula_id = plano_aula.id
+                            INNER JOIN municipio ON plano_aula.FK_escola_id = municipio.id
                             INNER JOIN estado ON municipio.FK_UF_id = estado.id
-                            WHERE agenda_equipe.FK_agenda_diretoria_id =  {args[1]};""") 
-        
+
+                            WHERE conteudo_plano_aula.FK_plano_aula_id = {args[1]};""") 
+         
         result = cursor.fetchall()
         cursor.close()
         dictFinal = {}
         listEstadosDict = []
         for estadoTupla in result:
             
-            tup1 = ('id', 'FK_escola_id' , 'nome' , 
-                    'prazo', 'resultado','titulo', 'mensagem', 'recursos', 'agenda_equipe_nome',  'nome_escola' ,'estado_nome', 'FK_UF_id', 'municipio_nome', 'FK_municipio_id') 
+            tup1 = ('conteudo_plano_aula_FK_plano_aula_id', 'plano_aula_FK_escola_id', 'FK_municipio_id'  ,'municipio_nome', 'FK_estado_id', 
+                            'estado_nome', 'estado_uf' , 'ano', 'bimestre_escolar', 'FK_etapa_ensino' , 'FK_turma_id', 
+                            'plano_aula_FK_componente_escola_profissional_id', 'unidade_tematica', 'conteudo', 'resultado', 'nome') 
             tup2 = estadoTupla
 
             if len(tup1) == len(tup2): 
@@ -90,27 +91,27 @@ class planoAulaModel():
             dictFatores = {}
             for chave in Dict:
                 
-                if 'equipe' not in dictFinal.keys():
-                    if chave == 'agenda_equipe_nome':
+                if 'sub_conteudo' not in dictFinal.keys():
+                    if chave == 'nome':
                         
-                        dictFinal['equipe'] = {'itens':[]}
+                        dictFinal['sub_conteudo'] = {'itens':[]}
                         dictFatores[chave] = Dict[chave]
                         
-                        dictFinal['equipe']['itens'].append(dictFatores)
+                        dictFinal['sub_conteudo']['itens'].append(dictFatores)
                        
                 else:
-                    if chave == 'agenda_equipe_nome':
+                    if chave == 'nome':
                         
                         dictFatores[chave] = Dict[chave]
                    
-                        dictFinal['equipe']['itens'].append(dictFatores)
+                        dictFinal['sub_conteudo']['itens'].append(dictFatores)
                         
                 if chave in dictFinal.keys():
                     continue
 
                     
                 
-                if chave != 'agenda_equipe_nome':
+                if chave != 'nome':
                     dictFinal[chave] = Dict[chave] 
         
         return dictFinal
