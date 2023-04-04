@@ -303,6 +303,34 @@ class UserModel():
         # #     return None
 
     @classmethod
+    def get_log_autenticacao_by_last_id(*args, **kwargs):
+        cursor = conn.cursor()
+        
+ 
+        cursor.execute(f"SELECT TOP 1 * from log_autenticacao WHERE FK_user_id = {args[1]} ORDER BY id DESC ;")
+        
+        result = cursor.fetchall()
+        cursor.close()
+
+        listEstadosDict = []
+        for estadoTupla in result:
+            
+            tup1 = ('id', 'FK_user_id', 'date', 'navegador', 'ip', 'date_logout') 
+            tup2 = estadoTupla
+           
+            if len(tup1) == len(tup2): 
+                res = dict(zip(tup1, tup2))
+                # print(res)
+
+                listEstadosDict.append(res)   
+            
+        if len(listEstadosDict) != 0:
+            return listEstadosDict
+
+        return False
+
+
+    @classmethod
     def update_log_login(*args, **kwargs):
         # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
         # try:
@@ -313,7 +341,7 @@ class UserModel():
             cursor.execute('''
                         UPDATE log_autenticacao
                         SET date_logout = ?
-                        WHERE FK_user_id = ?
+                        WHERE id = ?
                         ''', args[1], args[2]
                         )
             

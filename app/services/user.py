@@ -219,7 +219,8 @@ class UserLogout(Resource):
         jwt_id = get_jwt()['jti']
         BLACKLIST.add(jwt_id)
         dateNow = datetime.today()
-        UserModel.update_log_login( dateNow, args[0] )
+        logId = UserModel.get_log_autenticacao_by_last_id(args[0])
+        UserModel.update_log_login( dateNow, logId[0]['id'] )
         return jsonify({'message' : 'Deslogado com sucesso!'}), 200  
     
 class UserEdit(Resource):
