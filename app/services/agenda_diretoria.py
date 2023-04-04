@@ -30,7 +30,7 @@ class AgendaDiretoriaServices(Resource):
     @jwt_required()
     def get_contar_resultado(self, *args, **kwargs):
         try:
-            return  AgendaDiretoriaModel.get_agenda_diretoria_resultado(args[0]), 200
+            return  AgendaDiretoriaModel.get_agenda_diretoria_resultado(), 200
         except:
             return { 'error': 'verifique a requisição !' }, 400
 
