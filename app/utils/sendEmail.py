@@ -81,6 +81,7 @@ def sendEmail(hash, emailSend):
         </style>
     </head>
     """
+    
     htmlcorpo =  f"""\
     <body>
         
@@ -113,7 +114,7 @@ def sendEmail(hash, emailSend):
     """
 
     # add in the message body
-    msg.attach(MIMEText(htmltopo + htmlcorpo, 'plain'))
+    msg.attach(MIMEText(htmltopo + htmlcorpo, 'html'))
 
     # send the message via the server set up earlier.
     s.send_message(msg)
