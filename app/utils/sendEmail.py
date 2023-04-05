@@ -2,7 +2,7 @@
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-import win32com.client as win32
+# import win32com.client as win32
 
 # criar a integração com o outlook
 def sendEmail(hash, emailSend):
