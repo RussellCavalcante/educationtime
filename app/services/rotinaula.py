@@ -8,13 +8,11 @@ from app.blacklist import BLACKLIST
 
 atributos = reqparse.RequestParser()
 
-atributos.add_argument('nome', type=str, help="campo obrigatorio ")
-atributos.add_argument('FK_turma_id', type=int, help="campo obrigatorio")
-atributos.add_argument('FK_profissional_id', type=str, help="campo obrigatorio ")
-atributos.add_argument('FK_momento_id', type=int, help="campo obrigatorio ")
-atributos.add_argument('FK_componente_curricular_id', type=str, help="campo obrigatorio ")
-atributos.add_argument('update_date', type=str, help="campo obrigatorio ")
-atributos.add_argument('current_date', type=str, help="campo obrigatorio ")
+atributos.add_argument('nome_rotina', type=str, help="campo obrigatorio ")
+atributos.add_argument('FK_escola_id', type=int, help="campo obrigatorio")
+atributos.add_argument('ano', type=str, help="campo obrigatorio ")
+atributos.add_argument('momentos', type=dict, help="campo obrigatorio ")
+atributos.add_argument('turma_compoenente', type=dict, help="campo obrigatorio ")
 
 
 class GetrotinaAula(Resource):
@@ -41,17 +39,21 @@ class GetrotinaAula(Resource):
 
             dados = atributos.parse_args()
             
-            nome = dados['nome'].strip()
-            FK_turma_id = dados['FK_turma_id']
-            FK_profissional_id = dados['FK_profissional_id']
-            FK_momento_id = dados['FK_momento_id']
-            FK_componente_curricular_id = dados['FK_componente_curricular_id']
-            update_date = dados['update_date'].strip()
-            current_date = dados['current_date'].strip()
+            nome_rotina = dados['nome_rotina'].strip()
+            FK_escola_id = dados['FK_escola_id']
+            ano_letivo = dados['ano']
+            momentos = dados['momentos']
+            turma_compoenente = dados['turma_compoenente']
             
-            RotinaAulaModel.create_rotinaaula(nome ,int(FK_turma_id), int(FK_profissional_id),  int(FK_momento_id), int(FK_componente_curricular_id), str(update_date), str(current_date))
+            rotina_aula = RotinaAulaModel.create_rotinaaula(nome_rotina, FK_escola_id, ano_letivo)
             
-            return  {'created': nome}, 201
+            for i , momento in enumerate(momentos['itens']):
+                RotinaAulaModel.create_momento( momento['nome_momento'],momento['ordem'], momento['descricao'])
+            
+            for i , turma_compoenente in enumerate(turma_compoenente['itens']):
+                RotinaAulaModel.associate_rotina_componente_turma( rotina_aula, turma_compoenente['tumar_profissional_componente'])
+            
+            return  {'id': rotina_aula ,'nome_rotina': nome_rotina}, 201
         
         except:
             return { 'error': 'verifique a requisição !' }, 400

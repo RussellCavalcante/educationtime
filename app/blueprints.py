@@ -370,7 +370,7 @@ def get_rotinaula_by(id):
     return _Get_services.get_by_id(id)
 
 
-@avaliable_route.route('/rotinaaula/inserir', methods=['POST'])
+@avaliable_route.route('/RotinaAula/Cadastro', methods=['POST'])
 
 def post_rotin_aula():    
     from app.services.rotinaula import GetrotinaAula
