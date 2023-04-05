@@ -1,7 +1,8 @@
 from flask_restful import Resource, reqparse
 from app.models.profissionais_editora import ProfissionaisEditoraModel
 from app.models.user import UserModel
-from app.utils.sendEmail import sendEmail
+from app.utils.contrucotorEmail import constructorEmail
+from app.utils.sendEmail import sendEmailModel
 from datetime import date
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt
 # from app.config import conn
@@ -82,7 +83,9 @@ class ProfissionaisEditoraServices(Resource):
 
             hashconvite = UserModel.password_encrypted(cpf, salt)
 
-            sendEmail(hashconvite, email)
+            body = sendEmailModel.conviteAcesso(hashconvite)
+
+            constructorEmail(email, body)
 
             UserModel.create_convite_acesso(user[0], str(today), hashconvite, salt)
 
