@@ -289,9 +289,12 @@ class RotinaAulaModel():
             # print(args)
             # input()
             
-            cursor.execute("insert into rotina_aula_momento ( FK_rotina_aula_id, FK_momento_id) values(?,?);",args[1], args[2])
+            cursor.execute("insert into rotina_aula_momento ( FK_rotina_aula_id, FK_momento_id) OUTPUT INSERTED.id values(?,?);",args[1], args[2])
             
-            conn.commit()
+            result = cursor.fetchone()
+            cursor.commit()
+            cursor.close()
+            return result[0]
             # conn.close()
             # return 'created'
             # rows = cursor.fetchall()

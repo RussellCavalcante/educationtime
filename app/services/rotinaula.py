@@ -52,9 +52,9 @@ class GetrotinaAula(Resource):
                 RotinaAulaModel.associate_rotina_aula_momento(rotina_aula, momento_id)
 
             for i , turma_compoenente in enumerate(turma_compoenente['itens']):
-                RotinaAulaModel.associate_rotina_componente_turma( rotina_aula, turma_compoenente['tumar_profissional_componente'])
+                rotina_componente = RotinaAulaModel.associate_rotina_componente_turma( rotina_aula, turma_compoenente['tumar_profissional_componente'])
             
-            return  {'id': rotina_aula ,'nome_rotina': nome_rotina}, 201
+            return  {'id': rotina_componente ,'nome_rotina': nome_rotina}, 201
         
         except:
             return { 'error': 'verifique a requisição !' }, 400
