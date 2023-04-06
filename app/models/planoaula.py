@@ -76,9 +76,9 @@ class planoAulaModel():
         listEstadosDict = []
         for estadoTupla in result:
             
-            tup1 = ('conteudo_plano_aula_FK_plano_aula_id', 'plano_aula_FK_escola_id', 'FK_municipio_id'  ,'municipio_nome', 'FK_estado_id', 
+            tup1 = ('conteudo_plano_aula_FK_plano_aula_id', 'FK_escola_id', 'FK_municipio_id'  ,'municipio_nome', 'FK_estado_id', 
                             'estado_nome', 'estado_uf' , 'ano', 'bimestre_escolar', 'FK_etapa_ensino' , 'FK_turma_id', 
-                            'plano_aula_FK_componente_escola_profissional_id', 'unidade_tematica', 'conteudo', 'resultado', 'nome') 
+                            'plano_aula_FK_componente_escola_profissional_id', 'unidade_tematica', 'conteudo', 'resultado', 'nome')
             tup2 = estadoTupla
 
             if len(tup1) == len(tup2): 
