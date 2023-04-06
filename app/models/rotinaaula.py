@@ -63,27 +63,69 @@ class RotinaAulaModel():
     @classmethod
     def get_rotinaaula_by_id(*args, **kwargs):
         cursor = conn.cursor()
+        
  
-        cursor.execute(f"select * from rotina_aula where id = {args[1]};")
+        cursor.execute(f"""SELECT rotina_componente_turma.id, estado.id ,estado.uf , municipio.id, municipio.nome , rotina_aula.FK_escola_id, escola.nome_escola , rotina_aula.nome, turma.id, users.nome, 
+                        turma.FK_etapa_ensino_id , etapa_ensino.nome, componente_curricular.nome, rotina_aula.ano_letivo, turma.nome_turma, turno.nome
+                        FROM rotina_componente_turma
+                        INNER JOIN rotina_aula ON rotina_componente_turma.FK_rotina_aula = rotina_aula.id
+                        INNER JOIN turma_componente_educador ON rotina_componente_turma.FK_turma_componente_educador_id = turma_componente_educador.id
+                        INNER JOIN profissional_escola_componente ON turma_componente_educador.FK_profissional_componente_id = profissional_escola_componente.id
+                        INNER JOIN users ON profissional_escola_componente.FK_user_id = users.id
+                        INNER JOIN componente_curricular ON profissional_escola_componente.FK_componente_id = componente_curricular.id
+                        INNER JOIN turma ON turma_componente_educador.FK_turma_id = turma.id
+                        INNER JOIN etapa_ensino ON turma.FK_etapa_ensino_id = etapa_ensino.id
+                        INNER JOIN escola ON rotina_aula.FK_escola_id = escola.id
+                        INNER JOIN municipio ON escola.FK_municipio_id = municipio.id
+                        INNER JOIN estado ON municipio.FK_UF_id = estado.id
+                        INNER JOIN turno ON turma.FK_turno_id = turno.id
+                        WHERE rotina_componente_turma.id = {args[1]};""")
         
         result = cursor.fetchall()
-        cursor.close()
-
-        # print(result)
-        # input()
-        listEstadosDict = []
+        cursor.close() 
+        dictFinal = {}
+        listEstadosDict = [] 
         for estadoTupla in result:
             
-            tup1 = ('id', 'nome','FK_turma_id', 'FK_profissional_id', 'FK_momento_id', 'FK_componente_curricular_id', 'update_date', 'current_date') 
+            tup1 = ('id', 'FK_uf_id' ,'uf' , 'FK_municipio_id', 'municipio_nome' , 'FK_escola_id', 'nome_escola' , 'rotina_aula_nome', 'FK_turma_id', 'educador_nome', 
+                        'FK_etapa_ensino_id' , 'etapa_ensino_nome', 'componente_curricular_nome', 'ano', 'nome_turma', 'turno_nome') 
             tup2 = estadoTupla
-           
+
             if len(tup1) == len(tup2): 
                 res = dict(zip(tup1, tup2))
-                # print(res)
-
                 listEstadosDict.append(res)   
             
-        return listEstadosDict
+
+        for Dict in listEstadosDict:
+        
+            dictFatores = {}
+            for chave in Dict:
+                
+                if 'Itens' not in dictFinal.keys():
+                    if chave == 'FK_fatores_id':
+                        
+                        dictFinal['Itens'] = {'itens':[]}
+                        dictFatores[chave] = Dict[chave]
+                       
+                else:
+                    if chave == 'FK_fatores_id' or chave == 'nome' or chave == 'score':
+                      
+                        dictFatores[chave] = Dict[chave]
+                   
+                    if chave == 'score':
+                        dictFinal['Itens']['itens'].append(dictFatores)
+                        
+                if chave in dictFinal.keys():
+                    continue
+
+                    
+                if chave != 'FK_fatores_id':
+                    if chave != 'nome':
+                        if chave != 'score':
+                            dictFinal[chave] = Dict[chave] 
+
+                
+        return dictFinal
 
     @classmethod
     def get_rotina_aula_by_last_id(*args, **kwargs):
@@ -156,6 +198,23 @@ class RotinaAulaModel():
         # except:
         #     print(TypeError)
         # #     return None
+    @classmethod
+    def associate_rotina_aula_momento(*args, **kwargs):
+        # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
+        # try:
+            cursor = conn.cursor()
+            # print(args)
+            # input()
+            
+            cursor.execute("insert into rotina_aula_momento ( FK_rotina_aula_id, FK_momento_id) values(?,?);",args[1], args[2])
+            
+            conn.commit()
+            # conn.close()
+            # return 'created'
+            # rows = cursor.fetchall()
+        # except:
+        #     print(TypeError)
+        # #     return None
 
     @classmethod
     def associate_rotina_componente_turma(*args, **kwargs):
@@ -183,9 +242,12 @@ class RotinaAulaModel():
             # print(args)
             # input()
             
-            cursor.execute("insert into momento ( nome_momento, ordem, descricao) values(?,?,?);",args[1], args[2], args[3])
+            cursor.execute("insert into momento ( nome_momento, ordem, descricao) OUTPUT INSERTED.id values(?,?,?);",args[1], args[2], args[3])
             
-            conn.commit()
+            result = cursor.fetchone()
+            cursor.commit()
+            cursor.close()
+            return result[0]
             # conn.close()
             # return 'created'
             # rows = cursor.fetchall()
@@ -199,8 +261,8 @@ class RotinaAulaModel():
         # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
         # try:
             cursor = conn.cursor()
-            print(args)
-            input()
+            # print(args)
+            # input()
             
             cursor.execute("insert into rotina_aula_momento ( FK_rotina_aula_id, FK_momento_id) values(?,?);",args[1], args[2])
             

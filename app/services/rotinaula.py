@@ -48,8 +48,9 @@ class GetrotinaAula(Resource):
             rotina_aula = RotinaAulaModel.create_rotinaaula(nome_rotina, FK_escola_id, ano_letivo)
             
             for i , momento in enumerate(momentos['itens']):
-                RotinaAulaModel.create_momento( momento['nome_momento'],momento['ordem'], momento['descricao'])
-            
+                momento_id = RotinaAulaModel.create_momento( momento['nome_momento'],momento['ordem'], momento['descricao'])
+                RotinaAulaModel.associate_rotina_aula_momento(rotina_aula, momento_id)
+
             for i , turma_compoenente in enumerate(turma_compoenente['itens']):
                 RotinaAulaModel.associate_rotina_componente_turma( rotina_aula, turma_compoenente['tumar_profissional_componente'])
             
