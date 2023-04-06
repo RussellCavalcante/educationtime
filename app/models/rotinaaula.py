@@ -65,21 +65,26 @@ class RotinaAulaModel():
         cursor = conn.cursor()
         
  
-        cursor.execute(f"""SELECT rotina_componente_turma.id, estado.id ,estado.uf , municipio.id, municipio.nome , rotina_aula.FK_escola_id, escola.nome_escola , rotina_aula.nome, turma.id, users.nome, 
-                        turma.FK_etapa_ensino_id , etapa_ensino.nome, componente_curricular.nome, rotina_aula.ano_letivo, turma.nome_turma, turno.nome
-                        FROM rotina_componente_turma
-                        INNER JOIN rotina_aula ON rotina_componente_turma.FK_rotina_aula = rotina_aula.id
-                        INNER JOIN turma_componente_educador ON rotina_componente_turma.FK_turma_componente_educador_id = turma_componente_educador.id
-                        INNER JOIN profissional_escola_componente ON turma_componente_educador.FK_profissional_componente_id = profissional_escola_componente.id
-                        INNER JOIN users ON profissional_escola_componente.FK_user_id = users.id
-                        INNER JOIN componente_curricular ON profissional_escola_componente.FK_componente_id = componente_curricular.id
-                        INNER JOIN turma ON turma_componente_educador.FK_turma_id = turma.id
-                        INNER JOIN etapa_ensino ON turma.FK_etapa_ensino_id = etapa_ensino.id
-                        INNER JOIN escola ON rotina_aula.FK_escola_id = escola.id
-                        INNER JOIN municipio ON escola.FK_municipio_id = municipio.id
-                        INNER JOIN estado ON municipio.FK_UF_id = estado.id
-                        INNER JOIN turno ON turma.FK_turno_id = turno.id
-                        WHERE rotina_componente_turma.id = {args[1]};""")
+        cursor.execute(f"""SELECT rotina_componente_turma.id, estado.id ,estado.uf , municipio.id, municipio.nome ,
+                            rotina_aula.FK_escola_id, escola.nome_escola , rotina_aula.nome,
+                            momento.ordem, momento.nome_momento, momento.descricao, turma.id, users.nome, 
+                            turma.FK_etapa_ensino_id , etapa_ensino.nome, componente_curricular.nome, 
+                            rotina_aula.ano_letivo, turma.nome_turma, turno.nome
+                            FROM rotina_componente_turma
+                            INNER JOIN rotina_aula ON rotina_componente_turma.FK_rotina_aula = rotina_aula.id
+                            INNER JOIN rotina_aula_momento ON rotina_aula.id = rotina_aula_momento.FK_rotina_aula_id
+                            INNER JOIN momento ON rotina_aula_momento.FK_momento_id = momento.id
+                            INNER JOIN turma_componente_educador ON rotina_componente_turma.FK_turma_componente_educador_id = turma_componente_educador.id
+                            INNER JOIN profissional_escola_componente ON turma_componente_educador.FK_profissional_componente_id = profissional_escola_componente.id
+                            INNER JOIN users ON profissional_escola_componente.FK_user_id = users.id
+                            INNER JOIN componente_curricular ON profissional_escola_componente.FK_componente_id = componente_curricular.id
+                            INNER JOIN turma ON turma_componente_educador.FK_turma_id = turma.id
+                            INNER JOIN etapa_ensino ON turma.FK_etapa_ensino_id = etapa_ensino.id
+                            INNER JOIN escola ON rotina_aula.FK_escola_id = escola.id
+                            INNER JOIN municipio ON escola.FK_municipio_id = municipio.id
+                            INNER JOIN estado ON municipio.FK_UF_id = estado.id
+                            INNER JOIN turno ON turma.FK_turno_id = turno.id
+                            WHERE rotina_componente_turma.id = {args[1]};""")
         
         result = cursor.fetchall()
         cursor.close() 
@@ -87,7 +92,7 @@ class RotinaAulaModel():
         listEstadosDict = [] 
         for estadoTupla in result:
             
-            tup1 = ('id', 'FK_uf_id' ,'uf' , 'FK_municipio_id', 'municipio_nome' , 'FK_escola_id', 'nome_escola' , 'rotina_aula_nome', 'FK_turma_id', 'educador_nome', 
+            tup1 = ('id', 'FK_uf_id' ,'uf' , 'FK_municipio_id', 'municipio_nome' , 'FK_escola_id', 'nome_escola' , 'rotina_aula_nome','ordem', 'nome_momento', 'descricao', 'FK_turma_id', 'educador_nome', 
                         'FK_etapa_ensino_id' , 'etapa_ensino_nome', 'componente_curricular_nome', 'ano', 'nome_turma', 'turno_nome') 
             tup2 = estadoTupla
 
@@ -95,33 +100,53 @@ class RotinaAulaModel():
                 res = dict(zip(tup1, tup2))
                 listEstadosDict.append(res)   
             
+        AceptKeysListTurmaCompoenente = {'FK_turma_id':int, 'educador_nome':str, 
+                        'FK_etapa_ensino_id':int , 'etapa_ensino_nome':str, 'componente_curricular_nome':str, 'ano':str, 'nome_turma':str, 'turno_nome':str}
+
+        NotAceptKeyForStart = {'ordem':str, 'nome_momento':str,'descricao':str,'FK_turma_id':int, 'educador_nome':str, 'FK_etapa_ensino_id':int , 'etapa_ensino_nome':str, 
+                               'componente_curricular_nome':str, 'ano':str, 'nome_turma':str, 'turno_nome':str}
 
         for Dict in listEstadosDict:
         
-            dictFatores = {}
+            dictMmentos = {}
+            turma_compoenenteDict = {}
+            
             for chave in Dict:
                 
-                if 'Itens' not in dictFinal.keys():
-                    if chave == 'FK_fatores_id':
+                if 'momentos' not in dictFinal.keys():
+                    if chave == 'ordem':
                         
-                        dictFinal['Itens'] = {'itens':[]}
-                        dictFatores[chave] = Dict[chave]
+                        dictFinal['momentos'] = {'itens':[]}
+                        dictMmentos[chave] = Dict[chave]
                        
                 else:
-                    if chave == 'FK_fatores_id' or chave == 'nome' or chave == 'score':
+                    if chave == 'ordem' or chave == 'nome_momento' or chave == 'descricao':
                       
-                        dictFatores[chave] = Dict[chave]
+                        dictMmentos[chave] = Dict[chave]
                    
-                    if chave == 'score':
-                        dictFinal['Itens']['itens'].append(dictFatores)
+                    if chave == 'descricao':
+                        dictFinal['momentos']['itens'].append(dictMmentos)
+
+                if 'turma_compoenente' not in dictFinal.keys():
+                    if chave == 'FK_turma_id':
+                        
+                        dictFinal['turma_compoenente'] = {'itens':[]}
+                        turma_compoenenteDict[chave] = Dict[chave]
+                       
+                else:
+                    if chave in AceptKeysListTurmaCompoenente.keys() :
+                      
+                        turma_compoenenteDict[chave] = Dict[chave]
+                   
+                    if chave == 'turno_nome':
+                        dictFinal['turma_compoenente']['itens'].append(turma_compoenenteDict)
                         
                 if chave in dictFinal.keys():
                     continue
 
                     
-                if chave != 'FK_fatores_id':
-                    if chave != 'nome':
-                        if chave != 'score':
+                if chave not in NotAceptKeyForStart.keys():
+                    
                             dictFinal[chave] = Dict[chave] 
 
                 
