@@ -62,12 +62,18 @@ class planoAulaModel():
         cursor = conn.cursor()
         cursor.execute(f"""SELECT conteudo_plano_aula.FK_plano_aula_id, plano_aula.FK_escola_id, municipio.id  ,municipio.nome, estado.id, 
                             estado.nome, estado.uf , ano, bimestre_escolar, FK_etapa_ensino , FK_turma_id, 
-                            plano_aula.FK_componente_escola_profissional_id, unidade_tematica, conteudo, resultado, conteudo_plano_aula.nome
+                            plano_aula.FK_componente_escola_profissional_id, unidade_tematica, conteudo, resultado, conteudo_plano_aula.nome, 
+                            nome_escola,
+                            area_conhecimento.id, area_conhecimento.nome,
+                            componente_curricular.id, componente_curricular.nome
                             FROM conteudo_plano_aula 
                             INNER JOIN plano_aula ON conteudo_plano_aula.FK_plano_aula_id = plano_aula.id
-                            INNER JOIN municipio ON plano_aula.FK_escola_id = municipio.id
+                            INNER JOIN escola ON plano_aula.FK_escola_id = escola.id
+                            INNER JOIN profissional_escola_componente ON  plano_aula.FK_componente_escola_profissional_id = profissional_escola_componente.id
+                            INNER JOIN componente_curricular ON componente_curricular.id = profissional_escola_componente.FK_componente_id
+                            INNER JOIN area_conhecimento ON area_conhecimento.id = componente_curricular.FK_area_conhecimento_id
+                            INNER JOIN municipio ON escola.FK_municipio_id = municipio.id
                             INNER JOIN estado ON municipio.FK_UF_id = estado.id
-
                             WHERE conteudo_plano_aula.FK_plano_aula_id = {args[1]};""") 
          
         result = cursor.fetchall()
@@ -76,9 +82,10 @@ class planoAulaModel():
         listEstadosDict = []
         for estadoTupla in result:
             
-            tup1 = ('conteudo_plano_aula_FK_plano_aula_id', 'FK_escola_id', 'FK_municipio_id'  ,'municipio_nome', 'FK_estado_id', 
-                            'estado_nome', 'estado_uf' , 'ano', 'bimestre_escolar', 'FK_etapa_ensino' , 'FK_turma_id', 
-                            'plano_aula_FK_componente_escola_profissional_id', 'unidade_tematica', 'conteudo', 'resultado', 'nome')
+            tup1 = ('conteudo_plano_aula_FK_plano_aula_id', 'FK_escola_id', 'FK_municipio_id'  ,'municipio_nome', 'FK_UF_id', 
+                            'nome_uf', 'estado_uf' , 'ano', 'bimestre_escolar', 'FK_etapa_ensino' , 'FK_turma_id', 
+                            'plano_aula_FK_componente_escola_profissional_id', 'unidade_tematica', 'conteudo', 'resultado', 'nome', 'nome_escola', 'area_conhecimento_id', 'area_conhecimento_nome',
+                            'componente_curricular_id', 'componente_curricular_nome')
             tup2 = estadoTupla
 
             if len(tup1) == len(tup2): 
