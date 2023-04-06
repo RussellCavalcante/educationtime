@@ -83,7 +83,7 @@ class planoAulaModel():
         for estadoTupla in result:
             
             tup1 = ('conteudo_plano_aula_FK_plano_aula_id', 'FK_escola_id', 'FK_municipio_id'  ,'municipio_nome', 'FK_UF_id', 
-                            'nome_uf', 'estado_uf' , 'ano', 'bimestre_escolar', 'FK_etapa_ensino' , 'FK_turma_id', 
+                            'estado_nome', 'estado_uf' , 'ano', 'bimestre_escolar', 'FK_etapa_ensino' , 'FK_turma_id', 
                             'plano_aula_FK_componente_escola_profissional_id', 'unidade_tematica', 'conteudo', 'resultado', 'nome', 'nome_escola', 'area_conhecimento_id', 'area_conhecimento_nome',
                             'componente_curricular_id', 'componente_curricular_nome')
             tup2 = estadoTupla
