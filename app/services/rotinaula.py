@@ -61,7 +61,7 @@ class GetrotinaAula(Resource):
     
     @jwt_required()
     def update(self, *args, **kwargs):
-        # try:
+        try:
 
             dados = atributos.parse_args()
             
@@ -72,18 +72,13 @@ class GetrotinaAula(Resource):
             turma_compoenente = dados['turma_compoenente']
             idRotina = RotinaAulaModel.get_rotina_aula_by_rotina_componente_id(args[0])
 
-            # print(idRotina)
-            # input()
             
             RotinaAulaModel.update_rotinaaula(nome_rotina, FK_escola_id, ano_letivo, idRotina[0])
 
             momento_id_get = RotinaAulaModel.get_momento_id_by_rotina_aula(idRotina[0])
 
-            # print(momento_id_get)
-            # input()
             for id_moment in momento_id_get:
-                # print(id_moment)
-                # input()
+        
                 RotinaAulaModel.delete_rotina_aula_momento(id_moment)
 
                 RotinaAulaModel.delete_momentos(id_moment)
@@ -93,10 +88,6 @@ class GetrotinaAula(Resource):
 
             for i , momento in enumerate(momentos['itens']):
                 momento_id = RotinaAulaModel.create_momento( momento['nome_momento'],momento['ordem'], momento['descricao'])
-
-                # print(momento_id)
-                # input()
-
 
 
                 RotinaAulaModel.associate_rotina_aula_momento(idRotina[0], momento_id)
@@ -108,5 +99,5 @@ class GetrotinaAula(Resource):
             
             return  {'id': rotina_componente ,'nome_rotina': nome_rotina}, 201
 
-        # except:
-        #     return { 'error': 'verifique a requisição !' }, 400
+        except:
+            return { 'error': 'verifique a requisição !' }, 400
