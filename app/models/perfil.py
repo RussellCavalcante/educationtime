@@ -53,28 +53,110 @@ class   PerfilModel():
     @classmethod
     def get_perfil_by_id(*args, **kwargs):
         cursor = conn.cursor()
+        
  
-        cursor.execute(f"select * from profiles where id = {args[1]};")
+        cursor.execute(f"""SELECT profiles.id, profile_name, FK_roles_id, profile_roles.valor FROM profile_roles
+                            INNER JOIN profiles ON profile_roles.FK_profile_id = profiles.id
+                            WHERE profiles.id = {args[1]};""")
         
         result = cursor.fetchall()
-        cursor.close()
-
-        # print(result)
-        # input()
-        listEstadosDict = []
+        cursor.close() 
+        dictFinal = {}
+        listEstadosDict = [] 
         for estadoTupla in result:
             
-            tup1 = ('id', 'profile_name') 
+            tup1 = ('id', 'profile_name', 'FK_roles_id', 'valor') 
             tup2 = estadoTupla
-           
+
             if len(tup1) == len(tup2): 
                 res = dict(zip(tup1, tup2))
-                # print(res)
-
                 listEstadosDict.append(res)   
             
-        return listEstadosDict
 
+        for Dict in listEstadosDict:
+        
+            dictFatores = {}
+            for chave in Dict:
+                
+                if 'Itens' not in dictFinal.keys():
+                    if chave == 'FK_roles_id':
+                        
+                        dictFinal['Itens'] = {'itens':[]}
+                        dictFatores[chave] = Dict[chave]
+                       
+                else:
+                    if chave == 'FK_roles_id' or chave == 'valor':
+                      
+                        dictFatores[chave] = Dict[chave]
+                   
+                    if chave == 'valor':
+                        dictFinal['Itens']['itens'].append(dictFatores)
+                        
+                if chave in dictFinal.keys():
+                    continue
+
+                    
+                if chave != 'FK_roles_id':
+                    if chave != 'valor':
+                        dictFinal[chave] = Dict[chave] 
+
+                
+        return dictFinal
+
+    @classmethod
+    def get_perfil_by_user_id(*args, **kwargs):
+        cursor = conn.cursor()
+        
+ 
+        cursor.execute(f"""SELECT profiles.id, profile_name, FK_roles_id, profile_roles.valor FROM profile_roles
+                            INNER JOIN profiles ON profile_roles.FK_profile_id = profiles.id
+                            INNER JOIN user_profiles ON profiles.id = user_profiles.FK_profile_id
+                            INNER JOIN users ON user_profiles.FK_user_id = users.id
+                            WHERE users.id = {args[1]};""")
+        
+        result = cursor.fetchall()
+        cursor.close() 
+        dictFinal = {}
+        listEstadosDict = [] 
+        for estadoTupla in result:
+            
+            tup1 = ('id', 'profile_name', 'FK_roles_id', 'valor') 
+            tup2 = estadoTupla
+
+            if len(tup1) == len(tup2): 
+                res = dict(zip(tup1, tup2))
+                listEstadosDict.append(res)   
+            
+
+        for Dict in listEstadosDict:
+        
+            dictFatores = {}
+            for chave in Dict:
+                
+                if 'Itens' not in dictFinal.keys():
+                    if chave == 'FK_roles_id':
+                        
+                        dictFinal['Itens'] = {'itens':[]}
+                        dictFatores[chave] = Dict[chave]
+                       
+                else:
+                    if chave == 'FK_roles_id' or chave == 'valor':
+                      
+                        dictFatores[chave] = Dict[chave]
+                   
+                    if chave == 'valor':
+                        dictFinal['Itens']['itens'].append(dictFatores)
+                        
+                if chave in dictFinal.keys():
+                    continue
+
+                    
+                if chave != 'FK_roles_id':
+                    if chave != 'valor':
+                        dictFinal[chave] = Dict[chave] 
+
+                
+        return dictFinal
 
     @classmethod
     def get_perfilRoles_by_perfil_id(*args, **kwargs):
@@ -199,7 +281,7 @@ class   PerfilModel():
 
             conn.autocommit = True
 
-            cursor.execute("insert into profile_roles ( FK_profile_id, FK_roles_id ) values(?,?)",args[1], args[2])
+            cursor.execute("insert into profile_roles ( FK_profile_id, FK_roles_id, valor ) values(?,?,?)",args[1], args[2], args[3])
             
             conn.commit()
             # conn.close()

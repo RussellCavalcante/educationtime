@@ -29,6 +29,13 @@ class PerfilServices(Resource):
             return  PerfilModel.get_perfil_by_id(args[0]), 200
         except:
             return { 'error': 'verifique a requisição !' }, 400
+    @jwt_required()
+    def get_by_user_id(self, *args, **kwargs):
+        try:
+
+            return  PerfilModel.get_perfil_by_user_id(args[0]), 200
+        except:
+            return { 'error': 'verifique a requisição !' }, 400
     
     @jwt_required()
     def get_perfilRolesby_perfil_id(self, *args, **kwargs):
@@ -72,7 +79,7 @@ class PerfilRegister(Resource):
 
             for i , role in enumerate(FK_roles_id['roles']):
 
-                PerfilModel.associateProfileRoles(id[0], role) 
+                PerfilModel.associateProfileRoles(id[0], role['role_id'], role['valor']) 
 
             return {'message':'Perfil Criado com sucesso!'}, 201
         
@@ -89,8 +96,8 @@ class PerfilRegister(Resource):
             FK_roles_id = dados['FK_roles_id']
             id = PerfilModel.find_by_profile_name(profile_name)
 
-            if not PerfilModel.find_by_profile_name(profile_name):
-                return {'message': "Esse perfil '{}' nao existe.".format(profile_name)}
+            # if not PerfilModel.find_by_profile_name(profile_name):
+            #     return {'message': "Esse perfil '{}' nao existe.".format(profile_name)}
 
             PerfilModel.delete_profile_roles(id[0])
 
@@ -98,9 +105,9 @@ class PerfilRegister(Resource):
            
             id = PerfilModel.find_by_profile_name(profile_name)
 
-            for i , roles in enumerate(FK_roles_id['roles']):
+            for i , role in enumerate(FK_roles_id['roles']):
                 
-                PerfilModel.associateProfileRoles(id[0], roles)
+                PerfilModel.associateProfileRoles(id[0], role['role_id'], role['valor'])
 
             return {'message':'Perfil atualizado com sucesso!'}, 201
         

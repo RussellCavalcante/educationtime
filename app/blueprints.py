@@ -525,6 +525,15 @@ def get_perfil_by(id):
     
     return _Get_services.get_by_id(id)
 
+@avaliable_route.route('/perfil/user/<int:id>', methods=['GET'])
+
+def get_perfil_by_user_id(id):    
+    from app.services.perfil import PerfilServices
+    
+    _Get_services = PerfilServices()
+    
+    return _Get_services.get_by_user_id(id)
+
 @avaliable_route.route('/perfil/Cadastro', methods=['POST'])
 
 def post_perfil():    
