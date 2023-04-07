@@ -61,20 +61,52 @@ class GetrotinaAula(Resource):
     
     @jwt_required()
     def update(self, *args, **kwargs):
-        try:
+        # try:
 
             dados = atributos.parse_args()
             
-            nome = dados['nome'].strip()
-            FK_turma_id = dados['FK_turma_id'].strip()
-            FK_profissional_id = dados['FK_profissional_id'].strip()
-            FK_momento_id = dados['FK_momento_id']
-            FK_momento_id = dados['FK_componente_curricular_id'].strip()
-            update_date = dados['update_date'].strip()
-            current_date = dados['current_date'].strip()
+            nome_rotina = dados['nome_rotina'].strip()
+            FK_escola_id = dados['FK_escola_id']
+            ano_letivo = dados['ano']
+            momentos = dados['momentos']
+            turma_compoenente = dados['turma_compoenente']
+            idRotina = RotinaAulaModel.get_rotina_aula_by_rotina_componente_id(args[0])
 
-            RotinaAulaModel.update_rotinaaula(nome ,FK_turma_id, FK_profissional_id, FK_momento_id, FK_momento_id, update_date, current_date, args[0])
-            return {'updated': nome }, 200
+            # print(idRotina)
+            # input()
+            
+            RotinaAulaModel.update_rotinaaula(nome_rotina, FK_escola_id, ano_letivo, idRotina[0])
 
-        except:
-            return { 'error': 'verifique a requisição !' }, 400
+            momento_id_get = RotinaAulaModel.get_momento_id_by_rotina_aula(idRotina[0])
+
+            # print(momento_id_get)
+            # input()
+            for id_moment in momento_id_get:
+                # print(id_moment)
+                # input()
+                RotinaAulaModel.delete_rotina_aula_momento(id_moment)
+
+                RotinaAulaModel.delete_momentos(id_moment)
+
+                RotinaAulaModel.delete_relacao_momentos(id_moment)
+
+
+            for i , momento in enumerate(momentos['itens']):
+                momento_id = RotinaAulaModel.create_momento( momento['nome_momento'],momento['ordem'], momento['descricao'])
+
+                # print(momento_id)
+                # input()
+
+
+
+                RotinaAulaModel.associate_rotina_aula_momento(idRotina[0], momento_id)
+
+            RotinaAulaModel.delete_rotina_componente(idRotina[0])
+
+            for i , turma_compoenente in enumerate(turma_compoenente['itens']):
+                rotina_componente = RotinaAulaModel.associate_rotina_componente_turma( idRotina[0], turma_compoenente['tumar_profissional_componente'])
+            
+            return  {'id': rotina_componente ,'nome_rotina': nome_rotina}, 201
+
+        # except:
+        #     return { 'error': 'verifique a requisição !' }, 400
