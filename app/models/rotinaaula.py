@@ -109,7 +109,7 @@ class RotinaAulaModel():
         listEstadosDict = []
         for estadoTupla in result:
 
-            tup1 = ('id', 'rotina_aula_nome', 'educador_nome', 'componente_curricular_nome',
+            tup1 = ('id', 'nome_rotina', 'educador_nome', 'componente_curricular_nome',
                     'etapa_ensino_nome', 'ano' )
 
             tup2 = estadoTupla
@@ -154,7 +154,7 @@ class RotinaAulaModel():
         listEstadosDict = []
         for estadoTupla in result:
 
-            tup1 = ('id', 'FK_uf_id' ,'uf' , 'FK_municipio_id', 'municipio_nome' , 'FK_escola_id', 'nome_escola' , 'rotina_aula_nome','ordem', 'nome_momento', 'descricao', 'FK_turma_id', 'educador_nome',
+            tup1 = ('id', 'FK_uf_id' ,'uf' , 'FK_municipio_id', 'municipio_nome' , 'FK_escola_id', 'nome_escola' , 'nome_rotina','ordem', 'nome_momento', 'descricao', 'FK_turma_id', 'educador_nome',
                         'FK_etapa_ensino_id' , 'etapa_ensino_nome', 'componente_curricular_nome', 'ano', 'nome_turma', 'turno_nome')
             tup2 = estadoTupla
 
