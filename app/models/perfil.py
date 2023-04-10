@@ -254,12 +254,14 @@ class   PerfilModel():
         # #     return None
 
     @classmethod
-    def find_by_profile_name(*args, **kwargs):
+    def find_by_FK_profile_id(*args, **kwargs):
         try:
             # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
             cursor = conn.cursor()
 
-            cursor.execute("select * from profiles where profile_name = ?;", args[1])
+            cursor.execute("""select top 1 profiles.id, profile_name FROM profile_roles
+                            inner join profiles ON profile_roles.FK_roles_id = profiles.id
+                            WHERE profile_roles.FK_profile_id = ?;""", args[1])
 
             row = cursor.fetchall()
 

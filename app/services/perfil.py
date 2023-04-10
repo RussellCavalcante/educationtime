@@ -94,16 +94,16 @@ class PerfilRegister(Resource):
             profile_name = dados['profile_name']
             
             FK_roles_id = dados['FK_roles_id']
-            id = PerfilModel.find_by_profile_name(profile_name)
+            id = PerfilModel.find_by_FK_profile_id(args[0])
 
-            # if not PerfilModel.find_by_profile_name(profile_name):
-            #     return {'message': "Esse perfil '{}' nao existe.".format(profile_name)}
+            if not PerfilModel.find_by_FK_profile_id(args[0]):
+                return {'message': "Esse perfil '{}' nao foi encontrado.".format(profile_name)}
 
-            PerfilModel.delete_profile_roles(id[0])
+            PerfilModel.delete_profile_roles(args[0])
 
             PerfilModel.update_profile(profile_name, args[0])
            
-            id = PerfilModel.find_by_profile_name(profile_name)
+            # id = PerfilModel.find_by_FK_profile_id(profile_name)
 
             for i , role in enumerate(FK_roles_id['roles']):
                 
