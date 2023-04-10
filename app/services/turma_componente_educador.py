@@ -38,6 +38,17 @@ class TurmaComponentesEducadoresServices(Resource):
             return { 'error': 'verifique a requisição !' }, 400
 
     @jwt_required()
+    def get_componentes_by_profissional_and_escola(self, *args, **kwargs):
+        try:
+            profissional = TurmaComponenteEducadorModel.get_turma_componentes_profissional_escola(args[0])
+            if profissional != False :
+                 
+                  return profissional, 200
+            else : return  {'return':'nao ha componentes para essa escola'}, 200
+        except:
+            return { 'error': 'verifique a requisição !' }, 400
+
+    @jwt_required()
     def post(self, *args, **kwargs):
         try:
             dados = atributos.parse_args()

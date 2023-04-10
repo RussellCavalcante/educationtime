@@ -988,8 +988,12 @@ def update_EquipeMonitoramento(id):
 def get_TurmaComponenteEducador():    
     from app.services.turma_componente_educador import TurmaComponentesEducadoresServices
     
+
     _Get_services = TurmaComponentesEducadoresServices()
     
+    if request.args.get('FK_escola_id'):
+        return _Get_services.get_componentes_by_profissional_and_escola(request.args.get('FK_escola_id'))
+
     return _Get_services.get()
 
 @avaliable_route.route('/TurmaComponenteEducador/<int:id>', methods=['GET'])

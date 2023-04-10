@@ -151,6 +151,46 @@ class TurmaComponenteEducadorModel():
                 listEstadosDict.append(res)   
             
         return listEstadosDict
+    
+    @classmethod
+    def get_turma_componentes_profissional_escola(*args, **kwargs):
+        cursor = conn.cursor()
+ 
+        cursor.execute(f"""SELECT turma_componente_educador.id , turma_componente_educador.FK_profissional_componente_id, users.nome,
+                            turma_componente_educador.FK_turma_id , turma.nome_turma,
+                            profissional_escola_componente.FK_componente_id , componente_curricular.nome,
+                            profissional_escola_componente.FK_escola_id, escola.nome_escola, turma.ano_letivo, etapa_ensino.id, etapa_ensino.nome
+                            FROM turma_componente_educador 
+                            INNER JOIN profissional_escola_componente ON turma_componente_educador.FK_profissional_componente_id = profissional_escola_componente.id
+                            INNER JOIN componente_curricular ON profissional_escola_componente.FK_componente_id = componente_curricular.id
+                            INNER JOIN turma ON turma_componente_educador.FK_turma_id = turma.id
+                            INNER JOIN users ON profissional_escola_componente.FK_user_id = users.id
+                            INNER JOIN escola ON profissional_escola_componente.FK_escola_id = escola.id
+                            INNER JOIN etapa_ensino ON turma.FK_etapa_ensino_id = etapa_ensino.id
+                            WHERE escola.id = {args[1]};""")
+        
+        result = cursor.fetchall()
+        cursor.close()
+
+        # print(result)
+        # input()
+        listEstadosDict = []
+        for estadoTupla in result:
+            
+            tup1 = ('id' ,'FK_profissional_componente_id', 'educador_nome',
+                    'FK_turma_id' , 'nome_turma',
+                    'FK_componente_id' , 'componente_curricular_nome',
+                    'FK_escola_id', 'nome_escola', 'ano', 'etapa_ensino_id', 'etapa_ensino_nome') 
+            
+            tup2 = estadoTupla
+           
+            if len(tup1) == len(tup2): 
+                res = dict(zip(tup1, tup2))
+                # print(res)
+
+                listEstadosDict.append(res)   
+            
+        return listEstadosDict
 
     @classmethod
     def create_turma_componente_educador(*args, **kwargs):
