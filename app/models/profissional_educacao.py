@@ -672,6 +672,38 @@ class ProfissionaisEducacaoModel():
         return False
     
     @classmethod
+    def get_componente(*args, **kwargs):
+        cursor = conn.cursor()
+ 
+        cursor.execute(f"""SELECT id, nome, FK_area_conhecimento_id FROM componente_curricular;""") 
+        
+        result = cursor.fetchall()
+        cursor.close()
+
+        # print(result)
+        # input()
+
+        listEstadosDict = []
+        for estadoTupla in result:
+            
+            tup1 = ('id' , 'nome', 'FK_area_conhecimento_id' ) 
+            
+            tup2 = estadoTupla
+           
+            if len(tup1) == len(tup2): 
+                res = dict(zip(tup1, tup2)) 
+                # print(res)
+
+                listEstadosDict.append(res)   
+        # print(listEstadosDict)
+        # input()
+
+        if len(listEstadosDict) != 0:
+            return listEstadosDict
+
+        return False
+    
+    @classmethod
     def get_componente_by_area_do_conhecimento(*args, **kwargs):
         cursor = conn.cursor()
  

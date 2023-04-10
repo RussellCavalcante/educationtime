@@ -840,6 +840,14 @@ def get_AreaDoConhecimento():
     
     return _Get_services.get_area_do_conhecimento()
 
+@avaliable_route.route('/Componente', methods=['GET'])
+def get_Componente():    
+    from app.services.profissional_educacao import ProfissionaisEducacaoServices
+    
+    _Get_services = ProfissionaisEducacaoServices()
+    
+    return _Get_services.get_componente()
+
 @avaliable_route.route('/Componente/AreaDoConhecimento/<int:id>', methods=['GET'])
 def get_ComponenteAreaDoConhecimento(id):    
     from app.services.profissional_educacao import ProfissionaisEducacaoServices

@@ -93,6 +93,13 @@ class ProfissionaisEducacaoServices(Resource):
             return  ProfissionaisEducacaoModel.get_area_do_conhecimento(), 200
         except:
             return { 'error': 'verifique a requisição !' }, 400
+        
+    @jwt_required()
+    def get_componente(self, *args, **kwargs):
+        try:
+            return  ProfissionaisEducacaoModel.get_componente(), 200
+        except:
+            return { 'error': 'verifique a requisição !' }, 400
 
     @jwt_required()
     def get_componente_by_area_do_conhecimento(self, *args, **kwargs):
