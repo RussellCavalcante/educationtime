@@ -51,6 +51,7 @@ class FormacaoServicoServices(Resource):
                 momento_id = FormacaoServicosModel.create_momento( momento['nome_momento'],momento['ordem'], momento['descricao'])
                 FormacaoServicosModel.associate_rotina_aula_momento(rotina_aula, momento_id)
 
+
             
             return  {'id': rotina_componente ,'nome_rotina': nome_rotina}, 201
         
