@@ -5,7 +5,7 @@ import re
 from app import conn
 
 
-class RotinaAulaModel():
+class FormacaoServicosModel():
     # __tablename__ = 'estado'
 
 
@@ -26,10 +26,10 @@ class RotinaAulaModel():
 
 
     @classmethod
-    def get_rotina_aula_by_rotina_componente_id(*args, **kwargs):
+    def get_formacao_servico_by_rotina_componente_id(*args, **kwargs):
         cursor = conn.cursor()
 
-        cursor.execute(f"""SELECT FK_rotina_aula
+        cursor.execute(f"""SELECT FK_formacao_servico
                             FROM rotina_componente_turma
                             WHERE id = {args[1]}
                             """)
@@ -57,12 +57,12 @@ class RotinaAulaModel():
         return listEstadosDict
 
     @classmethod
-    def get_momento_id_by_rotina_aula(*args, **kwargs):
+    def get_momento_id_by_formacao_servico(*args, **kwargs):
         cursor = conn.cursor()
 
         cursor.execute(f"""SELECT FK_momento_id
-                            FROM rotina_aula_momento
-                            WHERE FK_rotina_aula_id = {args[1]}
+                            FROM formacao_servico_momento
+                            WHERE FK_formacao_servico_id = {args[1]}
 
                             """)
 
@@ -88,12 +88,12 @@ class RotinaAulaModel():
 
 
     @classmethod
-    def get_rotina_aula(*args, **kwargs):
+    def get_formacao_servico(*args, **kwargs):
         cursor = conn.cursor()
 
-        cursor.execute("""SELECT rotina_componente_turma.id, rotina_aula.nome, users.nome, componente_curricular.nome,
-                         etapa_ensino.nome, rotina_aula.ano_letivo FROM rotina_componente_turma
-                        INNER JOIN rotina_aula ON rotina_componente_turma.FK_rotina_aula = rotina_aula.id
+        cursor.execute("""SELECT rotina_componente_turma.id, formacao_servico.nome, users.nome, componente_curricular.nome,
+                         etapa_ensino.nome, formacao_servico.ano_letivo FROM rotina_componente_turma
+                        INNER JOIN formacao_servico ON rotina_componente_turma.FK_formacao_servico = formacao_servico.id
                         INNER JOIN turma_componente_educador ON rotina_componente_turma.FK_turma_componente_educador_id = turma_componente_educador.id
                         INNER JOIN profissional_escola_componente ON turma_componente_educador.FK_profissional_componente_id = profissional_escola_componente.id
                         INNER JOIN users ON profissional_escola_componente.FK_user_id = users.id
@@ -123,30 +123,29 @@ class RotinaAulaModel():
         return listEstadosDict
 
     @classmethod
-    def get_rotinaaula_by_id(*args, **kwargs):
+    def get_formacao_servico_by_id(*args, **kwargs):
         cursor = conn.cursor()
 
 
         cursor.execute(f"""SELECT rotina_componente_turma.id, estado.id ,estado.uf , municipio.id, municipio.nome ,
-                            rotina_aula.FK_escola_id, escola.nome_escola , rotina_aula.nome,
+                            formacao_servico.FK_escola_id, escola.nome_escola , formacao_servico.nome,
                             momento.ordem, momento.nome_momento, momento.descricao, turma.id, users.nome,
-                            turma.FK_etapa_ensino_id , etapa_ensino.nome, grau_etapa_ensino.id, grau_etapa_ensino.nome_grau, componente_curricular.nome,
-                            rotina_aula.ano_letivo, turma.nome_turma, turno.nome
+                            turma.FK_etapa_ensino_id , etapa_ensino.nome, componente_curricular.nome,
+                            formacao_servico.ano_letivo, turma.nome_turma, turno.nome
                             FROM rotina_componente_turma
-                            INNER JOIN rotina_aula ON rotina_componente_turma.FK_rotina_aula = rotina_aula.id
-                            INNER JOIN rotina_aula_momento ON rotina_aula.id = rotina_aula_momento.FK_rotina_aula_id
-                            INNER JOIN momento ON rotina_aula_momento.FK_momento_id = momento.id
+                            INNER JOIN formacao_servico ON rotina_componente_turma.FK_formacao_servico = formacao_servico.id
+                            INNER JOIN formacao_servico_momento ON formacao_servico.id = formacao_servico_momento.FK_formacao_servico_id
+                            INNER JOIN momento ON formacao_servico_momento.FK_momento_id = momento.id
                             INNER JOIN turma_componente_educador ON rotina_componente_turma.FK_turma_componente_educador_id = turma_componente_educador.id
                             INNER JOIN profissional_escola_componente ON turma_componente_educador.FK_profissional_componente_id = profissional_escola_componente.id
                             INNER JOIN users ON profissional_escola_componente.FK_user_id = users.id
                             INNER JOIN componente_curricular ON profissional_escola_componente.FK_componente_id = componente_curricular.id
                             INNER JOIN turma ON turma_componente_educador.FK_turma_id = turma.id
                             INNER JOIN etapa_ensino ON turma.FK_etapa_ensino_id = etapa_ensino.id
-                            INNER JOIN escola ON rotina_aula.FK_escola_id = escola.id
+                            INNER JOIN escola ON formacao_servico.FK_escola_id = escola.id
                             INNER JOIN municipio ON escola.FK_municipio_id = municipio.id
                             INNER JOIN estado ON municipio.FK_UF_id = estado.id
                             INNER JOIN turno ON turma.FK_turno_id = turno.id
-                            INNER JOIN grau_etapa_ensino ON turma.FK_grau_etapa_ensino_id = grau_etapa_ensino.id
                             WHERE rotina_componente_turma.id = {args[1]};""")
 
         result = cursor.fetchall()
@@ -155,8 +154,8 @@ class RotinaAulaModel():
         listEstadosDict = []
         for estadoTupla in result:
 
-            tup1 = ('id', 'FK_UF_id' ,'nome_uf' , 'FK_municipio_id', 'municipio_nome' , 'FK_escola_id', 'nome_escola' , 'nome_rotina','ordem', 'nome_momento', 'descricao', 'FK_turma_id', 'educador_nome',
-                        'FK_etapa_ensino_id' , 'etapa_ensino_nome', 'FK_grau_etapa_ensino_id', 'nome_grau', 'componente_curricular_nome', 'ano', 'nome_turma', 'turno_nome')
+            tup1 = ('id', 'FK_uf_id' ,'uf' , 'FK_municipio_id', 'municipio_nome' , 'FK_escola_id', 'nome_escola' , 'nome_rotina','ordem', 'nome_momento', 'descricao', 'FK_turma_id', 'educador_nome',
+                        'FK_etapa_ensino_id' , 'etapa_ensino_nome', 'componente_curricular_nome', 'ano', 'nome_turma', 'turno_nome')
             tup2 = estadoTupla
 
             if len(tup1) == len(tup2):
@@ -164,10 +163,10 @@ class RotinaAulaModel():
                 listEstadosDict.append(res)
 
         AceptKeysListTurmaCompoenente = {'FK_turma_id':int, 'educador_nome':str,
-                        'FK_etapa_ensino_id':int , 'etapa_ensino_nome':str,  'FK_grau_etapa_ensino_id':int , 'nome_grau':str, 'componente_curricular_nome':str, 'nome_turma':str, 'turno_nome':str}
+                        'FK_etapa_ensino_id':int , 'etapa_ensino_nome':str, 'componente_curricular_nome':str, 'ano':str, 'nome_turma':str, 'turno_nome':str}
 
-        NotAceptKeyForStart = {'ordem':str, 'nome_momento':str,'descricao':str,'FK_turma_id':int, 'educador_nome':str, 'FK_etapa_ensino_id':int , 'etapa_ensino_nome':str, 'FK_grau_etapa_ensino_id':int , 'nome_grau':str,
-                               'componente_curricular_nome':str,  'nome_turma':str, 'turno_nome':str}
+        NotAceptKeyForStart = {'ordem':str, 'nome_momento':str,'descricao':str,'FK_turma_id':int, 'educador_nome':str, 'FK_etapa_ensino_id':int , 'etapa_ensino_nome':str,
+                               'componente_curricular_nome':str, 'ano':str, 'nome_turma':str, 'turno_nome':str}
 
         for Dict in listEstadosDict:
 
@@ -216,7 +215,7 @@ class RotinaAulaModel():
         return dictFinal
 
     @classmethod
-    def get_rotina_aula_by_last_id(*args, **kwargs):
+    def get_formacao_servico_by_last_id(*args, **kwargs):
         cursor = conn.cursor()
 
 
@@ -243,14 +242,14 @@ class RotinaAulaModel():
         return False
 
     @classmethod
-    def create_rotinaaula(*args, **kwargs):
+    def create_formacao_servico(*args, **kwargs):
         # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
         # try:
             cursor = conn.cursor()
             # print(args)
             # input()
 
-            cursor.execute("""insert into rotina_aula ( nome, FK_escola_id, ano_letivo) OUTPUT INSERTED.id values(?,?,?);
+            cursor.execute("""insert into formacao_servico ( nome, FK_escola_id, ano_letivo) OUTPUT INSERTED.id values(?,?,?);
                            """,args[1], args[2], args[3])
 
 
@@ -287,14 +286,14 @@ class RotinaAulaModel():
         #     print(TypeError)
         # #     return None
     @classmethod
-    def associate_rotina_aula_momento(*args, **kwargs):
+    def associate_formacao_servico_momento(*args, **kwargs):
         # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
         # try:
             cursor = conn.cursor()
             # print(args)
             # input()
 
-            cursor.execute("insert into rotina_aula_momento ( FK_rotina_aula_id, FK_momento_id) values(?,?);",args[1], args[2])
+            cursor.execute("insert into formacao_servico_momento ( FK_formacao_servico_id, FK_momento_id) values(?,?);",args[1], args[2])
 
             conn.commit()
             # conn.close()
@@ -312,7 +311,7 @@ class RotinaAulaModel():
             # print(args)
             # input()
 
-            cursor.execute("insert into rotina_componente_turma ( FK_rotina_aula, FK_turma_componente_educador_id) OUTPUT INSERTED.id values(?,?);",args[1], args[2])
+            cursor.execute("insert into rotina_componente_turma ( FK_formacao_servico, FK_turma_componente_educador_id) OUTPUT INSERTED.id values(?,?);",args[1], args[2])
 
             result = cursor.fetchone()
             cursor.commit()
@@ -348,14 +347,14 @@ class RotinaAulaModel():
 
 
     @classmethod
-    def associate_rotina_aula_momento(*args, **kwargs):
+    def associate_formacao_servico_momento(*args, **kwargs):
         # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
         # try:
             cursor = conn.cursor()
             # print(args)
             # input()
 
-            cursor.execute("insert into rotina_aula_momento ( FK_rotina_aula_id, FK_momento_id) OUTPUT INSERTED.id values(?,?);",args[1], args[2])
+            cursor.execute("insert into formacao_servico_momento ( FK_formacao_servico_id, FK_momento_id) OUTPUT INSERTED.id values(?,?);",args[1], args[2])
 
             result = cursor.fetchone()
             cursor.commit()
@@ -369,7 +368,7 @@ class RotinaAulaModel():
         # #     return None
 
     @classmethod
-    def update_rotinaaula(*args, **kwargs):
+    def update_formacao_servico(*args, **kwargs):
         # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
         # try:
             cursor = conn.cursor()
@@ -377,7 +376,7 @@ class RotinaAulaModel():
             # input()
 
             cursor.execute('''
-                        UPDATE rotina_aula
+                        UPDATE formacao_servico
                         SET nome = ?, FK_escola_id = ? , ano_letivo = ?
                         WHERE id = ?
                         ''',args[1],args[2], args[3], int(args[4]))
@@ -400,7 +399,7 @@ class RotinaAulaModel():
                 # input()
 
             cursor.execute('''
-                            DELETE FROM rotina_componente_turma WHERE FK_rotina_aula = ?;
+                            DELETE FROM rotina_componente_turma WHERE FK_formacao_servico = ?;
 
                             ''', args[1])
 
@@ -436,7 +435,7 @@ class RotinaAulaModel():
         # #     return None
 
     @classmethod
-    def delete_rotina_aula_momento(*args, **kwargs):
+    def delete_formacao_servico_momento(*args, **kwargs):
         # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
         # try:
             cursor = conn.cursor()
@@ -444,7 +443,7 @@ class RotinaAulaModel():
                 # input()
 
             cursor.execute('''
-                            DELETE FROM rotina_aula_momento WHERE FK_momento_id = ?;
+                            DELETE FROM formacao_servico_momento WHERE FK_momento_id = ?;
 
                             ''', args[1])
 
@@ -466,7 +465,7 @@ class RotinaAulaModel():
                 # input()
 
             cursor.execute('''
-                            DELETE FROM rotina_aula_momento WHERE FK_momento_id = ?;
+                            DELETE FROM formacao_servico_momento WHERE FK_momento_id = ?;
 
                             ''', args[1])
 
