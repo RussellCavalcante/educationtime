@@ -105,10 +105,14 @@ class EscolaModel():
             # print(args[1], args[2], args[3])
             # input()
             
-            cursor.execute("insert into escola ( nome_escola , endereco , email_escola, telefone, cod_inep, FK_municipio_id) values(?,?,?,?,?,?)",args[1], args[2], args[3], int(args[4]), int(args[5]), int(args[6]))
+            cursor.execute("insert into escola ( nome_escola , endereco , email_escola, telefone, cod_inep, FK_municipio_id) OUTPUT INSERTED.id values(?,?,?,?,?,?)",args[1], args[2], args[3], int(args[4]), int(args[5]), int(args[6]))
             
-            conn.commit()
+            # conn.commit()
             # conn.close()
+            result = cursor.fetchone()
+            cursor.commit()
+            cursor.close()
+            return result[0]
             # return 'created'
             # rows = cursor.fetchall()
         # except:

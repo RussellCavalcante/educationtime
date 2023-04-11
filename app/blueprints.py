@@ -171,7 +171,7 @@ def get_escola():
     
     _Get_services = GetEscola()
     
-    return _Get_services.get()
+    return _Get_services.get(request.args.get('IdLog'))
 
 @avaliable_route.route('/escolas/<int:id>', methods=['GET'])
 
@@ -196,9 +196,9 @@ def get_by_muncipio_id(id):
 def post_escola():    
     from app.services.escola import GetEscola
     
-    _Get_services = GetEscola()
-    
-    return _Get_services.post()
+    _Get_services = GetEscola()        
+
+    return _Get_services.post(request.args.get('IdLog'))
 
 @avaliable_route.route('/escolas/update/<int:id>', methods=['PUT'])
 
@@ -207,7 +207,7 @@ def update_escola(id):
 
     _Get_services = GetEscola()
     
-    return _Get_services.update(id)
+    return _Get_services.update(id, request.args.get('IdLog'))
 
 
 @avaliable_route.route('/turmas', methods=['GET'])
