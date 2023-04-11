@@ -108,7 +108,7 @@ class   PerfilModel():
         cursor = conn.cursor()
         
  
-        cursor.execute(f"""SELECT profiles.id, profile_name, FK_roles_id, profile_roles.valor FROM profile_roles
+        cursor.execute(f"""SELECT users.nome, profiles.id, profile_name, FK_roles_id, profile_roles.valor FROM profile_roles
                             INNER JOIN profiles ON profile_roles.FK_profile_id = profiles.id
                             INNER JOIN user_profiles ON profiles.id = user_profiles.FK_profile_id
                             INNER JOIN users ON user_profiles.FK_user_id = users.id
@@ -120,7 +120,7 @@ class   PerfilModel():
         listEstadosDict = [] 
         for estadoTupla in result:
             
-            tup1 = ('id', 'profile_name', 'FK_roles_id', 'valor') 
+            tup1 = ('user_name','profile_id', 'profile_name', 'FK_roles_id', 'valor') 
             tup2 = estadoTupla
 
             if len(tup1) == len(tup2): 
