@@ -292,9 +292,13 @@ class UserModel():
 
             conn.autocommit = True
 
-            cursor.execute("insert into log_autenticacao (FK_user_id , date , navegador , ip ) values(?,?,?,?)",args[1], args[2], args[3],args[4])
+            cursor.execute("insert into log_autenticacao (FK_user_id , date , navegador , ip ) OUTPUT INSERTED.id values(?,?,?,?)",args[1], args[2], args[3],args[4])
             
-            conn.commit()
+            # conn.commit()
+            result = cursor.fetchone()
+            cursor.commit()
+            cursor.close()
+            return result[0]
             # conn.close()
             # return 'created'
             # rows = cursor.fetchall()

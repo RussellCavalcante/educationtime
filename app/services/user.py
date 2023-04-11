@@ -203,10 +203,12 @@ class UserLogin(Resource):
 
             dateNow = datetime.today()
 
-            UserModel.create_log_login(user[0], dateNow, navegador, ip)
+            IdLog = UserModel.create_log_login(user[0], dateNow, navegador, ip)
+
 
             return {'acess_token': token_de_acesso,
                     'cpf': cpf,
+                    'IdLog':IdLog,
                     'id': user[0]}, 200
         except:
             return { 'error': 'verifique a requisição !' }, 400   
