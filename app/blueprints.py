@@ -1162,3 +1162,21 @@ def get_FormacaoServico():
     _Get_services = FormacaoServicoServices()
     
     return _Get_services.get()
+
+@avaliable_route.route('/PlanoLeitura/Cadastro', methods=['POST'])
+
+def post_PlanoLeitura():    
+    from app.services.planoleitura import PlanoLeituraServices
+    
+    _Get_services = PlanoLeituraServices()
+    
+    return _Get_services.post()
+
+@avaliable_route.route('/PlanoLeitura', methods=['GET'])
+
+def get_planoleitura():    
+    from app.services.planoleitura import PlanoLeituraServices
+    
+    _Get_services = PlanoLeituraServices()
+    
+    return _Get_services.get()
