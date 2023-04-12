@@ -170,7 +170,7 @@ class RotinaAulaModel():
             #             'FK_etapa_ensino_id' , 'etapa_ensino_nome', 'FK_grau_etapa_ensino_id', 'nome_grau', 'componente_curricular_nome', 'ano', 'nome_turma', 'turno_nome')
             tup1 = ('id', 'FK_UF_id', 'uf', 
                     'estado_nome', 'FK_municipio_id', 'municipio_nome', 'FK_escola_id', 'nome_escola',
-                    'nome', 'ano',
+                    'nome_rotina', 'ano',
                     'ordem', 'nome_momento', 'descricao')
 
             tup2 = estadoTupla
