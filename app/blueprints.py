@@ -1153,3 +1153,12 @@ def post_FormacaoServico():
     _Get_services = FormacaoServicoServices()
     
     return _Get_services.post_formacaoservico()
+
+@avaliable_route.route('/FormacaoServico', methods=['GET'])
+
+def get_FormacaoServico():    
+    from app.services.formacaoservico import FormacaoServicoServices
+    
+    _Get_services = FormacaoServicoServices()
+    
+    return _Get_services.get()

@@ -91,15 +91,13 @@ class FormacaoServicosModel():
     def get_formacao_servico(*args, **kwargs):
         cursor = conn.cursor()
 
-        cursor.execute("""SELECT rotina_componente_turma.id, formacao_servico.nome, users.nome, componente_curricular.nome,
-                         etapa_ensino.nome, formacao_servico.ano_letivo FROM rotina_componente_turma
-                        INNER JOIN formacao_servico ON rotina_componente_turma.FK_formacao_servico = formacao_servico.id
-                        INNER JOIN turma_componente_educador ON rotina_componente_turma.FK_turma_componente_educador_id = turma_componente_educador.id
-                        INNER JOIN profissional_escola_componente ON turma_componente_educador.FK_profissional_componente_id = profissional_escola_componente.id
-                        INNER JOIN users ON profissional_escola_componente.FK_user_id = users.id
-                        INNER JOIN componente_curricular ON profissional_escola_componente.FK_componente_id = componente_curricular.id
-                        INNER JOIN turma ON turma_componente_educador.FK_turma_id = turma.id
-                        INNER JOIN etapa_ensino ON turma.FK_etapa_ensino_id = etapa_ensino.id""")
+        cursor.execute("""SELECT formacao_servico_escola.id, formacao_servico.id, formacao_servico.FK_municipio,
+                        formacao_servico.nome, formacao_servico.ano_letivo , formacao_servico.data_inicio, 
+                        formacao_servico.data_limite, escola.id, escola.nome_escola 
+                        FROM formacao_servico_escola 
+                        INNER JOIN formacao_servico ON formacao_servico_escola.FK_formacao_servico_id = formacao_servico.id
+                        INNER JOIN escola ON formacao_servico_escola.FK_escola_id = escola.id
+                        """)
 
         result = cursor.fetchall()
         cursor.close()
@@ -109,8 +107,9 @@ class FormacaoServicosModel():
         listEstadosDict = []
         for estadoTupla in result:
 
-            tup1 = ('id', 'nome_rotina', 'educador_nome', 'componente_curricular_nome',
-                    'etapa_ensino_nome', 'ano' )
+            tup1 = ('id', 'formacao_servico_id', 'FK_municipio',
+                        'formacao_servico_nome', 'ano' , 'data_inicio', 
+                        'data_limite', 'FK_escola_id', 'nome_escola'  )
 
             tup2 = estadoTupla
 
