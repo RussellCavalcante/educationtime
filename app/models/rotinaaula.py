@@ -258,19 +258,20 @@ class RotinaAulaModel():
         #                     INNER JOIN grau_etapa_ensino ON turma.FK_grau_etapa_ensino_id = grau_etapa_ensino.id
         #                     WHERE rotina_componente_turma.id = {args[1]};""")
         cursor.execute(f"""SELECT rotina_componente_turma.id , turma.id, users.nome, turma.FK_etapa_ensino_id, etapa_ensino.nome, 
-                            turma.FK_grau_etapa_ensino_id, grau_etapa_ensino.nome_grau, turma.nome_turma, turno.nome
+                        turma.FK_grau_etapa_ensino_id, grau_etapa_ensino.nome_grau, turma.nome_turma, turno.nome,
+                        profissional_escola_componente.FK_componente_id , componente_curricular.nome
+                        FROM rotina_componente_turma 
+                        INNER JOIN rotina_aula ON rotina_componente_turma.FK_rotina_aula = rotina_aula.id
+                        INNER JOIN turma_componente_educador ON rotina_componente_turma.FK_turma_componente_educador_id = turma_componente_educador.id
+                        INNER JOIN profissional_escola_componente ON  turma_componente_educador.FK_profissional_componente_id = profissional_escola_componente.id
+                        INNER JOIN componente_curricular ON profissional_escola_componente.FK_componente_id = componente_curricular.id
+                        INNER JOIN users ON profissional_escola_componente.FK_user_id = users.id
+                        INNER JOIN turma ON turma_componente_educador.FK_turma_id = turma.id
+                        INNER JOIN turno ON turma.FK_turno_id = turno.id
+                        INNER JOIN etapa_ensino ON turma.FK_etapa_ensino_id = etapa_ensino.id
+                        INNER JOIN grau_etapa_ensino ON turma.FK_grau_etapa_ensino_id = grau_etapa_ensino.id
 
-                            FROM rotina_componente_turma 
-                            INNER JOIN rotina_aula ON rotina_componente_turma.FK_rotina_aula = rotina_aula.id
-                            INNER JOIN turma_componente_educador ON rotina_componente_turma.FK_turma_componente_educador_id = turma_componente_educador.id
-                            INNER JOIN profissional_escola_componente ON  turma_componente_educador.FK_profissional_componente_id = profissional_escola_componente.id
-                            INNER JOIN users ON profissional_escola_componente.FK_user_id = users.id
-                            INNER JOIN turma ON turma_componente_educador.FK_turma_id = turma.id
-                            INNER JOIN turno ON turma.FK_turno_id = turno.id
-                            INNER JOIN etapa_ensino ON turma.FK_etapa_ensino_id = etapa_ensino.id
-                            INNER JOIN grau_etapa_ensino ON turma.FK_grau_etapa_ensino_id = grau_etapa_ensino.id
-
-                            WHERE rotina_aula.id  = {args[1]};""")
+                        WHERE rotina_aula.id  = {args[1]};""")
 
         result = cursor.fetchall()
         cursor.close()
@@ -281,7 +282,7 @@ class RotinaAulaModel():
             # tup1 = ('id', 'FK_UF_id' ,'nome_uf' , 'FK_municipio_id', 'municipio_nome' , 'FK_escola_id', 'nome_escola' , 'nome_rotina','ordem', 'nome_momento', 'descricao', 'FK_turma_id', 'educador_nome',
             #             'FK_etapa_ensino_id' , 'etapa_ensino_nome', 'FK_grau_etapa_ensino_id', 'nome_grau', 'componente_curricular_nome', 'ano', 'nome_turma', 'turno_nome')
             tup1 = ('id' , 'turma_id', 'educador_nome', 'FK_etapa_ensino_id', 'etapa_ensino_nome', 
-                            'FK_grau_etapa_ensino_id', 'nome_grau', 'nome_turma', 'turno_nome')
+                            'FK_grau_etapa_ensino_id', 'nome_grau', 'nome_turma', 'turno_nome','FK_componente_id' , 'componente_curricular_nome')
 
             tup2 = estadoTupla
 
@@ -289,7 +290,7 @@ class RotinaAulaModel():
                 res = dict(zip(tup1, tup2))
                 listEstadosDict.append(res)
 
-        AceptKeysListTurmaCompoenente = {'id':str, 'turma_id':str,'educador_nome':str,'FK_etapa_ensino_id':str, 'etapa_ensino_nome':str, 'FK_grau_etapa_ensino_id':str,'nome_grau':str, 'nome_turma':str,'turno_nome':str}
+        AceptKeysListTurmaCompoenente = {'id':str, 'turma_id':str,'educador_nome':str,'FK_etapa_ensino_id':str, 'etapa_ensino_nome':str, 'FK_grau_etapa_ensino_id':str,'nome_grau':str, 'nome_turma':str,'turno_nome':str, 'FK_componente_id':str,'componente_curricular_nome':str}
 
         # NotAceptKeyForStart = {'id':str, 'turma_id':str,'educador_nome':str,'FK_etapa_ensino_id':str, 'etapa_ensino_nome':str, 'FK_grau_etapa_ensino_id':str,'nome_grau':str, 'nome_turma':str,'turno_nome':str}
 
@@ -333,7 +334,7 @@ class RotinaAulaModel():
 
                         turma_compoenenteDict[chave] = Dict[chave]
 
-                    if chave == 'turno_nome':
+                    if chave == 'componente_curricular_nome':
                         dictFinal['turma_compoenente']['itens'].append(turma_compoenenteDict)
 
                 if chave in dictFinal.keys():

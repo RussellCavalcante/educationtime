@@ -8,11 +8,12 @@ from app.blacklist import BLACKLIST
 
 atributos = reqparse.RequestParser()
 
-atributos.add_argument('nome_rotina', type=str, help="campo obrigatorio ")
-atributos.add_argument('FK_escola_id', type=int, help="campo obrigatorio")
+atributos.add_argument('nome', type=str, help="campo obrigatorio ")
+atributos.add_argument('FK_municipio_id', type=int, help="campo obrigatorio")
 atributos.add_argument('ano', type=str, help="campo obrigatorio ")
-atributos.add_argument('momentos', type=dict, help="campo obrigatorio ")
-atributos.add_argument('turma_compoenente', type=dict, help="campo obrigatorio ")
+atributos.add_argument('data_inicio', type=str, help="campo obrigatorio ")
+atributos.add_argument('data_limite', type=dict, help="campo obrigatorio ")
+atributos.add_argument('escolas', type=dict, help="campo obrigatorio ")
 
 
 class FormacaoServicoServices(Resource):
@@ -39,24 +40,26 @@ class FormacaoServicoServices(Resource):
 
             dados = atributos.parse_args()
             
-            FK_municipio_id = dados['FK_municipio_id'].strip()
-            nome_acao = dados['nome_acao']
+            FK_municipio_id = dados['FK_municipio_id']
+            nome = dados['nome']
+            ano = dados['ano']
             data_inicio = dados['data_inicio']
             data_limite = dados['data_limite']
             escolas = dados['escolas']
             
-            rotina_aula = FormacaoServicosModel.create_formacao_servico(nome_rotina, FK_escola_id, ano_letivo)
+            formacaoServico = FormacaoServicosModel.create_formacao_servico(FK_municipio_id, ano ,nome, data_inicio, data_limite)
             
-            for i , momento in enumerate(momentos['itens']):
-                momento_id = FormacaoServicosModel.create_momento( momento['nome_momento'],momento['ordem'], momento['descricao'])
-                FormacaoServicosModel.associate_rotina_aula_momento(rotina_aula, momento_id)
+            for i , escola in enumerate(escolas['itens']):
+                FormacaoServicosModel.associate_formacao_servico_escola(formacaoServico, escola['FK_escola_id'])
 
 
             
-            return  {'id': rotina_componente ,'nome_rotina': nome_rotina}, 201
+            return  {'id': formacaoServico }, 201
         
         except:
             return { 'error': 'verifique a requisição !' }, 400
+        
+        
     
     @jwt_required()
     def update(self, *args, **kwargs):

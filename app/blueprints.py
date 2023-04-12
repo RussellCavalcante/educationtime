@@ -1144,3 +1144,12 @@ def update_AgendaDiretoria(id):
     _Get_services = AgendaDiretoriaServices()
     
     return _Get_services.update(id)
+
+@avaliable_route.route('/FormacaoServico/Cadastro', methods=['POST'])
+
+def post_FormacaoServico():    
+    from app.services.formacaoservico import FormacaoServicoServices
+    
+    _Get_services = FormacaoServicoServices()
+    
+    return _Get_services.post_formacaoservico()

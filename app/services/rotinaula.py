@@ -27,15 +27,15 @@ class GetrotinaAula(Resource):
     
     @jwt_required()
     def get_by_id(self, *args, **kwargs):
-        # try:    
+        try:    
             rotinaaula = RotinaAulaModel.get_rotinaaula_by_id(args[0])
             componente = RotinaAulaModel.get_rotinaaula_componente_educador_by_id(args[0])
             
             rotinaaula['turma_compoenente'] = componente['turma_compoenente']
 
             return  rotinaaula, 200
-        # except:
-        #     return { 'error': 'verifique a requisição !' }, 400
+        except:
+            return { 'error': 'verifique a requisição !' }, 400
 
     @jwt_required()
     def post_rotinaoaula(self, *args, **kwargs):

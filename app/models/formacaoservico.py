@@ -249,8 +249,8 @@ class FormacaoServicosModel():
             # print(args)
             # input()
 
-            cursor.execute("""insert into formacao_servico ( nome, FK_escola_id, ano_letivo) OUTPUT INSERTED.id values(?,?,?);
-                           """,args[1], args[2], args[3])
+            cursor.execute("""insert into formacao_servico ( FK_municipio, ano_letivo, nome, data_inicio, data_limite) OUTPUT INSERTED.id values(?,?,?,?,?);
+                           """,args[1], args[2], args[3], args[4], args[5])
 
 
 
@@ -286,14 +286,14 @@ class FormacaoServicosModel():
         #     print(TypeError)
         # #     return None
     @classmethod
-    def associate_formacao_servico_momento(*args, **kwargs):
+    def associate_formacao_servico_escola(*args, **kwargs):
         # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
         # try:
             cursor = conn.cursor()
             # print(args)
             # input()
 
-            cursor.execute("insert into formacao_servico_momento ( FK_formacao_servico_id, FK_momento_id) values(?,?);",args[1], args[2])
+            cursor.execute("insert into formacao_servico_escola ( FK_formacao_servico_id , FK_escola_id) values(?,?);",args[1], args[2])
 
             conn.commit()
             # conn.close()
