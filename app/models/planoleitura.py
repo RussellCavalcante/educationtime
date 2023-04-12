@@ -91,10 +91,11 @@ class PlanoLeituraModel():
     def get_plano_leitura(*args, **kwargs):
         cursor = conn.cursor()
 
-        cursor.execute("""SELECT plano_leitura.id, plano_leitura.FK_escola_id, escola.nome_escola,
+        cursor.execute("""SELECT plano_componente_turma.id, plano_leitura.id, plano_leitura.FK_escola_id, escola.nome_escola,
                             escola.FK_municipio_id, municipio.nome, estado.uf, estado.nome, plano_leitura.ano,
                             plano_leitura.prazo, plano_leitura.qtd_livros
-                            FROM plano_leitura
+                            FROM plano_componente_turma
+                            INNER JOIN plano_leitura ON plano_componente_turma.FK_plano_leitura_id = plano_leitura.id
                             INNER JOIN escola ON  plano_leitura.FK_escola_id = escola.id
                             INNER JOIN municipio ON escola.FK_municipio_id = municipio.id
                             INNER JOIN estado ON municipio.FK_UF_id = estado.id""")
@@ -107,7 +108,7 @@ class PlanoLeituraModel():
         listEstadosDict = []
         for estadoTupla in result:
 
-            tup1 = ('id', 'FK_escola_id', 'nome_escola',
+            tup1 = ('id','plano_leitura_id', 'FK_escola_id', 'nome_escola',
                     'FK_municipio_id', 'municipio_nome', 'estado_uf', 'estado_nome', 'ano',
                     'prazo', 'qtd_livros' )
 
