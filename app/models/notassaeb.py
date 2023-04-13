@@ -91,36 +91,76 @@ class NotasSaebModel():
     def get_notas_saeb(*args, **kwargs):
         cursor = conn.cursor()
 
-        cursor.execute("""SELECT rotina_componente_turma.id, notas_saeb.id, notas_saeb.nome, users.nome, componente_curricular.nome,
-                         etapa_ensino.nome, notas_saeb.ano_letivo FROM rotina_componente_turma
-                        INNER JOIN notas_saeb ON rotina_componente_turma.FK_notas_saeb = notas_saeb.id
-                        INNER JOIN turma_componente_educador ON rotina_componente_turma.FK_turma_componente_educador_id = turma_componente_educador.id
-                        INNER JOIN profissional_escola_componente ON turma_componente_educador.FK_profissional_componente_id = profissional_escola_componente.id
-                        INNER JOIN users ON profissional_escola_componente.FK_user_id = users.id
-                        INNER JOIN componente_curricular ON profissional_escola_componente.FK_componente_id = componente_curricular.id
-                        INNER JOIN turma ON turma_componente_educador.FK_turma_id = turma.id
-                        INNER JOIN etapa_ensino ON turma.FK_etapa_ensino_id = etapa_ensino.id""")
+        cursor.execute("""SELECT notas_saeb.id, escola.FK_municipio_id, municipio.nome, municipio.FK_UF_id, estado.uf, estado.nome, notas_saeb.ano, 
+                        notas_saeb_area_conhecimento.id, notas_saeb_area_conhecimento.FK_area_conhecimento_id, area_conhecimento.nome, notas_saeb_area_conhecimento.nota
+                        FROM notas_saeb_area_conhecimento 
+                        INNER JOIN area_conhecimento ON notas_saeb_area_conhecimento.FK_area_conhecimento_id = area_conhecimento.id
+                        INNER JOIN notas_saeb ON notas_saeb_area_conhecimento.FK_notas_saeb_id = notas_saeb.id
+                        INNER JOIN escola ON notas_saeb.FK_escola_id = escola.id
+                        INNER JOIN municipio ON escola.FK_municipio_id = municipio.id
+                        INNER JOIN estado ON municipio.FK_UF_id = estado.id""")
 
         result = cursor.fetchall()
         cursor.close()
 
         # print(result)
         # input()
+        dictFinal = {}
         listEstadosDict = []
         for estadoTupla in result:
 
-            tup1 = ('id', 'notas_saeb_id','nome_rotina', 'educador_nome', 'componente_curricular_nome',
-                    'etapa_ensino_nome', 'ano' )
+            # tup1 = ('id', 'FK_UF_id' ,'nome_uf' , 'FK_municipio_id', 'municipio_nome' , 'FK_escola_id', 'nome_escola' , 'nome_rotina','ordem', 'nome_momento', 'descricao', 'FK_turma_id', 'educador_nome',
+            #             'FK_etapa_ensino_id' , 'etapa_ensino_nome', 'FK_grau_etapa_ensino_id', 'nome_grau', 'componente_curricular_nome', 'ano', 'nome_turma', 'turno_nome')
+            tup1 = ('id', 'FK_municipio_id', 'municipio_nome', 'FK_UF_id', 'estado_uf', 'estado_nome', 'ano', 
+                        'notas_saeb_area_conhecimento_id', 'FK_area_conhecimento_id', 'area_conhecimento_nome', 'nota')
 
             tup2 = estadoTupla
 
             if len(tup1) == len(tup2):
                 res = dict(zip(tup1, tup2))
-                # print(res)
-
                 listEstadosDict.append(res)
 
-        return listEstadosDict
+        AceptKeysListTurmaCompoenente = { 'notas_saeb_area_conhecimento_id':str, 'FK_area_conhecimento_id':str, 'area_conhecimento_nome':str, 'nota':str}
+
+        NotAceptKeyForStart = {'notas_saeb_area_conhecimento_id':str, 'FK_area_conhecimento_id':str, 'area_conhecimento_nome':str, 'nota':int}
+
+        # print(listEstadosDict)
+        # input()
+
+        for Dict in listEstadosDict:
+
+            # print(Dict)
+            # input()
+
+            # dictMmentos = {}
+            notasDict = {}
+
+            for chave in Dict:
+
+                if 'notas' not in dictFinal.keys():
+                    if chave == 'notas_saeb_area_conhecimento_id':
+
+                        dictFinal['notas'] = {'itens':[]}
+                        notasDict[chave] = Dict[chave]
+
+                else:
+                    if chave in AceptKeysListTurmaCompoenente.keys() :
+
+                        notasDict[chave] = Dict[chave]
+
+                    if chave == 'nota':
+                        dictFinal['notas']['itens'].append(notasDict)
+
+                if chave in dictFinal.keys():
+                    continue
+
+
+                if chave not in NotAceptKeyForStart.keys():
+                        
+                        dictFinal[chave] = Dict[chave]
+
+
+        return dictFinal
 
     @classmethod
     def get_notas_saeb_by_id(*args, **kwargs):

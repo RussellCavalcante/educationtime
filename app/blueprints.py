@@ -1189,3 +1189,12 @@ def post_NotasSaeb():
     _Get_services = NotasSaebServices()
     
     return _Get_services.post()
+
+@avaliable_route.route('/NotasSaeb', methods=['GET'])
+
+def get_post_NotasSaeb():    
+    from app.services.notassaeb import NotasSaebServices
+    
+    _Get_services = NotasSaebServices()
+    
+    return _Get_services.get()
