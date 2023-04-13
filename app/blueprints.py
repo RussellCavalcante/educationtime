@@ -1180,3 +1180,12 @@ def get_planoleitura():
     _Get_services = PlanoLeituraServices()
     
     return _Get_services.get()
+
+@avaliable_route.route('/NotasSaeb/Cadastro', methods=['POST'])
+
+def post_NotasSaeb():    
+    from app.services.notassaeb import NotasSaebServices
+    
+    _Get_services = NotasSaebServices()
+    
+    return _Get_services.post()
