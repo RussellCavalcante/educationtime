@@ -248,7 +248,7 @@ class FormacaoServicosModel():
             # print(args)
             # input()
 
-            cursor.execute("""insert into formacao_servico ( FK_municipio, ano_letivo, nome, data_inicio, data_limite) OUTPUT INSERTED.id values(?,?,?,?,?);
+            cursor.execute("""insert into formacao_servico ( FK_municipio, ano_letivo, nome, responsavel ,data_inicio, data_limite) OUTPUT INSERTED.id values(?,?,?,?,?,?);
                            """,args[1], args[2], args[3], args[4], args[5])
 
 

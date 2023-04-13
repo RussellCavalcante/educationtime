@@ -43,11 +43,12 @@ class FormacaoServicoServices(Resource):
             FK_municipio_id = dados['FK_municipio_id']
             nome = dados['nome']
             ano = dados['ano']
+            responsavel = dados['responsavel']
             data_inicio = dados['data_inicio']
             data_limite = dados['data_limite']
             escolas = dados['escolas']
             
-            formacaoServico = FormacaoServicosModel.create_formacao_servico(FK_municipio_id, ano ,nome, data_inicio, data_limite)
+            formacaoServico = FormacaoServicosModel.create_formacao_servico(FK_municipio_id, ano ,nome, responsavel, data_inicio, data_limite)
             
             for i , escola in enumerate(escolas['itens']):
                 FormacaoServicosModel.associate_formacao_servico_escola(formacaoServico, escola['FK_escola_id'])
