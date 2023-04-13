@@ -11,8 +11,9 @@ atributos = reqparse.RequestParser()
 atributos.add_argument('nome', type=str, help="campo obrigatorio ")
 atributos.add_argument('FK_municipio_id', type=int, help="campo obrigatorio")
 atributos.add_argument('ano', type=str, help="campo obrigatorio ")
+atributos.add_argument('responsavel', type=str, help="campo obrigatorio ")
 atributos.add_argument('data_inicio', type=str, help="campo obrigatorio ")
-atributos.add_argument('data_limite', type=dict, help="campo obrigatorio ")
+atributos.add_argument('data_limite', type=str, help="campo obrigatorio ")
 atributos.add_argument('escolas', type=dict, help="campo obrigatorio ")
 
 

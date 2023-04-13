@@ -92,7 +92,7 @@ class FormacaoServicosModel():
         cursor = conn.cursor()
 
         cursor.execute("""SELECT formacao_servico_escola.id, formacao_servico.id, formacao_servico.FK_municipio,
-                        formacao_servico.nome, formacao_servico.ano_letivo , formacao_servico.data_inicio, 
+                        formacao_servico.nome, formacao_servico.responsavel , formacao_servico.ano_letivo , formacao_servico.data_inicio, 
                         formacao_servico.data_limite, escola.id, escola.nome_escola 
                         FROM formacao_servico_escola 
                         INNER JOIN formacao_servico ON formacao_servico_escola.FK_formacao_servico_id = formacao_servico.id
@@ -108,7 +108,7 @@ class FormacaoServicosModel():
         for estadoTupla in result:
 
             tup1 = ('id', 'formacao_servico_id', 'FK_municipio',
-                        'formacao_servico_nome', 'ano' , 'data_inicio', 
+                        'formacao_servico_nome', 'responsavel' ,'ano' , 'data_inicio', 
                         'data_limite', 'FK_escola_id', 'nome_escola'  )
 
             tup2 = estadoTupla
