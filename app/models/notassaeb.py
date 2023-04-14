@@ -91,7 +91,7 @@ class NotasSaebModel():
     def get_notas_saeb(*args, **kwargs):
         cursor = conn.cursor()
 
-        cursor.execute("""SELECT notas_saeb.id, notas_saeb.FK_escola_id, escola.nome_escola, escola.FK_municipio_id,
+        cursor.execute("""SELECT notas_saeb_area_conhecimento.id, notas_saeb.FK_escola_id, escola.nome_escola, escola.FK_municipio_id,
                         municipio.nome, municipio.FK_UF_id, estado.uf, estado.nome, notas_saeb.ano, 
                         notas_saeb_area_conhecimento.id, notas_saeb_area_conhecimento.FK_area_conhecimento_id,
                         area_conhecimento.nome, notas_saeb_area_conhecimento.nota
@@ -284,7 +284,7 @@ class NotasSaebModel():
     def get_notas_saeb_by_FK_escola_id_and_ano(*args, **kwargs):
         cursor = conn.cursor()
 
-        cursor.execute(f"""SELECT notas_saeb.id, notas_saeb.FK_escola_id, escola.nome_escola, escola.FK_municipio_id,
+        cursor.execute(f"""SELECT notas_saeb_area_conhecimento.id, notas_saeb.FK_escola_id, escola.nome_escola, escola.FK_municipio_id,
                         municipio.nome, municipio.FK_UF_id, estado.uf, estado.nome, notas_saeb.ano, 
                         notas_saeb_area_conhecimento.id, notas_saeb_area_conhecimento.FK_area_conhecimento_id,
                         area_conhecimento.nome, notas_saeb_area_conhecimento.nota
