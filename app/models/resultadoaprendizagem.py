@@ -91,28 +91,28 @@ class ResultadoAprendizagemModel():
     def get_resultado_aprendizagem(*args, **kwargs):
         cursor = conn.cursor()
 
-        cursor.execute("""SELECT resultado_aprendizagem.id, escola.FK_municipio_id, municipio.nome, municipio.FK_UF_id, estado.uf, estado.nome, resultado_aprendizagem.ano, 
-                        resultado_aprendizagem_area_conhecimento.id, resultado_aprendizagem_area_conhecimento.FK_area_conhecimento_id, area_conhecimento.nome, resultado_aprendizagem_area_conhecimento.nota
-                        FROM resultado_aprendizagem_area_conhecimento 
-                        INNER JOIN area_conhecimento ON resultado_aprendizagem_area_conhecimento.FK_area_conhecimento_id = area_conhecimento.id
-                        INNER JOIN resultado_aprendizagem ON resultado_aprendizagem_area_conhecimento.FK_resultado_aprendizagem_id = resultado_aprendizagem.id
-                        INNER JOIN escola ON resultado_aprendizagem.FK_escola_id = escola.id
-                        INNER JOIN municipio ON escola.FK_municipio_id = municipio.id
-                        INNER JOIN estado ON municipio.FK_UF_id = estado.id""")
+        cursor.execute("""SELECT resultado_aprendizagem_acoes.id, nome_escola, escola.FK_municipio_id,
+                            municipio.nome, estado.uf, estado.nome, notas_saeb.ano
+                            FROM resultado_aprendizagem_acoes 
+                            INNER JOIN notas_saeb_area_conhecimento ON resultado_aprendizagem_acoes.FK_notas_saeb_area_conhecimento_id = notas_saeb_area_conhecimento.id
+                            INNER JOIN notas_saeb ON notas_saeb_area_conhecimento.FK_notas_saeb_id = notas_saeb.id
+                            INNER JOIN escola ON notas_saeb.FK_escola_id = escola.id
+                            INNER JOIN municipio ON escola.FK_municipio_id = municipio.id
+                            INNER JOIN estado ON municipio.FK_UF_id = estado.id""")
 
         result = cursor.fetchall()
         cursor.close()
 
         # print(result)
         # input()
-        dictFinal = {}
+        # dictFinal = {}
         listEstadosDict = []
         for estadoTupla in result:
 
             # tup1 = ('id', 'FK_UF_id' ,'nome_uf' , 'FK_municipio_id', 'municipio_nome' , 'FK_escola_id', 'nome_escola' , 'nome_rotina','ordem', 'nome_momento', 'descricao', 'FK_turma_id', 'educador_nome',
             #             'FK_etapa_ensino_id' , 'etapa_ensino_nome', 'FK_grau_etapa_ensino_id', 'nome_grau', 'componente_curricular_nome', 'ano', 'nome_turma', 'turno_nome')
-            tup1 = ('id', 'FK_municipio_id', 'municipio_nome', 'FK_UF_id', 'estado_uf', 'estado_nome', 'ano', 
-                        'resultado_aprendizagem_area_conhecimento_id', 'FK_area_conhecimento_id', 'area_conhecimento_nome', 'nota')
+            tup1 = ("id", 'nome_escola', "FK_municipio_id",
+                            "municipio_nome", "estado_uf", "estado_nome", "ano")
 
             tup2 = estadoTupla
 
@@ -120,47 +120,8 @@ class ResultadoAprendizagemModel():
                 res = dict(zip(tup1, tup2))
                 listEstadosDict.append(res)
 
-        AceptKeysListTurmaCompoenente = { 'resultado_aprendizagem_area_conhecimento_id':str, 'FK_area_conhecimento_id':str, 'area_conhecimento_nome':str, 'nota':str}
 
-        NotAceptKeyForStart = {'resultado_aprendizagem_area_conhecimento_id':str, 'FK_area_conhecimento_id':str, 'area_conhecimento_nome':str, 'nota':int}
-
-        # print(listEstadosDict)
-        # input()
-
-        for Dict in listEstadosDict:
-
-            # print(Dict)
-            # input()
-
-            # dictMmentos = {}
-            notasDict = {}
-
-            for chave in Dict:
-
-                if 'notas' not in dictFinal.keys():
-                    if chave == 'resultado_aprendizagem_area_conhecimento_id':
-
-                        dictFinal['notas'] = {'itens':[]}
-                        notasDict[chave] = Dict[chave]
-
-                else:
-                    if chave in AceptKeysListTurmaCompoenente.keys() :
-
-                        notasDict[chave] = Dict[chave]
-
-                    if chave == 'nota':
-                        dictFinal['notas']['itens'].append(notasDict)
-
-                if chave in dictFinal.keys():
-                    continue
-
-
-                if chave not in NotAceptKeyForStart.keys():
-                        
-                        dictFinal[chave] = Dict[chave]
-
-
-        return dictFinal
+        return listEstadosDict
 
     @classmethod
     def get_resultado_aprendizagem_by_id(*args, **kwargs):
