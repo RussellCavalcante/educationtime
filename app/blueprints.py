@@ -1196,5 +1196,17 @@ def get_post_NotasSaeb():
     from app.services.notassaeb import NotasSaebServices
     
     _Get_services = NotasSaebServices()
-    
+
+    if request.args.get('FK_escola_id') and request.args.get('ano'):
+        return _Get_services.get_notas_saeb_by_FK_escola_id_and_ano(request.args.get('FK_escola_id'), request.args.get('ano'))
+
     return _Get_services.get()
+
+@avaliable_route.route('/ResultadoAprendizagem/Cadastro', methods=['POST'])
+
+def post_ResultadoAprendizagem():    
+    from app.services.resultadoaprendizagem import ResultadoAprendizagemServices
+    
+    _Get_services = ResultadoAprendizagemServices()
+    
+    return _Get_services.post()

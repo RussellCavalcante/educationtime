@@ -5,7 +5,7 @@ import re
 from app import conn
 
 
-class NotasSaebModel():
+class ResultadoAprendizagemModel():
     # __tablename__ = 'estado'
 
 
@@ -26,10 +26,10 @@ class NotasSaebModel():
 
 
     @classmethod
-    def get_notas_saeb_by_rotina_componente_id(*args, **kwargs):
+    def get_resultado_aprendizagem_by_rotina_componente_id(*args, **kwargs):
         cursor = conn.cursor()
 
-        cursor.execute(f"""SELECT FK_notas_saeb
+        cursor.execute(f"""SELECT FK_resultado_aprendizagem
                             FROM rotina_componente_turma
                             WHERE id = {args[1]}
                             """)
@@ -57,12 +57,12 @@ class NotasSaebModel():
         return listEstadosDict
 
     @classmethod
-    def get_momento_id_by_notas_saeb(*args, **kwargs):
+    def get_momento_id_by_resultado_aprendizagem(*args, **kwargs):
         cursor = conn.cursor()
 
         cursor.execute(f"""SELECT FK_momento_id
-                            FROM notas_saeb_momento
-                            WHERE FK_notas_saeb_id = {args[1]}
+                            FROM resultado_aprendizagem_momento
+                            WHERE FK_resultado_aprendizagem_id = {args[1]}
 
                             """)
 
@@ -88,17 +88,15 @@ class NotasSaebModel():
 
 
     @classmethod
-    def get_notas_saeb(*args, **kwargs):
+    def get_resultado_aprendizagem(*args, **kwargs):
         cursor = conn.cursor()
 
-        cursor.execute("""SELECT notas_saeb.id, notas_saeb.FK_escola_id, escola.nome_escola, escola.FK_municipio_id,
-                        municipio.nome, municipio.FK_UF_id, estado.uf, estado.nome, notas_saeb.ano, 
-                        notas_saeb_area_conhecimento.id, notas_saeb_area_conhecimento.FK_area_conhecimento_id,
-                        area_conhecimento.nome, notas_saeb_area_conhecimento.nota
-                        FROM notas_saeb_area_conhecimento 
-                        INNER JOIN area_conhecimento ON notas_saeb_area_conhecimento.FK_area_conhecimento_id = area_conhecimento.id
-                        INNER JOIN notas_saeb ON notas_saeb_area_conhecimento.FK_notas_saeb_id = notas_saeb.id
-                        INNER JOIN escola ON notas_saeb.FK_escola_id = escola.id
+        cursor.execute("""SELECT resultado_aprendizagem.id, escola.FK_municipio_id, municipio.nome, municipio.FK_UF_id, estado.uf, estado.nome, resultado_aprendizagem.ano, 
+                        resultado_aprendizagem_area_conhecimento.id, resultado_aprendizagem_area_conhecimento.FK_area_conhecimento_id, area_conhecimento.nome, resultado_aprendizagem_area_conhecimento.nota
+                        FROM resultado_aprendizagem_area_conhecimento 
+                        INNER JOIN area_conhecimento ON resultado_aprendizagem_area_conhecimento.FK_area_conhecimento_id = area_conhecimento.id
+                        INNER JOIN resultado_aprendizagem ON resultado_aprendizagem_area_conhecimento.FK_resultado_aprendizagem_id = resultado_aprendizagem.id
+                        INNER JOIN escola ON resultado_aprendizagem.FK_escola_id = escola.id
                         INNER JOIN municipio ON escola.FK_municipio_id = municipio.id
                         INNER JOIN estado ON municipio.FK_UF_id = estado.id""")
 
@@ -107,18 +105,14 @@ class NotasSaebModel():
 
         # print(result)
         # input()
-        dictAll = []
         dictFinal = {}
-        
         listEstadosDict = []
         for estadoTupla in result:
 
             # tup1 = ('id', 'FK_UF_id' ,'nome_uf' , 'FK_municipio_id', 'municipio_nome' , 'FK_escola_id', 'nome_escola' , 'nome_rotina','ordem', 'nome_momento', 'descricao', 'FK_turma_id', 'educador_nome',
             #             'FK_etapa_ensino_id' , 'etapa_ensino_nome', 'FK_grau_etapa_ensino_id', 'nome_grau', 'componente_curricular_nome', 'ano', 'nome_turma', 'turno_nome')
-            tup1 = ('id', 'FK_escola_id', 'nome_escola', 'FK_municipio_id',
-                        'municipio_nome', 'FK_UF_id', 'estado_uf', 'estado_nome', 'ano', 
-                        'notas_saeb_area_conhecimento_id', 'FK_area_conhecimento_id',
-                        'area_conhecimento_nome', 'nota')
+            tup1 = ('id', 'FK_municipio_id', 'municipio_nome', 'FK_UF_id', 'estado_uf', 'estado_nome', 'ano', 
+                        'resultado_aprendizagem_area_conhecimento_id', 'FK_area_conhecimento_id', 'area_conhecimento_nome', 'nota')
 
             tup2 = estadoTupla
 
@@ -126,25 +120,25 @@ class NotasSaebModel():
                 res = dict(zip(tup1, tup2))
                 listEstadosDict.append(res)
 
-        AceptKeysListTurmaCompoenente = { 'notas_saeb_area_conhecimento_id':str, 'FK_area_conhecimento_id':str, 'area_conhecimento_nome':str, 'nota':str}
+        AceptKeysListTurmaCompoenente = { 'resultado_aprendizagem_area_conhecimento_id':str, 'FK_area_conhecimento_id':str, 'area_conhecimento_nome':str, 'nota':str}
 
-        NotAceptKeyForStart = {'notas_saeb_area_conhecimento_id':str, 'FK_area_conhecimento_id':str, 'area_conhecimento_nome':str, 'nota':int}
+        NotAceptKeyForStart = {'resultado_aprendizagem_area_conhecimento_id':str, 'FK_area_conhecimento_id':str, 'area_conhecimento_nome':str, 'nota':int}
 
         # print(listEstadosDict)
         # input()
 
         for Dict in listEstadosDict:
 
-            # print(dictAll)
+            # print(Dict)
             # input()
-            
+
             # dictMmentos = {}
             notasDict = {}
 
             for chave in Dict:
 
                 if 'notas' not in dictFinal.keys():
-                    if chave == 'notas_saeb_area_conhecimento_id':
+                    if chave == 'resultado_aprendizagem_area_conhecimento_id':
 
                         dictFinal['notas'] = {'itens':[]}
                         notasDict[chave] = Dict[chave]
@@ -157,57 +151,54 @@ class NotasSaebModel():
                     if chave == 'nota':
                         dictFinal['notas']['itens'].append(notasDict)
 
-                        dictAll.append(dictFinal)
-                        dictFinal = {}
-                        
                 if chave in dictFinal.keys():
                     continue
 
-                
+
                 if chave not in NotAceptKeyForStart.keys():
                         
                         dictFinal[chave] = Dict[chave]
 
 
-        return dictAll
+        return dictFinal
 
     @classmethod
-    def get_notas_saeb_by_id(*args, **kwargs):
+    def get_resultado_aprendizagem_by_id(*args, **kwargs):
         cursor = conn.cursor()
 
 
         # cursor.execute(f"""SELECT rotina_componente_turma.id, estado.id ,estado.uf , municipio.id, municipio.nome ,
-        #                     notas_saeb.FK_escola_id, escola.nome_escola , notas_saeb.nome,
+        #                     resultado_aprendizagem.FK_escola_id, escola.nome_escola , resultado_aprendizagem.nome,
         #                     momento.ordem, momento.nome_momento, momento.descricao, turma.id, users.nome,
         #                     turma.FK_etapa_ensino_id , etapa_ensino.nome, grau_etapa_ensino.id, grau_etapa_ensino.nome_grau, componente_curricular.nome,
-        #                     notas_saeb.ano_letivo, turma.nome_turma, turno.nome
+        #                     resultado_aprendizagem.ano_letivo, turma.nome_turma, turno.nome
         #                     FROM rotina_componente_turma
-        #                     INNER JOIN notas_saeb ON rotina_componente_turma.FK_notas_saeb = notas_saeb.id
-        #                     INNER JOIN notas_saeb_momento ON notas_saeb.id = notas_saeb_momento.FK_notas_saeb_id
-        #                     INNER JOIN momento ON notas_saeb_momento.FK_momento_id = momento.id
+        #                     INNER JOIN resultado_aprendizagem ON rotina_componente_turma.FK_resultado_aprendizagem = resultado_aprendizagem.id
+        #                     INNER JOIN resultado_aprendizagem_momento ON resultado_aprendizagem.id = resultado_aprendizagem_momento.FK_resultado_aprendizagem_id
+        #                     INNER JOIN momento ON resultado_aprendizagem_momento.FK_momento_id = momento.id
         #                     INNER JOIN turma_componente_educador ON rotina_componente_turma.FK_turma_componente_educador_id = turma_componente_educador.id
         #                     INNER JOIN profissional_escola_componente ON turma_componente_educador.FK_profissional_componente_id = profissional_escola_componente.id
         #                     INNER JOIN users ON profissional_escola_componente.FK_user_id = users.id
         #                     INNER JOIN componente_curricular ON profissional_escola_componente.FK_componente_id = componente_curricular.id
         #                     INNER JOIN turma ON turma_componente_educador.FK_turma_id = turma.id
         #                     INNER JOIN etapa_ensino ON turma.FK_etapa_ensino_id = etapa_ensino.id
-        #                     INNER JOIN escola ON notas_saeb.FK_escola_id = escola.id
+        #                     INNER JOIN escola ON resultado_aprendizagem.FK_escola_id = escola.id
         #                     INNER JOIN municipio ON escola.FK_municipio_id = municipio.id
         #                     INNER JOIN estado ON municipio.FK_UF_id = estado.id
         #                     INNER JOIN turno ON turma.FK_turno_id = turno.id
         #                     INNER JOIN grau_etapa_ensino ON turma.FK_grau_etapa_ensino_id = grau_etapa_ensino.id
         #                     WHERE rotina_componente_turma.id = {args[1]};""")
-        cursor.execute(f"""SELECT notas_saeb.id, municipio.FK_UF_id, estado.uf, 
-                            estado.nome, escola.FK_municipio_id, municipio.nome, notas_saeb.FK_escola_id, escola.nome_escola,
-                            notas_saeb.nome, notas_saeb.ano_letivo,
+        cursor.execute(f"""SELECT resultado_aprendizagem.id, municipio.FK_UF_id, estado.uf, 
+                            estado.nome, escola.FK_municipio_id, municipio.nome, resultado_aprendizagem.FK_escola_id, escola.nome_escola,
+                            resultado_aprendizagem.nome, resultado_aprendizagem.ano_letivo,
                             momento.ordem, momento.nome_momento, momento.descricao
-                            FROM notas_saeb_momento
-                            INNER JOIN notas_saeb ON notas_saeb_momento.FK_notas_saeb_id = notas_saeb.id
-                            INNER JOIN momento ON notas_saeb_momento.FK_momento_id = momento.id
-                            INNER JOIN escola ON notas_saeb.FK_escola_id = escola.id
+                            FROM resultado_aprendizagem_momento
+                            INNER JOIN resultado_aprendizagem ON resultado_aprendizagem_momento.FK_resultado_aprendizagem_id = resultado_aprendizagem.id
+                            INNER JOIN momento ON resultado_aprendizagem_momento.FK_momento_id = momento.id
+                            INNER JOIN escola ON resultado_aprendizagem.FK_escola_id = escola.id
                             INNER JOIN municipio ON escola.FK_municipio_id = municipio.id
                             INNER JOIN estado ON municipio.FK_UF_id = estado.id
-                            WHERE notas_saeb.id = {args[1]};""")
+                            WHERE resultado_aprendizagem.id = {args[1]};""")
 
         result = cursor.fetchall()
         cursor.close()
@@ -281,38 +272,57 @@ class NotasSaebModel():
         return dictFinal
     
     @classmethod
-    def get_notas_saeb_by_FK_escola_id_and_ano(*args, **kwargs):
+    def get_resultado_aprendizagem_componente_educador_by_id(*args, **kwargs):
         cursor = conn.cursor()
 
-        cursor.execute(f"""SELECT notas_saeb.id, notas_saeb.FK_escola_id, escola.nome_escola, escola.FK_municipio_id,
-                        municipio.nome, municipio.FK_UF_id, estado.uf, estado.nome, notas_saeb.ano, 
-                        notas_saeb_area_conhecimento.id, notas_saeb_area_conhecimento.FK_area_conhecimento_id,
-                        area_conhecimento.nome, notas_saeb_area_conhecimento.nota
-                        FROM notas_saeb_area_conhecimento 
-                        INNER JOIN area_conhecimento ON notas_saeb_area_conhecimento.FK_area_conhecimento_id = area_conhecimento.id
-                        INNER JOIN notas_saeb ON notas_saeb_area_conhecimento.FK_notas_saeb_id = notas_saeb.id
-                        INNER JOIN escola ON notas_saeb.FK_escola_id = escola.id
-                        INNER JOIN municipio ON escola.FK_municipio_id = municipio.id
-                        INNER JOIN estado ON municipio.FK_UF_id = estado.id
-                        WHERE notas_saeb.FK_escola_id = {args[1]} AND notas_saeb.ano = '{args[2]}'""")
+
+        # cursor.execute(f"""SELECT rotina_componente_turma.id, estado.id ,estado.uf , municipio.id, municipio.nome ,
+        #                     resultado_aprendizagem.FK_escola_id, escola.nome_escola , resultado_aprendizagem.nome,
+        #                     momento.ordem, momento.nome_momento, momento.descricao, turma.id, users.nome,
+        #                     turma.FK_etapa_ensino_id , etapa_ensino.nome, grau_etapa_ensino.id, grau_etapa_ensino.nome_grau, componente_curricular.nome,
+        #                     resultado_aprendizagem.ano_letivo, turma.nome_turma, turno.nome
+        #                     FROM rotina_componente_turma
+        #                     INNER JOIN resultado_aprendizagem ON rotina_componente_turma.FK_resultado_aprendizagem = resultado_aprendizagem.id
+        #                     INNER JOIN resultado_aprendizagem_momento ON resultado_aprendizagem.id = resultado_aprendizagem_momento.FK_resultado_aprendizagem_id
+        #                     INNER JOIN momento ON resultado_aprendizagem_momento.FK_momento_id = momento.id
+        #                     INNER JOIN turma_componente_educador ON rotina_componente_turma.FK_turma_componente_educador_id = turma_componente_educador.id
+        #                     INNER JOIN profissional_escola_componente ON turma_componente_educador.FK_profissional_componente_id = profissional_escola_componente.id
+        #                     INNER JOIN users ON profissional_escola_componente.FK_user_id = users.id
+        #                     INNER JOIN componente_curricular ON profissional_escola_componente.FK_componente_id = componente_curricular.id
+        #                     INNER JOIN turma ON turma_componente_educador.FK_turma_id = turma.id
+        #                     INNER JOIN etapa_ensino ON turma.FK_etapa_ensino_id = etapa_ensino.id
+        #                     INNER JOIN escola ON resultado_aprendizagem.FK_escola_id = escola.id
+        #                     INNER JOIN municipio ON escola.FK_municipio_id = municipio.id
+        #                     INNER JOIN estado ON municipio.FK_UF_id = estado.id
+        #                     INNER JOIN turno ON turma.FK_turno_id = turno.id
+        #                     INNER JOIN grau_etapa_ensino ON turma.FK_grau_etapa_ensino_id = grau_etapa_ensino.id
+        #                     WHERE rotina_componente_turma.id = {args[1]};""")
+        cursor.execute(f"""SELECT rotina_componente_turma.id , turma.id, users.nome, turma.FK_etapa_ensino_id, etapa_ensino.nome, 
+                        turma.FK_grau_etapa_ensino_id, grau_etapa_ensino.nome_grau, turma.nome_turma, turno.nome,
+                        profissional_escola_componente.FK_componente_id , componente_curricular.nome
+                        FROM rotina_componente_turma 
+                        INNER JOIN resultado_aprendizagem ON rotina_componente_turma.FK_resultado_aprendizagem = resultado_aprendizagem.id
+                        INNER JOIN turma_componente_educador ON rotina_componente_turma.FK_turma_componente_educador_id = turma_componente_educador.id
+                        INNER JOIN profissional_escola_componente ON  turma_componente_educador.FK_profissional_componente_id = profissional_escola_componente.id
+                        INNER JOIN componente_curricular ON profissional_escola_componente.FK_componente_id = componente_curricular.id
+                        INNER JOIN users ON profissional_escola_componente.FK_user_id = users.id
+                        INNER JOIN turma ON turma_componente_educador.FK_turma_id = turma.id
+                        INNER JOIN turno ON turma.FK_turno_id = turno.id
+                        INNER JOIN etapa_ensino ON turma.FK_etapa_ensino_id = etapa_ensino.id
+                        INNER JOIN grau_etapa_ensino ON turma.FK_grau_etapa_ensino_id = grau_etapa_ensino.id
+
+                        WHERE resultado_aprendizagem.id  = {args[1]};""")
 
         result = cursor.fetchall()
         cursor.close()
-
-        # print(result)
-        # input()
-        dictAll = []
         dictFinal = {}
-        
         listEstadosDict = []
         for estadoTupla in result:
 
             # tup1 = ('id', 'FK_UF_id' ,'nome_uf' , 'FK_municipio_id', 'municipio_nome' , 'FK_escola_id', 'nome_escola' , 'nome_rotina','ordem', 'nome_momento', 'descricao', 'FK_turma_id', 'educador_nome',
             #             'FK_etapa_ensino_id' , 'etapa_ensino_nome', 'FK_grau_etapa_ensino_id', 'nome_grau', 'componente_curricular_nome', 'ano', 'nome_turma', 'turno_nome')
-            tup1 = ('id', 'FK_escola_id', 'nome_escola', 'FK_municipio_id',
-                        'municipio_nome', 'FK_UF_id', 'estado_uf', 'estado_nome', 'ano', 
-                        'notas_saeb_area_conhecimento_id', 'FK_area_conhecimento_id',
-                        'area_conhecimento_nome', 'nota')
+            tup1 = ('id' , 'turma_id', 'educador_nome', 'FK_etapa_ensino_id', 'etapa_ensino_nome', 
+                            'FK_grau_etapa_ensino_id', 'nome_grau', 'nome_turma', 'turno_nome','FK_componente_id' , 'componente_curricular_nome')
 
             tup2 = estadoTupla
 
@@ -320,53 +330,66 @@ class NotasSaebModel():
                 res = dict(zip(tup1, tup2))
                 listEstadosDict.append(res)
 
-        AceptKeysListTurmaCompoenente = { 'notas_saeb_area_conhecimento_id':str, 'FK_area_conhecimento_id':str, 'area_conhecimento_nome':str, 'nota':str}
+        AceptKeysListTurmaCompoenente = {'id':str, 'turma_id':str,'educador_nome':str,'FK_etapa_ensino_id':str, 'etapa_ensino_nome':str, 'FK_grau_etapa_ensino_id':str,'nome_grau':str, 'nome_turma':str,'turno_nome':str, 'FK_componente_id':str,'componente_curricular_nome':str}
 
-        NotAceptKeyForStart = {'notas_saeb_area_conhecimento_id':str, 'FK_area_conhecimento_id':str, 'area_conhecimento_nome':str, 'nota':int}
+        # NotAceptKeyForStart = {'id':str, 'turma_id':str,'educador_nome':str,'FK_etapa_ensino_id':str, 'etapa_ensino_nome':str, 'FK_grau_etapa_ensino_id':str,'nome_grau':str, 'nome_turma':str,'turno_nome':str}
 
         # print(listEstadosDict)
         # input()
 
         for Dict in listEstadosDict:
 
-            # print(dictAll)
+            # print(Dict)
             # input()
-            
+
             # dictMmentos = {}
-            notasDict = {}
+            turma_compoenenteDict = {}
 
             for chave in Dict:
 
-                if 'notas' not in dictFinal.keys():
-                    if chave == 'notas_saeb_area_conhecimento_id':
+                # if 'momentos' not in dictFinal.keys():
+                #     if chave == 'ordem':
 
-                        dictFinal['notas'] = {'itens':[]}
-                        notasDict[chave] = Dict[chave]
+                #         dictFinal['momentos'] = {'itens':[]}
+                #         dictMmentos[chave] = Dict[chave]
+
+                # else:
+                    # if chave == 'ordem' or chave == 'nome_momento' or chave == 'descricao':
+
+                    #     dictMmentos[chave] = Dict[chave]
+
+                    # if chave == 'descricao':
+                    #     dictFinal['momentos']['itens'].append(dictMmentos)
+                # print(chave)
+                # input()
+
+                if 'turma_compoenente' not in dictFinal.keys():
+                    if chave == 'id':
+
+                        dictFinal['turma_compoenente'] = {'itens':[]}
+                        turma_compoenenteDict[chave] = Dict[chave]
 
                 else:
                     if chave in AceptKeysListTurmaCompoenente.keys() :
 
-                        notasDict[chave] = Dict[chave]
+                        turma_compoenenteDict[chave] = Dict[chave]
 
-                    if chave == 'nota':
-                        dictFinal['notas']['itens'].append(notasDict)
+                    if chave == 'componente_curricular_nome':
+                        dictFinal['turma_compoenente']['itens'].append(turma_compoenenteDict)
 
-                        dictAll.append(dictFinal)
-                        dictFinal = {}
-                        
                 if chave in dictFinal.keys():
                     continue
 
-                
-                if chave not in NotAceptKeyForStart.keys():
+
+                # if chave not in NotAceptKeyForStart.keys():
                         
-                        dictFinal[chave] = Dict[chave]
+                #         dictFinal[chave] = Dict[chave]
 
 
-        return dictAll
+        return dictFinal
 
     @classmethod
-    def get_notas_saeb_by_last_id(*args, **kwargs):
+    def get_resultado_aprendizagem_by_last_id(*args, **kwargs):
         cursor = conn.cursor()
 
 
@@ -393,14 +416,14 @@ class NotasSaebModel():
         return False
 
     @classmethod
-    def create_notas_saeb(*args, **kwargs):
+    def create_resultado_aprendizagem(*args, **kwargs):
         # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
         # try:
             cursor = conn.cursor()
             # print(args)
             # input()
 
-            cursor.execute("""insert into notas_saeb ( FK_escola_id, ano) OUTPUT INSERTED.id values(?,?);
+            cursor.execute("""insert into resultado_aprendizagem ( FK_escola_id, ano) OUTPUT INSERTED.id values(?,?);
                            """,args[1], args[2])
 
 
@@ -437,14 +460,14 @@ class NotasSaebModel():
         #     print(TypeError)
         # #     return None
     @classmethod
-    def associate_notas_saeb_momento(*args, **kwargs):
+    def associate_resultado_aprendizagem_momento(*args, **kwargs):
         # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
         # try:
             cursor = conn.cursor()
             # print(args)
             # input()
 
-            cursor.execute("insert into notas_saeb_momento ( FK_notas_saeb_id, FK_momento_id) values(?,?);",args[1], args[2])
+            cursor.execute("insert into resultado_aprendizagem_momento ( FK_resultado_aprendizagem_id, FK_momento_id) values(?,?);",args[1], args[2])
 
             conn.commit()
             # conn.close()
@@ -455,14 +478,14 @@ class NotasSaebModel():
         # #     return None
 
     @classmethod
-    def associate_notas_saeb_area_conhecimento(*args, **kwargs):
+    def associate_resultado_aprendizagem_area_conhecimento(*args, **kwargs):
         # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
         # try:
             cursor = conn.cursor()
             # print(args)
             # input()
 
-            cursor.execute("insert into notas_saeb_area_conhecimento ( FK_area_conhecimento_id, FK_notas_saeb_id, nota) values(?,?,?);",args[1], args[2], args[3])
+            cursor.execute("insert into resultado_aprendizagem_acoes ( nome_acao, prazo, FK_notas_saeb_area_conhecimento_id) values(?,?,?);",args[1], args[2], args[3])
 
             # result = cursor.fetchone()
             cursor.commit()
@@ -498,14 +521,14 @@ class NotasSaebModel():
 
 
     @classmethod
-    def associate_notas_saeb_momento(*args, **kwargs):
+    def associate_resultado_aprendizagem_momento(*args, **kwargs):
         # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
         # try:
             cursor = conn.cursor()
             # print(args)
             # input()
 
-            cursor.execute("insert into notas_saeb_momento ( FK_notas_saeb_id, FK_momento_id) OUTPUT INSERTED.id values(?,?);",args[1], args[2])
+            cursor.execute("insert into resultado_aprendizagem_momento ( FK_resultado_aprendizagem_id, FK_momento_id) OUTPUT INSERTED.id values(?,?);",args[1], args[2])
 
             result = cursor.fetchone()
             cursor.commit()
@@ -519,7 +542,7 @@ class NotasSaebModel():
         # #     return None
 
     @classmethod
-    def update_notas_saeb(*args, **kwargs):
+    def update_notas_saeb_area_conhecimento(*args, **kwargs):
         # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
         # try:
             cursor = conn.cursor()
@@ -527,10 +550,10 @@ class NotasSaebModel():
             # input()
 
             cursor.execute('''
-                        UPDATE notas_saeb
-                        SET nome = ?, FK_escola_id = ? , ano_letivo = ?
+                        UPDATE notas_saeb_area_conhecimento
+                        SET meta = ?
                         WHERE id = ?
-                        ''',args[1],args[2], args[3], int(args[4]))
+                        ''',args[1], args[2])
 
             conn.commit()
             # conn.close()
@@ -550,7 +573,7 @@ class NotasSaebModel():
                 # input()
 
             cursor.execute('''
-                            DELETE FROM rotina_componente_turma WHERE FK_notas_saeb = ?;
+                            DELETE FROM rotina_componente_turma WHERE FK_resultado_aprendizagem = ?;
 
                             ''', args[1])
 
@@ -586,7 +609,7 @@ class NotasSaebModel():
         # #     return None
 
     @classmethod
-    def delete_notas_saeb_momento(*args, **kwargs):
+    def delete_resultado_aprendizagem_momento(*args, **kwargs):
         # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
         # try:
             cursor = conn.cursor()
@@ -594,7 +617,7 @@ class NotasSaebModel():
                 # input()
 
             cursor.execute('''
-                            DELETE FROM notas_saeb_momento WHERE FK_momento_id = ?;
+                            DELETE FROM resultado_aprendizagem_momento WHERE FK_momento_id = ?;
 
                             ''', args[1])
 
@@ -616,7 +639,7 @@ class NotasSaebModel():
                 # input()
 
             cursor.execute('''
-                            DELETE FROM notas_saeb_momento WHERE FK_momento_id = ?;
+                            DELETE FROM resultado_aprendizagem_momento WHERE FK_momento_id = ?;
 
                             ''', args[1])
 
