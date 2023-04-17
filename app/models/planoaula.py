@@ -157,9 +157,16 @@ class planoAulaModel():
         for column, value in kwargs.items():
             if column != 'order_by' and value is not None:
                 if is_first_condition:
-                    query += f"WHERE {column} = '{value}'"
+                    if column == 'plano_aula_id':
+                        query += f"WHERE {'plano_aula.id'} = {value}"
+                        is_first_condition = False
+                    else:
+                        query += f"WHERE {column} = '{value}'"
+                        is_first_condition = False
+                    
                 else:
                     query += f"AND {column} = '{value}'"
+                    
 
         order_by = kwargs.get('order_by')
         if order_by:
@@ -171,11 +178,11 @@ class planoAulaModel():
         result = cursor.fetchall()
         cursor.close()
         json_string = result[0][0]
-        print(json_string)
-        json_obj = {'plano_aula': json_string}
-        print(json_obj)
-        input()
-        return json_obj
+        
+        # json_obj = {'plano_aula': json_string}
+        # print(json_obj)
+        # input()
+        return json_string
                         
     @classmethod
     def get_agenda_plano_aula_by_last_id(*args, **kwargs):

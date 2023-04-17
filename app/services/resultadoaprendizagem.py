@@ -47,8 +47,6 @@ class ResultadoAprendizagemServices(Resource):
             for i , metas in enumerate(metas['itens']):
                 ResultadoAprendizagemModel.update_notas_saeb_area_conhecimento(metas['meta'],metas['FK_notas_saeb_area_conhecimento_id'])
                 for i , acoes in enumerate(metas['acoes']):
-                    print(acoes)
-                    input()
                     ResultadoAprendizagemModel.associate_resultado_aprendizagem_area_conhecimento( acoes['nome_acao'], acoes['prazo'], metas['FK_notas_saeb_area_conhecimento_id'])
 
             return  {'id': metas['FK_notas_saeb_area_conhecimento_id'] }, 201
