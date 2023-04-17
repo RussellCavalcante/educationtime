@@ -1228,3 +1228,13 @@ def get_post_ResultadoAprendizagem():
     _Get_services = ResultadoAprendizagemServices()
 
     return _Get_services.get()
+
+@avaliable_route.route('/idadeserie', methods=['POST'])
+
+def post_IdadeSerie(): 
+
+        from app.services.idade_serie import IdadeSerieServices
+
+        _Get_services = IdadeSerieServices()
+
+        return _Get_services.post()

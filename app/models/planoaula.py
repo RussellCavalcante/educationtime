@@ -128,21 +128,25 @@ class planoAulaModel():
     @classmethod
     def get_plano_aula_by_turma_id(self, *args, **kwargs):
         cursor = conn.cursor()
-        query = f"""SELECT 
-                            distinct plano_aula.id, 
-                            plano_aula.FK_escola_id,
-                            municipio.id AS municipio_id ,municipio.nome as municipio_nome, estado.id AS estado_id, 
-                            estado.nome AS estado_nome, estado.uf ,
-                            plano_aula.FK_componente_escola_profissional_id,resultado, 
-                            area_conhecimento.id AS area_conhecimento_id, area_conhecimento.nome AS area_conhecimento_nome,
-                            componente_curricular.id AS componente_curricular_id, componente_curricular.nome AS componente_curricular_nome,
-                            plano_aula.ano,
-                            plano_aula.unidade_tematica,
-                            plano_aula.conteudo,
-                            plano_aula.FK_etapa_ensino,
-                            plano_aula.FK_turma_id,
-                            escola.nome_escola,
-                            (SELECT nome FROM conteudo_plano_aula WHERE FK_plano_aula_id = plano_aula.id FOR JSON PATH) AS sub_conteudo
+        qtd = kwargs.get('qtd')
+        if not qtd:
+            qtd = None
+             
+        queryDefalt = f"""SELECT distinct {'TOP ' + str(qtd) if qtd else ''}
+                            plano_aula.id AS plano_aula__id, 
+                            plano_aula.FK_escola_id AS plano_aula__FK_escola_id,
+                            municipio.id AS municipio__id ,municipio.nome as municipio__nome, estado.id AS estado__id, 
+                            estado.nome AS estado__nome, estado.uf AS estado__uf ,
+                            plano_aula.FK_componente_escola_profissional_id AS plano_aula__FK_componente_escola_profissional_id, resultado AS plano_aula__resultado, 
+                            area_conhecimento.id AS area_conhecimento__id, area_conhecimento.nome AS area_conhecimento__nome,
+                            componente_curricular.id AS componente_curricular__id, componente_curricular.nome AS componente_curricular__nome,
+                            plano_aula.ano AS plano_aula__ano,
+                            plano_aula.unidade_tematica AS plano_aula__unidade_tematica,
+                            plano_aula.conteudo AS plano_aula__conteudo,
+                            plano_aula.FK_etapa_ensino AS plano_aula__FK_etapa_ensino,
+                            plano_aula.FK_turma_id AS plano_aula__FK_turma_id,
+                            escola.nome_escola AS escola__nome_escola,
+                            (SELECT conteudo_plano_aula.id as conteudo_plano_aula__id ,nome as conteudo_plano_aula__nome FROM conteudo_plano_aula WHERE FK_plano_aula_id = plano_aula.id FOR JSON PATH) AS sub_conteudo
                         FROM plano_aula
                         INNER JOIN conteudo_plano_aula ON conteudo_plano_aula.FK_plano_aula_id = plano_aula.id
                         INNER JOIN escola ON plano_aula.FK_escola_id = escola.id
@@ -155,26 +159,36 @@ class planoAulaModel():
         
         is_first_condition = True
         for column, value in kwargs.items():
-            if column != 'order_by' and value is not None:
+            if column != 'order_by' and column != 'qtd' and value is not None:
                 if is_first_condition:
-                    if column == 'plano_aula_id':
-                        query += f"WHERE {'plano_aula.id'} = {value}"
-                        is_first_condition = False
-                    else:
-                        query += f"WHERE {column} = '{value}'"
-                        is_first_condition = False
+                    if column != 'qtd':
                     
+                        columnSplited = column.split('__')
+                    
+                    
+                        queryDefalt += f"WHERE {columnSplited[0]}.{columnSplited[1]} = {value}"
+                        is_first_condition = False
+                      
+                
                 else:
-                    query += f"AND {column} = '{value}'"
+                    columnSplited = column.split('__')
+                    print(columnSplited)
+                      
+                    queryDefalt += f"AND {columnSplited[0]}.{columnSplited[1]} = {value}"
+                
+                
+                
                     
 
         order_by = kwargs.get('order_by')
         if order_by:
-            query += f" ORDER BY {order_by}"
+            queryDefalt += f" ORDER BY {order_by}"
         
-        query += " FOR JSON PATH, ROOT('plano_aula');"
-    
-        cursor.execute(query)
+         
+        
+        queryDefalt += " FOR JSON PATH, ROOT('request');"
+
+        cursor.execute(queryDefalt)
         result = cursor.fetchall()
         cursor.close()
         json_string = result[0][0]
