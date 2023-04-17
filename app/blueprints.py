@@ -332,6 +332,15 @@ def get_planoaula_by(id):
     
     return _Get_services.get_by_id(id)
 
+@avaliable_route.route('/planoaula/turma', methods=['GET'])
+
+def get_planoaula_by_turma():    
+    from app.services.planoaula import GetPlanoAula
+    kwargs = request.args.to_dict()
+    _Get_services = GetPlanoAula()
+    
+    return _Get_services.get_by_turma_id(**kwargs)
+
 
 @avaliable_route.route('/PlanoaAula/Cadastro', methods=['POST'])
 

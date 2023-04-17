@@ -40,6 +40,15 @@ class GetPlanoAula(Resource):
             return { 'error': 'verifique a requisição !' }, 400
         
     @jwt_required()
+    def get_by_turma_id(self, *args, **kwargs):
+        # try:
+
+            return  planoAulaModel.get_plano_aula_by_turma_id(**kwargs), 200
+        
+        # except:
+           # return { 'error': 'verifique a requisição !' }, 400
+        
+    @jwt_required()
     def post_planoaula(self, *args, **kwargs):
         try:
 

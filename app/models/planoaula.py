@@ -1,5 +1,7 @@
 from sqlalchemy.dialects.postgresql import UUID
 # from app import banco
+import json
+
 from uuid import uuid1, uuid4
 import re
 from app import conn
@@ -123,6 +125,58 @@ class planoAulaModel():
         
         return dictFinal
     
+    @classmethod
+    def get_plano_aula_by_turma_id(self, *args, **kwargs):
+        cursor = conn.cursor()
+        query = f"""SELECT 
+                            distinct plano_aula.id, 
+                            plano_aula.FK_escola_id,
+                            municipio.id AS municipio_id ,municipio.nome as municipio_nome, estado.id AS estado_id, 
+                            estado.nome AS estado_nome, estado.uf ,
+                            plano_aula.FK_componente_escola_profissional_id,resultado, 
+                            area_conhecimento.id AS area_conhecimento_id, area_conhecimento.nome AS area_conhecimento_nome,
+                            componente_curricular.id AS componente_curricular_id, componente_curricular.nome AS componente_curricular_nome,
+                            plano_aula.ano,
+                            plano_aula.unidade_tematica,
+                            plano_aula.conteudo,
+                            plano_aula.FK_etapa_ensino,
+                            plano_aula.FK_turma_id,
+                            escola.nome_escola,
+                            (SELECT nome FROM conteudo_plano_aula WHERE FK_plano_aula_id = plano_aula.id FOR JSON PATH) AS sub_conteudo
+                        FROM plano_aula
+                        INNER JOIN conteudo_plano_aula ON conteudo_plano_aula.FK_plano_aula_id = plano_aula.id
+                        INNER JOIN escola ON plano_aula.FK_escola_id = escola.id
+                        INNER JOIN profissional_escola_componente ON  plano_aula.FK_componente_escola_profissional_id = profissional_escola_componente.id
+                        INNER JOIN componente_curricular ON componente_curricular.id = profissional_escola_componente.FK_componente_id
+                        INNER JOIN area_conhecimento ON area_conhecimento.id = componente_curricular.FK_area_conhecimento_id
+                        INNER JOIN municipio ON escola.FK_municipio_id = municipio.id
+                        INNER JOIN estado ON municipio.FK_UF_id = estado.id
+                        """
+        
+        is_first_condition = True
+        for column, value in kwargs.items():
+            if column != 'order_by' and value is not None:
+                if is_first_condition:
+                    query += f"WHERE {column} = '{value}'"
+                else:
+                    query += f"AND {column} = '{value}'"
+
+        order_by = kwargs.get('order_by')
+        if order_by:
+            query += f" ORDER BY {order_by}"
+        
+        query += " FOR JSON PATH, ROOT('plano_aula');"
+    
+        cursor.execute(query)
+        result = cursor.fetchall()
+        cursor.close()
+        json_string = result[0][0]
+        print(json_string)
+        json_obj = {'plano_aula': json_string}
+        print(json_obj)
+        input()
+        return json_obj
+                        
     @classmethod
     def get_agenda_plano_aula_by_last_id(*args, **kwargs):
         cursor = conn.cursor()
