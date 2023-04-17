@@ -19,7 +19,7 @@ class TarefaCasaServices(Resource):
     def get(self, *args, **kwargs):
         try:
                 
-            return  TarefaCasaModel.get_resultado_aprendizagem(), 200
+            return  TarefaCasaModel.get_tarefa_casa(**kwargs), 200
         except:
             return { 'error': 'verifique a requisição !' }, 400
         

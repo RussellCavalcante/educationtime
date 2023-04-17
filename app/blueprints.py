@@ -1247,3 +1247,14 @@ def post_tarefacasa():
     _Get_services = TarefaCasaServices()
     
     return _Get_services.post()
+
+@avaliable_route.route('/TarefaCasa', methods=['GET'])
+
+def get_tarefacasa():    
+    from app.services.tarefacasa import TarefaCasaServices
+    kwargs = request.args.to_dict()
+    _Get_services = TarefaCasaServices()
+    
+    return _Get_services.get(**kwargs)
+
+
