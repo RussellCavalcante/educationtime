@@ -1229,7 +1229,7 @@ def get_post_ResultadoAprendizagem():
 
     return _Get_services.get()
 
-@avaliable_route.route('/idadeserie', methods=['POST'])
+@avaliable_route.route('/idadeserie/Cadastro', methods=['POST'])
 
 def post_IdadeSerie(): 
 
@@ -1238,3 +1238,12 @@ def post_IdadeSerie():
         _Get_services = IdadeSerieServices()
 
         return _Get_services.post()
+
+@avaliable_route.route('/TarefaCasa/Cadastro', methods=['POST'])
+
+def post_tarefacasa():    
+    from app.services.tarefacasa import TarefaCasaServices
+    
+    _Get_services = TarefaCasaServices()
+    
+    return _Get_services.post()
