@@ -30,12 +30,12 @@ class IdadeSerieServices(Resource):
         try:
 
             dados = atributos.parse_args()
-            FK_escola_id = dados['FK_escola_id']
+            FK_turma_id = dados['FK_turma_id']
             resultado = dados['resultado']
             meta = dados['meta']
             acoes = dados['acoes']
             
-            idIdadeSerie = IdadeSerieModel.create_idade_serie(FK_escola_id, resultado, meta)
+            idIdadeSerie = IdadeSerieModel.create_idade_serie(FK_turma_id, resultado, meta)
             
             for i , acoes in enumerate(acoes['itens']):
                 IdadeSerieModel.associate_acao_idade_serie(idIdadeSerie, acoes['nome_acao'], acoes['prazo'])
