@@ -1,6 +1,9 @@
 from flask_restful import Resource, reqparse
 from app.models.profissional_educacao import ProfissionaisEducacaoModel
 from app.models.user import UserModel
+from app.utils.contrucotorEmail import constructorEmail
+from app.utils.sendEmail import sendEmailModel
+from datetime import date
 
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt
 # from app.config import conn
@@ -187,6 +190,18 @@ class ProfissionaisEducacaoServices(Resource):
             UserModel.create_profissionais_educacao(cpf, nome, email, int(telefone), perfil_ativo)
 
             user = UserModel.find_by_login(cpf)
+
+            salt = UserModel.get_new_salt()
+
+            today = date.today()
+
+            hashconvite = UserModel.password_encrypted(cpf, salt)
+
+            body = sendEmailModel.conviteAcesso(hashconvite)
+
+            constructorEmail(email, body)
+
+            UserModel.create_convite_acesso(user[0], str(today), hashconvite, salt)
             
             UserModel.associateProfissionalEscolaPerfil(user[0], FK_escola_id, FK_perfil_id)
 

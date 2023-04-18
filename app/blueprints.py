@@ -1257,4 +1257,13 @@ def get_tarefacasa():
     
     return _Get_services.get(**kwargs)
 
+@avaliable_route.route('/Calendario/Cadastro', methods=['POST'])
+
+def post_calendario():    
+    from app.services.calendario import CalendarioServices
+    
+    _Get_services = CalendarioServices()
+    
+    return _Get_services.post()
+
 

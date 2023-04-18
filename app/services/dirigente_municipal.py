@@ -1,6 +1,9 @@
 from flask_restful import Resource, reqparse
 from app.models.dirigente_municipal import DirigenteMunicipalModel
 from app.models.user import UserModel
+from app.utils.contrucotorEmail import constructorEmail
+from app.utils.sendEmail import sendEmailModel
+from datetime import date
 
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt
 # from app.config import conn
@@ -65,6 +68,23 @@ class DirigenteMunicipalServices(Resource):
             UserModel.create_dirigente_municipal(cpf, nome, email, int(telefone), FK_perfil_id)
 
             user = UserModel.find_by_login(cpf)
+
+            salt = UserModel.get_new_salt()
+
+            today = date.today()
+
+            hashconvite = UserModel.password_encrypted(cpf, salt)
+
+            body = sendEmailModel.conviteAcesso(hashconvite)
+
+            constructorEmail(email, body)
+
+            UserModel.create_convite_acesso(user[0], str(today), hashconvite, salt)
+
+            if UserModel.get_user_profiles_by_user_id(user[0]):
+                return {'error':'Usuario ja associado a perfil selecianado'}, 400
+
+            UserModel.associateUserProfile(user[0], FK_perfil_id)
             
             DirigenteMunicipalModel.create_dirigente_municipal(data_inicio, data_fim, FK_secretaria_municipio_id, user[0])
             
