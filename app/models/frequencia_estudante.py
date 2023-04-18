@@ -5,7 +5,7 @@ import re
 from app import conn
 
 
-class TarefaCasaModel(): 
+class FrequenciaEstudanteModel(): 
     
     @classmethod
     def get_plano_aula_by_id(*args, **kwargs):
@@ -74,16 +74,16 @@ class TarefaCasaModel():
         return dictFinal
     
     @classmethod
-    def get_tarefa_casa(self, *args, **kwargs):
+    def get_frequencia_estudante(self, *args, **kwargs):
         cursor = conn.cursor()
         qtd = kwargs.get('qtd')
         if not qtd:
             qtd = None
              
         queryDefalt = f"""SELECT distinct {'TOP ' + str(qtd) if qtd else ''} 
-                            tarefa_casa.id AS tarefa_casa__id, 
-                            tarefa_casa.nome_tarefa AS tarefa_casa__nome_tarefa,
-                            tarefa_casa.data_entrega AS tarefa_casa__data_entrega,
+                            frequencia_estudante.id AS frequencia_estudante__id, 
+                            frequencia_estudante.nome_tarefa AS frequencia_estudante__nome_tarefa,
+                            frequencia_estudante.data_entrega AS frequencia_estudante__data_entrega,
                             estado.nome AS estado__nome, estado.uf AS estado__uf ,
                             municipio.id AS municipio__id ,municipio.nome as municipio__nome, estado.id AS estado__id, 
                             escola.nome_escola AS escola__nome_escola,
@@ -95,8 +95,8 @@ class TarefaCasaModel():
                             plano_aula.unidade_tematica AS plano_aula__unidade_tematica,
                             plano_aula.conteudo AS plano_aula__conteudo,
                             plano_aula.FK_etapa_ensino AS plano_aula__FK_etapa_ensino
-                        FROM tarefa_casa
-                        INNER JOIN conteudo_plano_aula ON conteudo_plano_aula.id = tarefa_casa.FK_conteudo_plano_aula_id
+                        FROM frequencia_estudante
+                        INNER JOIN conteudo_plano_aula ON conteudo_plano_aula.id = frequencia_estudante.FK_conteudo_plano_aula_id
                         INNER JOIN plano_aula ON plano_aula.id = conteudo_plano_aula.FK_plano_aula_id
                         INNER JOIN escola ON plano_aula.FK_escola_id = escola.id
                         INNER JOIN profissional_escola_componente ON  plano_aula.FK_componente_escola_profissional_id = profissional_escola_componente.id
@@ -151,14 +151,14 @@ class TarefaCasaModel():
         return j
 
     @classmethod
-    def associate_tarefa_casa_serie(*args, **kwargs):
+    def associate_frequencia_estudante_serie(*args, **kwargs):
         # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
         # try:
             cursor = conn.cursor()
             # print(args)
             # input()
 
-            cursor.execute("insert into tarefa_casa (FK_tarefa_casa_id, nome_acao, prazo) values(?,?,?);",args[1], args[2], args[3])
+            cursor.execute("insert into frequencia_estudante (FK_frequencia_estudante_id, nome_acao, prazo) values(?,?,?);",args[1], args[2], args[3])
 
             # result = cursor.fetchone()
             cursor.commit()
@@ -172,14 +172,14 @@ class TarefaCasaModel():
         # #     return None
 
     @classmethod
-    def create_tarefa_casa(*args, **kwargs):
+    def create_frequencia_estudante(*args, **kwargs):
         # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
         # try:
             cursor = conn.cursor()
             # print(args)
             # input()
 
-            cursor.execute("insert into tarefa_casa ( FK_conteudo_plano_aula_id, nome_tarefa, data_entrega) OUTPUT INSERTED.id values(?,?,?);",args[1], args[2], args[3])
+            cursor.execute("insert into frequencia_estudante ( FK_conteudo_plano_aula_id, nome_tarefa, data_entrega) OUTPUT INSERTED.id values(?,?,?);",args[1], args[2], args[3])
 
             result = cursor.fetchone()
             cursor.commit()

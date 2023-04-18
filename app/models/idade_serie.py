@@ -76,29 +76,17 @@ class IdadeSerieModel():
         queryDefalt += " FOR JSON PATH, ROOT('request');"
 
         cursor.execute(queryDefalt)
-        result = cursor.fetchone()
+        result = cursor.fetchall()
         cursor.close()
+        
+        datastr = str(result)
 
-        print(result[0])
-        input()
-        # pprint.pprint(result[0])
-        # input()
-        if kwargs.items():
-            
-            json_string = result[0]
-        else:
-            json_string = result[0] + ']}'
-        # print(type(json_string))
-        # pprint.pprint(json_string)
-        # input()
-        # jsonSend = json.loads(json_string)
-        j = eval(json_string)
-        print(j)
-        # print(j)
-        # input()
-        # json_obj = {'plano_aula': json_string}
-        # print(json_obj)
-        # input()
+        strip1 = datastr.lstrip("[('")
+        strip2 = strip1.rstrip("', )]")
+        
+        
+        j = eval(strip2)
+        
         return j
     
     @classmethod
