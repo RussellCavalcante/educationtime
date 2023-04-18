@@ -8,7 +8,7 @@ from app.blacklist import BLACKLIST
 
 atributos = reqparse.RequestParser()
 
-atributos.add_argument('FK_escola_id', type=int, help="campo obrigatorio ")
+atributos.add_argument('FK_turma_id', type=int, help="campo obrigatorio ")
 atributos.add_argument('resultado', type=float, help="campo obrigatorio ")
 atributos.add_argument('meta', type=float, help="campo obrigatorio ")
 atributos.add_argument('acoes', type=dict, help="campo obrigatorio ")
