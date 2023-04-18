@@ -18,10 +18,11 @@ class IdadeSerieServices(Resource):
     @jwt_required()
     def get(self, *args, **kwargs):
         try:
-                
-            return  IdadeSerieModel.get_resultado_aprendizagem(), 200
+
+            return  IdadeSerieModel.get(**kwargs), 200
+        
         except:
-            return { 'error': 'verifique a requisição !' }, 400
+           return { 'error': 'verifique a requisição !' }, 400
         
 
     @jwt_required()
