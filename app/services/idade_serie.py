@@ -8,7 +8,7 @@ from app.blacklist import BLACKLIST
 
 atributos = reqparse.RequestParser()
 
-atributos.add_argument('FK_escola_id', type=int, help="campo obrigatorio ")
+atributos.add_argument('FK_turma_id', type=int, help="campo obrigatorio ")
 atributos.add_argument('resultado', type=float, help="campo obrigatorio ")
 atributos.add_argument('meta', type=float, help="campo obrigatorio ")
 atributos.add_argument('acoes', type=dict, help="campo obrigatorio ")
@@ -18,10 +18,11 @@ class IdadeSerieServices(Resource):
     @jwt_required()
     def get(self, *args, **kwargs):
         try:
-                
-            return  IdadeSerieModel.get_resultado_aprendizagem(), 200
+
+            return  IdadeSerieModel.get(**kwargs), 200
+        
         except:
-            return { 'error': 'verifique a requisição !' }, 400
+           return { 'error': 'verifique a requisição !' }, 400
         
 
     @jwt_required()
@@ -29,12 +30,12 @@ class IdadeSerieServices(Resource):
         try:
 
             dados = atributos.parse_args()
-            FK_escola_id = dados['FK_escola_id']
+            FK_turma_id = dados['FK_turma_id']
             resultado = dados['resultado']
             meta = dados['meta']
             acoes = dados['acoes']
             
-            idIdadeSerie = IdadeSerieModel.create_idade_serie(FK_escola_id, resultado, meta)
+            idIdadeSerie = IdadeSerieModel.create_idade_serie(FK_turma_id, resultado, meta)
             
             for i , acoes in enumerate(acoes['itens']):
                 IdadeSerieModel.associate_acao_idade_serie(idIdadeSerie, acoes['nome_acao'], acoes['prazo'])

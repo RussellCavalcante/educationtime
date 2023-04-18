@@ -1239,6 +1239,15 @@ def post_IdadeSerie():
 
         return _Get_services.post()
 
+@avaliable_route.route('/idadeserie', methods=['GET'])
+
+def get_idadeserie():    
+    from app.services.idade_serie import IdadeSerieServices
+    kwargs = request.args.to_dict()
+    _Get_services = IdadeSerieServices()
+    
+    return _Get_services.get(**kwargs)
+
 @avaliable_route.route('/TarefaCasa/Cadastro', methods=['POST'])
 
 def post_tarefacasa():    
