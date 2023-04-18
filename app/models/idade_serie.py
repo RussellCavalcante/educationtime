@@ -3,6 +3,8 @@ from sqlalchemy.dialects.postgresql import UUID
 from uuid import uuid1, uuid4
 import re
 from app import conn
+import json
+import pprint
 
 
 class IdadeSerieModel(): 
@@ -67,14 +69,30 @@ class IdadeSerieModel():
         queryDefalt += " FOR JSON PATH, ROOT('request');"
 
         cursor.execute(queryDefalt)
-        result = cursor.fetchall()
+        result = cursor.fetchone()
         cursor.close()
-        json_string = result[0][0]
-        
+
+        # print(result[0])
+        # input()
+        # pprint.pprint(result[0])
+        # input()
+        if kwargs.items():
+            
+            json_string = result[0]
+        else:
+            json_string = result[0] + ']}'
+        # print(type(json_string))
+        # pprint.pprint(json_string)
+        # input()
+        # jsonSend = json.loads(json_string)
+        j = eval(json_string)
+       
+        # print(j)
+        # input()
         # json_obj = {'plano_aula': json_string}
         # print(json_obj)
         # input()
-        return json_string
+        return j
     
     @classmethod
     def associate_acao_idade_serie(*args, **kwargs):
