@@ -36,8 +36,8 @@ class IdadeSerieModel():
                                 (SELECT acao_idade_serie.id AS acao_idade_serie__id, acao_idade_serie.nome_acao AS acao_idade_serie__nome_acao, acao_idade_serie.prazo AS acao_idade_serie__prazo  FROM acao_idade_serie WHERE acao_idade_serie.FK_idade_serie_id = idade_serie.id FOR JSON PATH) AS acoes
                             FROM idade_serie
                             INNER JOIN turma ON idade_serie.FK_turma_id = turma.id
-                            INNER JOIN etapa_ensino ON turma.FK_etapa_ensino_id = etapa_ensino.id
                             INNER JOIN grau_etapa_ensino ON turma.FK_grau_etapa_ensino_id = grau_etapa_ensino.id
+                            INNER JOIN etapa_ensino ON grau_etapa_ensino.FK_etapa_ensino = etapa_ensino.id
                             INNER JOIN turno ON turma.FK_turno_id = turno.id
                             INNER JOIN escola ON turma.FK_escola_id = escola.id
                             INNER JOIN municipio ON escola.FK_municipio_id = municipio.id
@@ -79,8 +79,8 @@ class IdadeSerieModel():
         result = cursor.fetchone()
         cursor.close()
 
-        # print(result[0])
-        # input()
+        print(result[0])
+        input()
         # pprint.pprint(result[0])
         # input()
         if kwargs.items():
@@ -93,7 +93,7 @@ class IdadeSerieModel():
         # input()
         # jsonSend = json.loads(json_string)
         j = eval(json_string)
-       
+        print(j)
         # print(j)
         # input()
         # json_obj = {'plano_aula': json_string}
