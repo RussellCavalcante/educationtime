@@ -26,11 +26,18 @@ class IdadeSerieModel():
                                 escola.nome_escola AS escola__nome_escola,
                                 idade_serie.FK_turma_id AS idade_serie__FK_turma_id,
                                 turma.id AS turma__id,
+                                turma.ano_letivo AS turma__ano_letivo,
                                 turma.nome_turma AS turma__nome_turma,
                                 turno.nome AS turno__nome,
+                                etapa_ensino.id AS etapa_ensino__id,
+                                etapa_ensino.nome AS etapa_ensino__nome,
+                                grau_etapa_ensino.id AS grau_etapa_ensino__id,
+                                grau_etapa_ensino.nome_grau AS grau_etapa_ensino__nome_grau,
                                 (SELECT acao_idade_serie.id AS acao_idade_serie__id, acao_idade_serie.nome_acao AS acao_idade_serie__nome_acao, acao_idade_serie.prazo AS acao_idade_serie__prazo  FROM acao_idade_serie WHERE acao_idade_serie.FK_idade_serie_id = idade_serie.id FOR JSON PATH) AS acoes
                             FROM idade_serie
                             INNER JOIN turma ON idade_serie.FK_turma_id = turma.id
+                            INNER JOIN etapa_ensino ON turma.FK_etapa_ensino_id = etapa_ensino.id
+                            INNER JOIN grau_etapa_ensino ON turma.FK_grau_etapa_ensino_id = grau_etapa_ensino.id
                             INNER JOIN turno ON turma.FK_turno_id = turno.id
                             INNER JOIN escola ON turma.FK_escola_id = escola.id
                             INNER JOIN municipio ON escola.FK_municipio_id = municipio.id
