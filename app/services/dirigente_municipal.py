@@ -21,6 +21,7 @@ atributos.add_argument('data_inicio', type=str, help="campo de nome do usuario e
 atributos.add_argument('data_fim', type=str, help="campo de email e obrigatorio")
 atributos.add_argument('FK_secretaria_municipio_id', type=int, help="FK_secretaria_municipal")
 atributos.add_argument('FK_user_id', type=int, help="campo de user")
+atributos.add_argument('perfil_ativo', type=int, help="campo de user")
 
 
 class DirigenteMunicipalServices(Resource):
@@ -49,7 +50,7 @@ class DirigenteMunicipalServices(Resource):
 
     @jwt_required()
     def post(self, *args, **kwargs):
-        try:
+        # try:
                 
             dados = atributos.parse_args()
             cpf = dados['cpf']
@@ -57,18 +58,22 @@ class DirigenteMunicipalServices(Resource):
             telefone = dados['telefone']
             email = dados['email'].strip()
             FK_perfil_id = dados['FK_perfil_id']
-
+            perfil_ativo = dados['perfil_ativo']
             data_inicio = dados['data_inicio']
             data_fim = dados['data_fim']
             FK_secretaria_municipio_id = dados['FK_secretaria_municipio_id']
-            
+
+            if UserModel.find_by_FK_secretaria_municipio_id(FK_secretaria_municipio_id):
+                return {'error': 'Secreataria ja possui dirigente ativo.'}, 400
+
             if UserModel.find_by_login(cpf):
-                return {'error': 'Cpf já cadastrado'}, 400
+                return {'error': 'Cpf já cadastrado'}, 400  
             
             if UserModel.find_by_email(email):
                 return {'error': 'Email já cadastrado'}, 400
+            
 
-            UserModel.create_dirigente_municipal(cpf, nome, email, int(telefone), FK_perfil_id)
+            UserModel.create_dirigente_municipal(cpf, nome, email, int(telefone), perfil_ativo)
 
             user = UserModel.find_by_login(cpf)
 
@@ -93,8 +98,8 @@ class DirigenteMunicipalServices(Resource):
             
             return  {'created': nome}, 201
         
-        except:
-            return { 'error': 'verifique a requisição !' }, 400
+        # except:
+        #     return { 'error': 'verifique a requisição !' }, 400
         
         
 

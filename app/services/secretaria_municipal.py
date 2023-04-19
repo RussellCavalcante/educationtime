@@ -53,6 +53,9 @@ class GetSecretariamunicipal(Resource):
 
             if SecretariaMunicipalModel.find_by_cnpj(cnpj):
                 return {'status': "Cnpj já cadastrado."}, 400
+            
+            if SecretariaMunicipalModel.find_by_FK_secretaria_municipio_id(FK_secretaria_municipio_id):
+                return {'status': "Municipio selecionado já possui secretaria associada."}, 400
 
             SecretariaMunicipalModel.create_secretaria_municipal(nome, cnpj, endereco, telefone, email,status, FK_secretaria_municipio_id)
             return  {'created': nome}, 201

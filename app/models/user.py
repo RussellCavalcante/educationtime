@@ -96,6 +96,30 @@ class UserModel():
         return False
     
     @classmethod
+    def find_by_FK_secretaria_municipio_id(cls, FK_secretaria_municipio_id):
+        # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
+        cursor = conn.cursor()
+ 
+        cursor.execute("select id, FK_user_id from dirigente_municipal where FK_secretaria_municipal_id = ? ;", FK_secretaria_municipio_id)
+
+        rows = cursor.fetchall()
+
+        cursor.commit()
+        
+        if len(rows) != 0:
+
+            for row in rows:
+                
+                cursor.execute("select id, perfil_ativo from users where id = ? ;", row[1])
+
+                data = cursor.fetchall()
+
+                if data[0][1] == True:
+                    return True
+            
+        return False
+    
+    @classmethod
     def find_by_email(cls, email):
         # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
         cursor = conn.cursor()
@@ -182,7 +206,7 @@ class UserModel():
 
             conn.autocommit = True
 
-            cursor.execute("insert into users (cpf , nome , email , telefone, FK_profile_id) values(?,?,?,?,?)",args[1], args[2], args[3], int(args[4]), args[5])
+            cursor.execute("insert into users (cpf , nome , email , telefone, perfil_ativo) values(?,?,?,?,?)",args[1], args[2], args[3], int(args[4]), args[5])
             
             conn.commit()
             # conn.close()
