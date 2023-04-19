@@ -1275,4 +1275,21 @@ def post_calendario():
     
     return _Get_services.post()
 
+@avaliable_route.route('/FrequenciaEstudante/Cadastro', methods=['POST'])
+
+def post_frequencia_estudante():    
+    from app.services.frequencia_estudante import FrequenciaEstudanteServices
+    
+    _Get_services = FrequenciaEstudanteServices()
+    
+    return _Get_services.post()
+
+@avaliable_route.route('/FrequenciaEstudante', methods=['GET'])
+
+def get_frequencia_estudante():    
+    from app.services.frequencia_estudante import FrequenciaEstudanteServices
+    
+    _Get_services = FrequenciaEstudanteServices()
+    
+    return _Get_services.get()
 

@@ -1,5 +1,6 @@
 from sqlalchemy.dialects.postgresql import UUID
 # from app import banco
+from app.utils.defaultGet import GetModel
 from uuid import uuid1, uuid4
 import re
 from app import conn
@@ -75,90 +76,48 @@ class FrequenciaEstudanteModel():
     
     @classmethod
     def get_frequencia_estudante(self, *args, **kwargs):
-        cursor = conn.cursor()
-        qtd = kwargs.get('qtd')
-        if not qtd:
-            qtd = None
+        
              
-        queryDefalt = f"""SELECT distinct {'TOP ' + str(qtd) if qtd else ''} 
-                            frequencia_estudante.id AS frequencia_estudante__id, 
-                            frequencia_estudante.nome_tarefa AS frequencia_estudante__nome_tarefa,
-                            frequencia_estudante.data_entrega AS frequencia_estudante__data_entrega,
+        queryDefalt = f""" 
+                            idade_serie.id AS idade_serie__id, 
+                            idade_serie.resultado AS idade_serie__resultado,
+                            idade_serie.meta AS idade_serie_meta,
                             estado.nome AS estado__nome, estado.uf AS estado__uf ,
                             municipio.id AS municipio__id ,municipio.nome as municipio__nome, estado.id AS estado__id, 
                             escola.nome_escola AS escola__nome_escola,
-                            plano_aula.FK_turma_id AS plano_aula__FK_turma_id,
-                            area_conhecimento.id AS area_conhecimento__id, area_conhecimento.nome AS area_conhecimento__nome,
-                            componente_curricular.id AS componente_curricular__id, componente_curricular.nome AS componente_curricular__nome,
-                            conteudo_plano_aula.id as conteudo_plano_aula__id ,conteudo_plano_aula.nome as conteudo_plano_aula__nome,
-                            plano_aula.ano AS plano_aula__ano,
-                            plano_aula.unidade_tematica AS plano_aula__unidade_tematica,
-                            plano_aula.conteudo AS plano_aula__conteudo,
-                            plano_aula.FK_etapa_ensino AS plano_aula__FK_etapa_ensino
-                        FROM frequencia_estudante
-                        INNER JOIN conteudo_plano_aula ON conteudo_plano_aula.id = frequencia_estudante.FK_conteudo_plano_aula_id
-                        INNER JOIN plano_aula ON plano_aula.id = conteudo_plano_aula.FK_plano_aula_id
-                        INNER JOIN escola ON plano_aula.FK_escola_id = escola.id
-                        INNER JOIN profissional_escola_componente ON  plano_aula.FK_componente_escola_profissional_id = profissional_escola_componente.id
-                        INNER JOIN componente_curricular ON componente_curricular.id = profissional_escola_componente.FK_componente_id
-                        INNER JOIN area_conhecimento ON area_conhecimento.id = componente_curricular.FK_area_conhecimento_id
-                        INNER JOIN municipio ON escola.FK_municipio_id = municipio.id
-                        INNER JOIN estado ON municipio.FK_UF_id = estado.id
+                            idade_serie.FK_turma_id AS idade_serie__FK_turma_id,
+                            turma.id AS turma__id,
+                            turma.ano_letivo AS turma__ano_letivo,
+                            turma.nome_turma AS turma__nome_turma,
+                            turno.nome AS turno__nome,
+                            etapa_ensino.id AS etapa_ensino__id,
+                            etapa_ensino.nome AS etapa_ensino__nome,
+                            grau_etapa_ensino.id AS grau_etapa_ensino__id,
+                            grau_etapa_ensino.nome_grau AS grau_etapa_ensino__nome_grau,
+                                (SELECT acao_idade_serie.id AS acao_idade_serie__id, acao_idade_serie.nome_acao AS acao_idade_serie__nome_acao, acao_idade_serie.prazo AS acao_idade_serie__prazo  FROM acao_idade_serie WHERE acao_idade_serie.FK_idade_serie_id = idade_serie.id FOR JSON PATH) AS acoes
+                            FROM idade_serie
+                            INNER JOIN turma ON idade_serie.FK_turma_id = turma.id
+                            INNER JOIN grau_etapa_ensino ON turma.FK_grau_etapa_ensino_id = grau_etapa_ensino.id
+                            INNER JOIN etapa_ensino ON grau_etapa_ensino.FK_etapa_ensino = etapa_ensino.id
+                            INNER JOIN turno ON turma.FK_turno_id = turno.id
+                            INNER JOIN escola ON turma.FK_escola_id = escola.id
+                            INNER JOIN municipio ON escola.FK_municipio_id = municipio.id
+                            INNER JOIN estado ON municipio.FK_UF_id = estado.id
                         """
         
-        is_first_condition = True
-        for column, value in kwargs.items():
-            if column != 'order_by' and column != 'qtd' and value is not None:
-                if is_first_condition:
-                    if column != 'qtd':
-                    
-                        columnSplited = column.split('__')
-                    
-                    
-                        queryDefalt += f"WHERE {columnSplited[0]}.{columnSplited[1]} = {value}"
-                        is_first_condition = False
-                      
-                
-                else:
-                    columnSplited = column.split('__')
-                    print(columnSplited)
-                      
-                    queryDefalt += f"AND {columnSplited[0]}.{columnSplited[1]} = {value}"
-                
-                
-                
-                    
+        j= GetModel.get_default(queryDefalt, **kwargs)
 
-        order_by = kwargs.get('order_by')
-        if order_by:
-            queryDefalt += f" ORDER BY {order_by}"
-        
-         
-        
-        queryDefalt += " FOR JSON PATH, ROOT('request');"
-
-        cursor.execute(queryDefalt)
-        result = cursor.fetchone()
-        cursor.close()
-
-        datastr = str(result)
-
-        strip1 = datastr.lstrip("[('")
-        strip2 = strip1.rstrip("', )]")
-        
-        j = eval(strip2)
-        
         return j
 
     @classmethod
-    def associate_frequencia_estudante_serie(*args, **kwargs):
+    def associate_frequencia_estudante(*args, **kwargs):
         # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
         # try:
             cursor = conn.cursor()
             # print(args)
             # input()
 
-            cursor.execute("insert into frequencia_estudante (FK_frequencia_estudante_id, nome_acao, prazo) values(?,?,?);",args[1], args[2], args[3])
+            cursor.execute("insert into frequencia_estudante (FK_frequencia_id, FK_estudante_id, faltas, presenca) values(?,?,?,?);",args[1], args[2], args[3], args[4])
 
             # result = cursor.fetchone()
             cursor.commit()
@@ -172,14 +131,14 @@ class FrequenciaEstudanteModel():
         # #     return None
 
     @classmethod
-    def create_frequencia_estudante(*args, **kwargs):
+    def create_frequencia(*args, **kwargs):
         # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
         # try:
             cursor = conn.cursor()
             # print(args)
             # input()
 
-            cursor.execute("insert into frequencia_estudante ( FK_conteudo_plano_aula_id, nome_tarefa, data_entrega) OUTPUT INSERTED.id values(?,?,?);",args[1], args[2], args[3])
+            cursor.execute("insert into frequencia ( FK_componente_educador_turma_id, mes) OUTPUT INSERTED.id values(?,?);",args[1], args[2])
 
             result = cursor.fetchone()
             cursor.commit()

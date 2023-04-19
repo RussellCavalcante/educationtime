@@ -8,9 +8,9 @@ from app.blacklist import BLACKLIST
 
 atributos = reqparse.RequestParser()
 
-atributos.add_argument('FK_conteudo_plano_aula_id', type=int, help="campo obrigatorio ")
-atributos.add_argument('nome_tarefa', type=str, help="campo obrigatorio ")
-atributos.add_argument('data_entrega', type=str, help="campo obrigatorio ")
+atributos.add_argument('FK_componente_educador_turma_id', type=int, help="campo obrigatorio ")
+atributos.add_argument('mes', type=str, help="campo obrigatorio ")
+atributos.add_argument('estudantes', type=dict, help="campo obrigatorio ")
 
 
 class FrequenciaEstudanteServices(Resource):
@@ -19,7 +19,7 @@ class FrequenciaEstudanteServices(Resource):
     def get(self, *args, **kwargs):
         try:
                 
-            return  FrequenciaEstudanteModel.get_tarefa_casa(**kwargs), 200
+            return  FrequenciaEstudanteModel.get_frequencia_estudante(**kwargs), 200
         except:
             return { 'error': 'verifique a requisição !' }, 400
         
@@ -29,15 +29,18 @@ class FrequenciaEstudanteServices(Resource):
         try:
 
             dados = atributos.parse_args()
-            FK_conteudo_plano_aula_id = dados['FK_conteudo_plano_aula_id']
-            nome_tarefa = dados['nome_tarefa']
-            data_entrega = dados['data_entrega']
-
-            
-            idIdadeSerie = FrequenciaEstudanteModel.create_tarefa_casa(FK_conteudo_plano_aula_id, nome_tarefa, data_entrega)
+            FK_componente_educador_turma_id = dados['FK_componente_educador_turma_id']
+            mes = dados['mes']
+            estudantes = dados['estudantes']
             
 
-            return  {'id': idIdadeSerie }, 201
+            
+            idFrequencia= FrequenciaEstudanteModel.create_frequencia(FK_componente_educador_turma_id, mes)
+            
+            for i , estudante in enumerate(estudantes['itens']):
+                FrequenciaEstudanteModel.associate_frequencia_estudante(idFrequencia, estudante['FK_estudante_id'], estudante['faltas'], estudante['presenca'])
+
+            return  {'id': idFrequencia }, 201
         
         except:
 

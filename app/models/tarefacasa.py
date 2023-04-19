@@ -121,7 +121,6 @@ class TarefaCasaModel():
                 
                 else:
                     columnSplited = column.split('__')
-                    print(columnSplited)
                       
                     queryDefalt += f"AND {columnSplited[0]}.{columnSplited[1]} = {value}"
                 
@@ -138,7 +137,7 @@ class TarefaCasaModel():
         queryDefalt += " FOR JSON PATH, ROOT('request');"
 
         cursor.execute(queryDefalt)
-        result = cursor.fetchone()
+        result = cursor.fetchall()
         cursor.close()
 
         datastr = str(result)
@@ -147,7 +146,7 @@ class TarefaCasaModel():
         strip2 = strip1.rstrip("', )]")
         
         j = eval(strip2)
-        
+
         return j
 
     @classmethod
