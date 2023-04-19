@@ -191,12 +191,16 @@ class planoAulaModel():
         cursor.execute(queryDefalt)
         result = cursor.fetchall()
         cursor.close()
-        json_string = result[0][0]
         
-        # json_obj = {'plano_aula': json_string}
-        # print(json_obj)
-        # input()
-        return json_string
+        datastr = str(result)
+
+        strip1 = datastr.lstrip("[('")
+        strip2 = strip1.rstrip("', )]")
+        
+        
+        j = eval(strip2)
+        
+        return j
                         
     @classmethod
     def get_agenda_plano_aula_by_last_id(*args, **kwargs):
