@@ -1,5 +1,4 @@
 from sqlalchemy.dialects.postgresql import UUID
-import pandas as pd
 # from app import banco
 import json
 from uuid import uuid1, uuid4
