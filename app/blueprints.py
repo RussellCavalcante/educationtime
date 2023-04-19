@@ -168,10 +168,10 @@ def update_secretaria_municipal(id):
 
 def get_escola():    
     from app.services.escola import GetEscola
-    
+    kwargs = request.args.to_dict()
     _Get_services = GetEscola()
-    
-    return _Get_services.get(request.args.get('IdLog'))
+
+    return _Get_services.get(request.args.get('IdLog'), **kwargs)
 
 @avaliable_route.route('/escolas/<int:id>', methods=['GET'])
 

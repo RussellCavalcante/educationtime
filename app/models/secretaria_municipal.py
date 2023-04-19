@@ -50,6 +50,23 @@ class SecretariaMunicipalModel():
         return listEstadosDict
 
     @classmethod
+    def find_by_cnpj(cls, cnpj):
+        # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
+        cursor = conn.cursor()
+ 
+        cursor.execute("select * from secretaria_municipal where cnpj = ?;", cnpj)
+
+        row = cursor.fetchall()
+
+        cursor.commit()
+        
+        # print('Rows --->>',row, type(row) )
+        # input()
+        if len(row) != 0:
+            return row[0]
+        return False
+
+    @classmethod
     def get_secretaria_municipal_by_municipio_id(*args, **kwargs):
         cursor = conn.cursor()
  

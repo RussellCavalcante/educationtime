@@ -1,5 +1,6 @@
 from sqlalchemy.dialects.postgresql import UUID
 # from app import banco
+from app.utils.defaultGet import GetModel
 from uuid import uuid1, uuid4
 import re
 from app import conn
@@ -27,28 +28,28 @@ class EscolaModel():
 
     @classmethod
     def get_escola(*args, **kwargs):
-        cursor = conn.cursor()
- 
-        cursor.execute("SELECT * FROM escola INNER JOIN municipio ON escola.FK_municipio_id = municipio.id INNER JOIN estado ON municipio.FK_UF_id = estado.id;")
+        queryDefalt = f""" 
+                            escola.id AS escola__id,
+                            escola.FK_municipio_id AS escola__FK_municipio_id,
+                            escola.cod_inep AS escola__cod_inep,
+                            escola.email_escola AS escola__email_escola,
+                            escola.endereco AS escola__endereco,
+                            escola.nome_escola AS escola__nome_escola,
+                            escola.telefone AS escola__telefone,
+                            municipio.codigo_ibge AS municipio__codigo_ibge,
+                            municipio.nome AS municipio__nome,
+                            municipio.FK_UF_id AS municipio__FK_UF_id,
+                            estado.nome AS estado__nome,
+                            estado.uf AS estado__uf
+                            
+                            FROM escola 
+                            INNER JOIN municipio ON escola.FK_municipio_id = municipio.id 
+                            INNER JOIN estado ON municipio.FK_UF_id = estado.id
+                        """
         
-        result = cursor.fetchall()
-        cursor.close()
-
-        # print(result)
-        # input()
-        listEstadosDict = []
-        for estadoTupla in result:
-            
-            tup1 = ('id', 'nome_escola','endereco', 'email_escola', 'telefone', 'cod_inep', 'FK_municipio_id', 'idMunicipio', 'codigo_ibge', 'nomemunicipio', 'FK_UF_id', 'iduf', 'nomeuf', 'uf') 
-            tup2 = estadoTupla
-           
-            if len(tup1) == len(tup2): 
-                res = dict(zip(tup1, tup2))
-                # print(res)
-
-                listEstadosDict.append(res)   
-            
-        return listEstadosDict
+        j = GetModel.get_default(queryDefalt, **kwargs)
+       
+        return j
     
     @classmethod
     def get_escola_by_id(*args, **kwargs):

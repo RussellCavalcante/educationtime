@@ -1,8 +1,11 @@
 from sqlalchemy.dialects.postgresql import UUID
+import pandas as pd
 # from app import banco
+import json
 from uuid import uuid1, uuid4
 import re
 from app import conn
+import pprint
 
 
 class GetModel(): 
@@ -81,13 +84,12 @@ class GetModel():
         if not qtd:
             qtd = None
              
-        queryDefalt = f"""SELECT distinct {'TOP ' + str(qtd) if qtd else ''} {args[0]}
-                        """
+        queryDefalt = f"""SELECT CAST( (SELECT distinct {'TOP ' + str(qtd) if qtd else ''} {args[0]} """
         
         
         is_first_condition = True
         for column, value in kwargs.items():
-            if column != 'order_by' and column != 'qtd' and value is not None:
+            if column != 'order_by' and column != 'qtd' and column != 'IdLog' and value is not None:
                 if is_first_condition:
                     if column != 'qtd':
                     
@@ -113,19 +115,18 @@ class GetModel():
         
          
         
-        queryDefalt += " FOR JSON PATH, ROOT('request');"
+        queryDefalt += " FOR JSON PATH, ROOT('request')) AS VARCHAR(MAX));"
 
         cursor.execute(queryDefalt)
         result = cursor.fetchall()
-        cursor.close()
 
-        datastr = str(result)
+        s = str(result)
 
-        strip1 = datastr.lstrip("[('")
+        strip1 = s.lstrip("[('")
         strip2 = strip1.rstrip("', )]")
-        
-        j = eval(strip2)
 
+        j = eval(strip2)
+        
         return j
 
    

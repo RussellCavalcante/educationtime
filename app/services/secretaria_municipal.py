@@ -50,6 +50,10 @@ class GetSecretariamunicipal(Resource):
             email = dados['email'].strip()
             status = dados['status']
             FK_secretaria_municipio_id = dados['FK_secretaria_municipio_id']
+
+            if SecretariaMunicipalModel.find_by_cnpj(cnpj):
+                return {'status': "Cnpj já cadastrado."}, 400
+
             SecretariaMunicipalModel.create_secretaria_municipal(nome, cnpj, endereco, telefone, email,status, FK_secretaria_municipio_id)
             return  {'created': nome}, 201
         

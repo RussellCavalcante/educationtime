@@ -31,7 +31,7 @@ class GetEscola(Resource):
         try:
            
             LogAtividadeModel.create_log_atividade_vizualizacao(args[0], str(datetime.today()),'visualização', 'escola')
-            return  EscolaModel.get_escola(), 200
+            return  EscolaModel.get_escola(**kwargs), 200
         except:
             return { 'error': 'verifique a requisição !' }, 400
 

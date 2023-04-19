@@ -71,7 +71,10 @@ class ProfissionaisEditoraServices(Resource):
             convite = dados['convite']
             
             if UserModel.find_by_login(cpf):
-                return {'error': 'Profissional da editora ja existente'}, 400
+                return {'error': 'Cpf já cadastrado'}, 400
+            
+            if UserModel.find_by_email(email):
+                return {'error': 'Email já cadastrado'}, 400
             
             UserModel.create_profissionais_editora(cpf, nome, email, int(telefone), perfil_ativo, convite)
 

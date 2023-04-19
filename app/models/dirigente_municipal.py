@@ -29,7 +29,14 @@ class DirigenteMunicipalModel():
     def get_dirigente_municipal(*args, **kwargs):
         cursor = conn.cursor()
  
-        cursor.execute("SELECT dirigente_municipal.id, dirigente_municipal.data_inicio, dirigente_municipal.data_fim, dirigente_municipal.FK_secretaria_municipal_id, dirigente_municipal.FK_user_id, users.nome, users.email, users.telefone, users.cpf, users.accept_lgpd, users.FK_profile_id, users.perfil_ativo, secretaria_municipal.nome, secretaria_municipal.FK_secretaria_municipio_id, municipio.nome, municipio.FK_UF_id, estado.nome, estado.uf FROM  dirigente_municipal INNER JOIN  users ON  dirigente_municipal.FK_user_id =  users.id INNER JOIN  secretaria_municipal ON  dirigente_municipal.FK_secretaria_municipal_id =  secretaria_municipal.id INNER JOIN  municipio ON  secretaria_municipal.FK_secretaria_municipio_id =  municipio.id INNER JOIN  estado ON  municipio.FK_UF_id =  estado.id;")
+        cursor.execute("""SELECT dirigente_municipal.id, dirigente_municipal.data_inicio, dirigente_municipal.data_fim, dirigente_municipal.FK_secretaria_municipal_id,
+        dirigente_municipal.FK_user_id, users.nome, users.email, users.telefone, users.cpf, users.accept_lgpd, users.perfil_ativo, 
+        secretaria_municipal.nome, secretaria_municipal.FK_secretaria_municipio_id, municipio.nome, municipio.FK_UF_id, estado.nome, 
+        estado.uf FROM  dirigente_municipal 
+        INNER JOIN  users ON  dirigente_municipal.FK_user_id =  users.id 
+        INNER JOIN  secretaria_municipal ON  dirigente_municipal.FK_secretaria_municipal_id =  secretaria_municipal.id 
+        INNER JOIN  municipio ON  secretaria_municipal.FK_secretaria_municipio_id =  municipio.id 
+        INNER JOIN  estado ON  municipio.FK_UF_id =  estado.id;""")
         
         result = cursor.fetchall()
         cursor.close()
@@ -47,7 +54,6 @@ class DirigenteMunicipalModel():
                     'telefone',
                     'cpf',
                     'accept_lgpd',
-                    'FK_profile_id',
                     'perfil_ativo',
                     'secretaria',
                     'FK_secretaria_municipio_id',

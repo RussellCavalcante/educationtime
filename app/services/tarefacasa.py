@@ -9,8 +9,7 @@ from app.blacklist import BLACKLIST
 atributos = reqparse.RequestParser()
 
 atributos.add_argument('FK_conteudo_plano_aula_id', type=int, help="campo obrigatorio ")
-atributos.add_argument('nome_tarefa', type=str, help="campo obrigatorio ")
-atributos.add_argument('data_entrega', type=str, help="campo obrigatorio ")
+atributos.add_argument('tarefas', type=dict, help="campo obrigatorio ")
 
 
 class TarefaCasaServices(Resource):
@@ -30,14 +29,14 @@ class TarefaCasaServices(Resource):
 
             dados = atributos.parse_args()
             FK_conteudo_plano_aula_id = dados['FK_conteudo_plano_aula_id']
-            nome_tarefa = dados['nome_tarefa']
-            data_entrega = dados['data_entrega']
 
-            
-            idIdadeSerie = TarefaCasaModel.create_tarefa_casa(FK_conteudo_plano_aula_id, nome_tarefa, data_entrega)
-            
+            tarefas = dados['tarefas']
+           
+            for i , tarefa in enumerate(tarefas['itens']):
+                TarefaCasaModel.create_tarefa_casa(FK_conteudo_plano_aula_id, tarefa['nome_tarefa'], tarefa['data_entrega'])
+                        
 
-            return  {'id': idIdadeSerie }, 201
+            return  {'status': f'tarefas criadas para o FK_conteudo_plano_aula_id : {FK_conteudo_plano_aula_id}' }, 201
         
         except:
 

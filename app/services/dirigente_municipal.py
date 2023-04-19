@@ -63,8 +63,11 @@ class DirigenteMunicipalServices(Resource):
             FK_secretaria_municipio_id = dados['FK_secretaria_municipio_id']
             
             if UserModel.find_by_login(cpf):
-                return {'error': 'dirigente ja existente'}, 400
+                return {'error': 'Cpf já cadastrado'}, 400
             
+            if UserModel.find_by_email(email):
+                return {'error': 'Email já cadastrado'}, 400
+
             UserModel.create_dirigente_municipal(cpf, nome, email, int(telefone), FK_perfil_id)
 
             user = UserModel.find_by_login(cpf)
