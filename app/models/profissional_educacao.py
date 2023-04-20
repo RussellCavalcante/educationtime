@@ -1,4 +1,5 @@
 from sqlalchemy.dialects.postgresql import UUID
+from app.utils.defaultGet import GetModel
 # from app import banco
 from uuid import uuid1, uuid4
 import re
@@ -27,42 +28,36 @@ class ProfissionaisEducacaoModel():
 
     @classmethod
     def get_profissionais_educacao(*args, **kwargs):
-        cursor = conn.cursor()
- 
-        cursor.execute("""SELECT profissonal_escola_perfil.id ,  profissonal_escola_perfil.FK_user_id, 
-                        users.nome, users.email, users.telefone, users.cpf, users.accept_lgpd, users.perfil_ativo,
-                        profissonal_escola_perfil.FK_perfil_id, profiles.profile_name, escola.id, escola.nome_escola ,
-                        escola.FK_municipio_id, municipio.id, municipio.nome, estado.id, estado.nome, estado.uf
-                        FROM profissonal_escola_perfil 
-                        INNER JOIN  users ON  profissonal_escola_perfil.FK_user_id =  users.id 
-                        INNER JOIN  escola ON  profissonal_escola_perfil.FK_escola_id =  escola.id 
-                        INNER JOIN  municipio ON  escola.FK_municipio_id =  municipio.id 
-                        INNER JOIN  estado ON  municipio.FK_UF_id =  estado.id 
-                        INNER JOIN  profiles ON  profissonal_escola_perfil.FK_perfil_id = profiles.id  
-                        """)
+        queryDefalt = f""" 
+                            PROFISSONAL_ESCOLA_PERFIL.ID AS PROFISSONAL_ESCOLA_PERFIL__ID,
+                            PROFISSONAL_ESCOLA_PERFIL.FK_USER_ID AS PROFISSONAL_ESCOLA_PERFIL__FK_USER_ID,
+                            USERS.NOME AS USERS__NOME,
+                            USERS.EMAIL AS USERS__EMAIL,
+                            USERS.TELEFONE AS USERS__TELEFONE,
+                            USERS.CPF AS USERS__CPF,
+                            USERS.ACCEPT_LGPD AS USERS__ACCEPT_LGPD,
+                            USERS.PERFIL_ATIVO AS USERS__PERFIL_ATIVO,
+                            PROFISSONAL_ESCOLA_PERFIL.FK_PERFIL_ID AS PROFISSONAL_ESCOLA_PERFIL__FK_PERFIL_ID,
+                            PROFILES.PROFILE_NAME AS PROFILES__PROFILE_NAME,
+                            ESCOLA.ID AS ESCOLA__ID, 
+                            ESCOLA.NOME_ESCOLA AS ESCOLA__NOME_ESCOLA,
+                            ESCOLA.FK_MUNICIPIO_ID AS ESCOLA__FK_MUNICIPIO_ID, 
+                            MUNICIPIO.ID AS MUNICIPIO__ID, 
+                            MUNICIPIO.NOME AS MUNICIPIO__NOME, 
+                            ESTADO.ID AS ESTADO__ID, 
+                            ESTADO.NOME AS ESTADO__NOME, 
+                            ESTADO.UF AS ESTADO__UF
+                            FROM PROFISSONAL_ESCOLA_PERFIL 
+                                INNER JOIN  USERS ON  PROFISSONAL_ESCOLA_PERFIL.FK_USER_ID =  USERS.ID 
+                                INNER JOIN  ESCOLA ON  PROFISSONAL_ESCOLA_PERFIL.FK_ESCOLA_ID =  ESCOLA.ID 
+                                INNER JOIN  MUNICIPIO ON  ESCOLA.FK_MUNICIPIO_ID =  MUNICIPIO.ID 
+                                INNER JOIN  ESTADO ON  MUNICIPIO.FK_UF_ID =  ESTADO.ID 
+                                INNER JOIN  PROFILES ON  PROFISSONAL_ESCOLA_PERFIL.FK_PERFIL_ID = PROFILES.ID 
+                        """
         
-        result = cursor.fetchall()
-        cursor.close()
-
-        # print(result)
-        # input()
-
-        listEstadosDict = []
-        for estadoTupla in result:
-            
-            tup1 = ('id' , 'FK_user_id', 'nome', 'email', 'telefone', 'cpf', 'accept_lgpd', 'perfil_ativo',
-                        'FK_perfil_id', 'profile_name', 'escola_id', 'nome_escola' ,
-                        'FK_municipio_id', 'municipio_id', 'municipio_nome', 'estado_id', 'estado_nome', 'estado_uf' ) 
-            
-            tup2 = estadoTupla
-           
-            if len(tup1) == len(tup2): 
-                res = dict(zip(tup1, tup2)) 
-                # print(res)
-
-                listEstadosDict.append(res)   
-            
-        return listEstadosDict
+        j = GetModel.get_default(queryDefalt, **kwargs)
+       
+        return j
     
     @classmethod
     def get_profissionais_educacao_nome(*args, **kwargs):
@@ -274,7 +269,7 @@ class ProfissionaisEducacaoModel():
                 # print(args)
                 # input()
     
-            cursor.execute("insert into profissionais_educacao ( FK_user_id) values(?);",args[1],)
+            cursor.execute("insert into profissionais_educacao ( FK_user_id, data_inicio, data_fim) values(?,?,?);",args[1],args[2],args[3])
             
             conn.commit()
             # conn.close()

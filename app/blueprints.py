@@ -765,11 +765,13 @@ def get_estudante_nome(nome):
 @avaliable_route.route('/ProfissionaisEducacao', methods=['GET'])
 def get_ProfissionaisEducacao():    
     from app.services.profissional_educacao import ProfissionaisEducacaoServices
-    # print(request.args.get('email'))
-    # input()
+    
+    kwargs = request.args.to_dict()
     _Get_services = ProfissionaisEducacaoServices()
     
-    return _Get_services.get()
+    return _Get_services.get(**kwargs)
+
+
 @avaliable_route.route('/ProfissionaisEducacao/<int:id>', methods=['GET'])
 
 def get_ProfissionaisEducacao_by(id):    

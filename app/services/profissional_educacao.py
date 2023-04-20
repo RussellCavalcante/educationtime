@@ -16,7 +16,10 @@ atributos.add_argument('email', type=str, help="campo de email e obrigatorio")
 atributos.add_argument('telefone', type=int, help="campo de telefone")
 atributos.add_argument('FK_perfil_id', type=int, help="campo de perfil_id")
 atributos.add_argument('FK_escola_id', type=int, help="campo de email e obrigatorio")
+atributos.add_argument('convite', type=int, help="campo de email e obrigatorio")
 atributos.add_argument('perfil_ativo', type=str, help="perfil_ativo")
+atributos.add_argument('data_inicio', type=str, help="campo obrigatorio")
+atributos.add_argument('data_fim', type=str, help="campo de email e obrigatorio")
 atributos.add_argument('componentes_curriculares', type=dict, help="componentes_curriculares")
 
 class ProfissionaisEducacaoServices(Resource):
@@ -24,7 +27,7 @@ class ProfissionaisEducacaoServices(Resource):
     @jwt_required()
     def get(self, *args, **kwargs):
         try:
-            return  ProfissionaisEducacaoModel.get_profissionais_educacao(), 200
+            return  ProfissionaisEducacaoModel.get_profissionais_educacao(**kwargs), 200
         except:
             return { 'error': 'verifique a requisição !' }, 400
         
@@ -123,29 +126,33 @@ class ProfissionaisEducacaoServices(Resource):
 
     @jwt_required()
     def post(self, *args, **kwargs):
-        try:
+        # try:
                 
             dados = atributos.parse_args()
             cpf = dados['cpf']
             nome = dados['nome'].strip()
             telefone = dados['telefone']
-            email = dados['email'].strip()
+            email = dados['email']
             FK_perfil_id = dados['FK_perfil_id']
             FK_escola_id = dados['FK_escola_id']
             perfil_ativo = dados['perfil_ativo']
+            convite = dados['convite']
+            data_inicio = dados['data_inicio']
+            data_fim = dados['data_fim']
             componentes_curriculares = dados['componentes_curriculares']
 
-            if UserModel.find_by_email(email):
-                return {'error': 'Email já cadastrado'}, 400
+            
 
             if UserModel.find_by_login(cpf):
+
+                
                      
                 if ProfissionaisEducacaoModel.get_profissionais_educacao_escola_perfil_by_escola_id(FK_escola_id) == False:
                     
                     user = UserModel.find_by_login(cpf)
                     
                     if ProfissionaisEducacaoModel.get_profissionais_educacao_by_FK_user_id(user[0]) == False:
-                        ProfissionaisEducacaoModel.create_profissionais_educacao( user[0])
+                        ProfissionaisEducacaoModel.create_profissionais_educacao( user[0], data_inicio, data_fim )
 
                     UserModel.associateProfissionalEscolaPerfil(user[0], FK_escola_id, FK_perfil_id)
 
@@ -155,21 +162,22 @@ class ProfissionaisEducacaoServices(Resource):
                     excluirAssociacao = []
                     novos = []
                     
-                    for element in componentizar:
-                        if element not in componentes_curriculares['componentes']:
-                            excluirAssociacao.append(element)
-                            ProfissionaisEducacaoModel.delete_profissionais_escola_componentes(element)
-                        else:
-                            manter.append(element) 
+                    if componentes_curriculares != None:
+                        for element in componentizar:
+                            if element not in componentes_curriculares['componentes']:
+                                excluirAssociacao.append(element)
+                                ProfissionaisEducacaoModel.delete_profissionais_escola_componentes(element)
+                            else:
+                                manter.append(element) 
 
-                    for adicionar in componentes_curriculares['componentes']:
-            
-                        if adicionar not in manter:
-                            novos.append(adicionar)
-                            if ProfissionaisEducacaoModel.get_profissionais_escola_componentes(adicionar, FK_escola_id) != False:
-                                    return {'error':f'componente curricular com id{adicionar} ja existe a esta escola '}
-                            UserModel.associateProfissionalEscolaComponentes(user[0], FK_escola_id, adicionar)
-                    
+                        for adicionar in componentes_curriculares['componentes']:
+                
+                            if adicionar not in manter:
+                                novos.append(adicionar)
+                                if ProfissionaisEducacaoModel.get_profissionais_escola_componentes(adicionar, FK_escola_id) != False:
+                                        return {'error':f'componente curricular com id{adicionar} ja existe a esta escola '}
+                                UserModel.associateProfissionalEscolaComponentes(user[0], FK_escola_id, adicionar)
+                        
 
                     return  {'created': nome}, 201
                 
@@ -177,8 +185,10 @@ class ProfissionaisEducacaoServices(Resource):
                     return {'error': 'escola ja associada a perfil'}, 400
             
          
+            if UserModel.find_by_email(email):
+                    return {'error': 'Email já cadastrado'}, 400
 
-            UserModel.create_profissionais_educacao(cpf, nome, email, int(telefone), perfil_ativo)
+            UserModel.create_profissionais_educacao(cpf, nome, email, int(telefone), perfil_ativo, convite)
 
             user = UserModel.find_by_login(cpf)
 
@@ -198,33 +208,36 @@ class ProfissionaisEducacaoServices(Resource):
 
             UserModel.associateUserProfile(user[0], FK_perfil_id)
             
-            ProfissionaisEducacaoModel.create_profissionais_educacao( user[0])
+            ProfissionaisEducacaoModel.create_profissionais_educacao( user[0], data_inicio, data_fim )
 
             componentizar = ProfissionaisEducacaoModel.get_componentes_id_by_FK_turma_id(FK_escola_id)
 
             manter = []
             excluirAssociacao = []
             novos = []
-            for element in componentizar:
-                if element not in componentes_curriculares['componentes']:
-                    excluirAssociacao.append(element)
-                    ProfissionaisEducacaoModel.delete_profissionais_escola_componentes(element)
-                else:
-                    manter.append(element) 
 
-            for adicionar in componentes_curriculares['componentes']:
-    
-                if adicionar not in manter:
-                    novos.append(adicionar)
-                    if ProfissionaisEducacaoModel.get_profissionais_escola_componentes(adicionar, FK_escola_id) != False:
-                            return {'error':f'componente curricular com id{adicionar} ja existe a esta escola '}
-                    UserModel.associateProfissionalEscolaComponentes(user[0], FK_escola_id, adicionar)
+            
+            if componentes_curriculares != None:
+                for element in componentizar:
+                    if element not in componentes_curriculares['componentes']:
+                        excluirAssociacao.append(element)
+                        ProfissionaisEducacaoModel.delete_profissionais_escola_componentes(element)
+                    else:
+                        manter.append(element) 
+
+                for adicionar in componentes_curriculares['componentes']:
+        
+                    if adicionar not in manter:
+                        novos.append(adicionar)
+                        if ProfissionaisEducacaoModel.get_profissionais_escola_componentes(adicionar, FK_escola_id) != False:
+                                return {'error':f'componente curricular com id{adicionar} ja existe a esta escola '}
+                        UserModel.associateProfissionalEscolaComponentes(user[0], FK_escola_id, adicionar)
 
 
             return  {'created': nome}, 201
         
-        except:
-            return { 'error': 'verifique a requisição !' }, 400
+        # except:
+        #     return { 'error': 'verifique a requisição !' }, 400
         
         
 

@@ -118,13 +118,14 @@ class GetModel():
 
         cursor.execute(queryDefalt)
         result = cursor.fetchall()
+        
 
         s = str(result)
 
         strip1 = s.lstrip("[('")
         strip2 = strip1.rstrip("', )]")
-
-        j = eval(strip2)
+        
+        j = json.loads(strip2)
         
         return j
 
