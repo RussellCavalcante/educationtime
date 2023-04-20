@@ -913,8 +913,7 @@ def update_FuncoesEscola(id):
 @avaliable_route.route('/EscolaridadeEducador', methods=['GET'])
 def get_EscolaridadeEducador():    
     from app.services.escolaridade_educadores import EscolaridadeEducadoresaServices
-    # print(request.args.get('email'))
-    # input()
+    
     _Get_services = EscolaridadeEducadoresaServices()
     
     return _Get_services.get()
@@ -946,6 +945,15 @@ def get_EscolaridadeEducador_by_id(id):
     
     return _Get_services.get_escolaridade_educador_by_id(id)
 
+@avaliable_route.route('/EscolaridadeEducador/image/<int:id>', methods=['GET'])
+
+def get_EscolaridadeEducador_image_by_id(id):    
+    from app.services.escolaridade_educadores import EscolaridadeEducadoresaServices
+    
+    _Get_services = EscolaridadeEducadoresaServices()
+    
+    return _Get_services.get_image_escolaridade_educador_by_id(id)
+
 
 @avaliable_route.route('/EscolaridadeEducador/Cadastro', methods=['POST'])
 
@@ -955,6 +963,22 @@ def post_EscolaridadeEducador():
     _Get_services = EscolaridadeEducadoresaServices()
     
     return _Get_services.post()
+
+@avaliable_route.route('/EscolaridadeEducador/image/Cadastro', methods=['POST'])
+
+def post_image_escolaridade_educador():
+    if 'file' not in request.files:
+        return jsonify({"message":"Arquivo obrigatório!"}), 500
+    file = request.files['file']
+    
+    if file and config.allowed_file(file.filename) and request.args.get('idEscolaridade'):
+        
+        from app.services.escolaridade_educadores import EscolaridadeEducadoresaServices
+    
+        _Get_services = EscolaridadeEducadoresaServices()
+        
+        return _Get_services.post_image(file.stream.read(), request.args.get('idEscolaridade'), file.filename.rsplit('.', 1)[1].lower())
+        
 
 @avaliable_route.route('/EscolaridadeEducador/Update/<int:id>', methods=['PUT'])
 

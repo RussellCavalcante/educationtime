@@ -99,6 +99,40 @@ class EscolaridadeEducadoresModel():
         return False
 
     @classmethod
+    def get_image_escolaridade_educador_by_id(*args, **kwargs):
+        cursor = conn.cursor()
+ 
+        cursor.execute(f"""SELECT escolaridade_educador.id , escolaridade_educador.img, escolaridade_educador.type_img
+                        FROM escolaridade_educador
+                        INNER JOIN users on escolaridade_educador.FK_user_id = users.id
+                        INNER JOIN escola on escolaridade_educador.FK_escola_id = escola.id
+                        INNER JOIN municipio on escola.FK_municipio_id = municipio.id
+                        INNER JOIN estado on municipio.FK_UF_id = estado.id WHERE escolaridade_educador.id = {args[1]};""")
+        
+        result = cursor.fetchall()
+        cursor.close()
+
+        # print(result)
+        # input()
+        listEstadosDict = []
+        for estadoTupla in result:
+            
+            tup1 = ('id' , 'img', 'type_img') 
+            
+            tup2 = estadoTupla
+           
+            if len(tup1) == len(tup2): 
+                res = dict(zip(tup1, tup2)) 
+                # print(res)
+
+                listEstadosDict.append(res)   
+            
+        if len(listEstadosDict) != 0:
+            return listEstadosDict
+
+        return False
+
+    @classmethod
     def get_escolaridade_educador_by_educadores(*args, **kwargs):
         cursor = conn.cursor()
  
@@ -174,10 +208,14 @@ class EscolaridadeEducadoresModel():
         # try:
             cursor = conn.cursor()
     
-            cursor.execute("insert into escolaridade_educador ( FK_user_id, FK_escola_id, escolaridade, ano_conclusao, nome_instituicao ) values(?,?,?,?,?)", args[1], args[2], args[3], args[4], args[5])
+            cursor.execute("insert into escolaridade_educador ( FK_user_id, FK_escola_id, escolaridade, ano_conclusao, nome_instituicao ) OUTPUT INSERTED.id values(?,?,?,?,?)", args[1], args[2], args[3], args[4], args[5])
             
-            conn.commit()
+            # conn.commit()
             # conn.close()
+            result = cursor.fetchone()
+            cursor.commit()
+            cursor.close()
+            return result[0]
             # return 'created'
             # rows = cursor.fetchall()
         # except:
@@ -219,6 +257,29 @@ class EscolaridadeEducadoresModel():
                         SET FK_user_id = ?, FK_escola_id = ? , escolaridade = ?, ano_conclusao = ?, nome_instituicao = ?
                         WHERE id = ?
                         ''',args[1], args[2], args[3], args[4], args[5], args[6]
+                        )
+            
+            conn.commit()
+            # conn.close()
+            # return 'created'
+            # rows = cursor.fetchall()
+        # except:
+        #     print(TypeError)
+        # #     return None
+
+    @classmethod
+    def update_image_escolaridade_educador(*args, **kwargs):
+        # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
+        # try:
+            cursor = conn.cursor()
+                # print(args)
+                # input()
+            
+            cursor.execute('''
+                        UPDATE escolaridade_educador
+                        SET img = ?, type_img = ?
+                        WHERE id = ?
+                        ''',args[1], args[2], args[3]
                         )
             
             conn.commit()

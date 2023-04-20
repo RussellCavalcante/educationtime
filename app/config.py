@@ -8,6 +8,7 @@ from flask_jwt_extended import JWTManager
 # from blacklist import BLACKLIST
 from flask_cors import CORS
 from app.services.user import *
+from werkzeug.utils import secure_filename
 # from flask_migrate import Migrate, MigrateCommand
 from flask_sqlalchemy import SQLAlchemy
 from app import server, jwt, banco
@@ -22,7 +23,12 @@ SQLALCHEMY_TRACK_MODIFICATIONS = False
 server.config['JWT_SECRET_KEY'] = 'DontTellAnyone'
 server.config['JWT_BLACKLIST_ENABLED'] = True
 server.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=999)
+server.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
+ALLOWED_EXTENSIONS = set(['pdf', 'png', 'jpg', 'jpeg'])
 
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 # @server.before_first_request
 
 @jwt.token_in_blocklist_loader
