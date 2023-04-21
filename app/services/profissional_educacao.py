@@ -126,7 +126,7 @@ class ProfissionaisEducacaoServices(Resource):
 
     @jwt_required()
     def post(self, *args, **kwargs):
-        try:
+        # try:
                 
             dados = atributos.parse_args()
             cpf = dados['cpf']
@@ -188,7 +188,7 @@ class ProfissionaisEducacaoServices(Resource):
             if UserModel.find_by_email(email):
                     return {'error': 'Email já cadastrado'}, 400
 
-            UserModel.create_profissionais_educacao(cpf, nome, email, int(telefone), perfil_ativo, convite)
+            UserModel.create_profissionais_educacao(cpf, nome, email, telefone, perfil_ativo, convite)
 
             user = UserModel.find_by_login(cpf)
 
@@ -199,8 +199,9 @@ class ProfissionaisEducacaoServices(Resource):
             hashconvite = UserModel.password_encrypted(cpf, salt)
 
             body = sendEmailModel.conviteAcesso(hashconvite)
-
-            constructorEmail(email, body)
+            
+            if email != None:
+                constructorEmail(email, body)
 
             UserModel.create_convite_acesso(user[0], str(today), hashconvite, salt)
             
@@ -236,8 +237,8 @@ class ProfissionaisEducacaoServices(Resource):
 
             return  {'created': nome}, 201
         
-        except:
-            return { 'error': 'verifique a requisição !' }, 400
+        # except:
+        #     return { 'error': 'verifique a requisição !' }, 400
         
         
 

@@ -315,7 +315,7 @@ class UserModel():
 
             conn.autocommit = True
 
-            cursor.execute("insert into users (cpf , nome , email , telefone, perfil_ativo, convite) values(?,?,?,?,?,?)",args[1], args[2], args[3], int(args[4]), args[5], args[6])
+            cursor.execute("insert into users (cpf , nome , email , telefone, perfil_ativo, convite) values(?,?,?,?,?,?)",args[1], args[2], args[3], args[4], args[5], args[6])
             
             conn.commit()
             # conn.close()

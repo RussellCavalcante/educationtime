@@ -19,7 +19,7 @@ def constructorEmail(emailSend, body):
     PASSWORD = 'k3@UqUWWZ96u'
     s = smtplib.SMTP(host='smtp.office365.com', port=587)
     s.starttls()
-    s.login(MY_ADDRESS, PASSWORD)
+    s.login(myemail, password)
 
     # print(s)
 
