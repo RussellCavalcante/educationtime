@@ -156,47 +156,13 @@ class ProfissionaisEducacaoModel():
                 # print(res)
 
                 listEstadosDict.append(res)   
-            
-        return listEstadosDict
 
-        # cursor = conn.cursor()
+        if len(listEstadosDict) != 0:
+            
+            return listEstadosDict
+
+        return False
         
-        # cursor.execute(f"SELECT dirigente_municipal.id, dirigente_municipal.data_inicio, dirigente_municipal.data_fim, dirigente_municipal.FK_secretaria_municipal_id, dirigente_municipal.FK_user_id, users.nome, users.email, users.telefone, users.cpf, users.accept_lgpd, users.FK_profile_id, users.perfil_ativo, secretaria_municipal.nome, secretaria_municipal.FK_secretaria_municipio_id, municipio.nome, municipio.FK_UF_id, estado.nome, estado.uf FROM  dirigente_municipal INNER JOIN  users ON  dirigente_municipal.FK_user_id =  users.id INNER JOIN  secretaria_municipal ON  dirigente_municipal.FK_secretaria_municipal_id =  secretaria_municipal.id INNER JOIN  municipio ON  secretaria_municipal.FK_secretaria_municipio_id =  municipio.id INNER JOIN  estado ON  municipio.FK_UF_id =  estado.id WHERE dirigente_municipal.id = {args[1]};")
-        
-        # result = cursor.fetchall()
-        # cursor.close()
-
-     
-        # listEstadosDict = []
-        # for estadoTupla in result:
-            
-        #     tup1 = ('id',
-        #             'data_inicio',
-        #             'data_fim',
-        #             'FK_secretaria_municipal_id',
-        #             'FK_user_id',
-        #             'nome',
-        #             'email',
-        #             'telefone',
-        #             'cpf',
-        #             'accept_lgpd',
-        #             'FK_profile_id',
-        #             'perfil_ativo',
-        #             'secretaria',
-        #             'FK_secretaria_municipio_id',
-        #             'municipio',
-        #             'FK_UF_id',
-        #             'estado',
-        #             'uf') 
-        #     tup2 = estadoTupla
-           
-        #     if len(tup1) == len(tup2): 
-        #         res = dict(zip(tup1, tup2)) 
-        #         # print(res)
-
-        #         listEstadosDict.append(res)   
-            
-        # return listEstadosDict
 
 
     @classmethod
@@ -232,12 +198,25 @@ class ProfissionaisEducacaoModel():
         # print(args)
         # input()
  
-        cursor.execute(f"SELECT profissonal_escola_perfil.id ,  profissonal_escola_perfil.FK_user_id, users.nome, users.email, users.telefone, users.cpf, users.accept_lgpd, users.perfil_ativo, profissonal_escola_perfil.FK_perfil_id, profiles.profile_name, escola.id, escola.nome_escola ,escola.FK_municipio_id, municipio.id, municipio.nome, estado.id, estado.nome, estado.uf FROM  profissonal_escola_perfil INNER JOIN  users ON  profissonal_escola_perfil.FK_user_id =  users.id INNER JOIN  escola ON  profissonal_escola_perfil.FK_escola_id =  escola.id INNER JOIN  municipio ON  escola.FK_municipio_id =  municipio.id INNER JOIN  estado ON  municipio.FK_UF_id =  estado.id INNER JOIN  profiles ON  profissonal_escola_perfil.FK_perfil_id =  profiles.id WHERE profissonal_escola_perfil.FK_escola_id = {args[1]} ")
+        cursor.execute(f"""SELECT profissonal_escola_perfil.id ,  
+                            profissonal_escola_perfil.FK_user_id, users.nome, users.email, 
+                            users.telefone, users.cpf, users.accept_lgpd, users.perfil_ativo, 
+                            profissonal_escola_perfil.FK_perfil_id, profiles.profile_name, 
+                            escola.id, escola.nome_escola ,escola.FK_municipio_id, municipio.id, 
+                            municipio.nome, estado.id, estado.nome, estado.uf FROM  profissonal_escola_perfil 
+                            INNER JOIN  users ON  profissonal_escola_perfil.FK_user_id =  users.id 
+                            INNER JOIN  escola ON  profissonal_escola_perfil.FK_escola_id =  escola.id 
+                            INNER JOIN  municipio ON  escola.FK_municipio_id =  municipio.id 
+                            INNER JOIN  estado ON  municipio.FK_UF_id =  estado.id 
+                            INNER JOIN  profiles ON  profissonal_escola_perfil.FK_perfil_id =  profiles.id 
+                            WHERE profissonal_escola_perfil.FK_escola_id = {args[1]} 
+                            AND profissonal_escola_perfil.FK_perfil_id = {args[2]}
+                            AND profissonal_escola_perfil.FK_user_id =  {args[3]};""")
         
         result = cursor.fetchall()
         cursor.close()
 
-        # print(result)
+        # print('result',result)
         # input()
 
         listEstadosDict = []
@@ -254,8 +233,11 @@ class ProfissionaisEducacaoModel():
                 listEstadosDict.append(res)   
         # print(listEstadosDict)
         # input()
+        # print(listEstadosDict)
+        # input()
 
         if len(listEstadosDict) != 0:
+            
             return listEstadosDict
 
         return False
@@ -308,9 +290,9 @@ class ProfissionaisEducacaoModel():
             
             cursor.execute('''
                         UPDATE profissionais_educacao
-                        SET FK_escola_id = ?, FK_user_id = ?
+                        SET  FK_user_id = ?,data_inicio = ?,data_fim = ?
                         WHERE id = ?
-                        ''',args[1], args[2], int(args[3])
+                        ''',args[1], args[2], args[3], args[4]
                         )
             
             conn.commit()
@@ -327,7 +309,7 @@ class ProfissionaisEducacaoModel():
         # try:
             cursor = conn.cursor()
     
-            cursor.execute("insert into profissionais_escola_perfil ( FK_user_id, FK_escola_id, FK_perfil_id) values(?,?,?);",args[1], int(args[2]), args[3])
+            cursor.execute("insert into profissonal_escola_perfil ( FK_user_id, FK_escola_id, FK_perfil_id) values(?,?,?);",args[1], int(args[2]), args[3])
             
             conn.commit()
             # conn.close()
@@ -349,7 +331,7 @@ class ProfissionaisEducacaoModel():
                         UPDATE profissonal_escola_perfil
                         SET  FK_user_id = ? , FK_escola_id = ?, FK_perfil_id = ?
                         WHERE id = ?
-                        ''',args[1], args[2], int(args[3]), int(args[3])
+                        ''',args[1], args[2], args[3], args[3]
 
                         )
             
@@ -463,7 +445,30 @@ class ProfissionaisEducacaoModel():
                 # input()
             
             cursor.execute('''
-                            DELETE FROM profissional_escola_componente WHERE FK_componente_id = ?;
+                            DELETE FROM profissional_escola_componente WHERE FK_componente_id = ? AND FK_escola_id = ? AND FK_user_id = ?;
+                            
+                            ''', args[1], args[2], args[3])
+                        
+            
+            conn.commit()
+            # conn.close()
+            # return 'created'
+            # rows = cursor.fetchall()
+        # except:
+        #     print(TypeError)
+        # #     return None
+
+    
+    @classmethod
+    def delete_profissionais_escola_perfil(*args, **kwargs):
+        # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
+        # try:
+            cursor = conn.cursor()
+                # print(args)
+                # input()
+            
+            cursor.execute('''
+                            DELETE FROM profissonal_escola_perfil WHERE id = ?;
                             
                             ''', args[1])
                         
