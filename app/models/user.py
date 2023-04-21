@@ -1,6 +1,7 @@
 from sqlalchemy.dialects.postgresql import UUID
 from app import banco
 from uuid import uuid1, uuid4
+import json
 import re
 from app import conn
 
@@ -94,6 +95,78 @@ class UserModel():
         if len(row) != 0:
             return row[0]
         return False
+    
+    @classmethod
+    def find_profissional_by_FK_user_id(*args, **kwargs):
+
+        cursor = conn.cursor()
+        qtd = kwargs.get('qtd')
+        if not qtd:
+            qtd = None
+             
+        queryDefalt = f"""SELECT CAST( (SELECT distinct {'TOP ' + str(qtd) if qtd else ''} profissonal_escola_perfil.id AS profissonal_escola_perfil__id, 
+                            profissonal_escola_perfil.FK_escola_id AS profissonal_escola_perfil__FK_escola_id, 
+                            escola.nome_escola AS escola__nome_escola,  
+                            profissonal_escola_perfil.FK_perfil_id AS profissonal_escola_perfil__FK_perfil_id, 
+                            profiles.profile_name AS profiles__profile_name, 
+                            municipio.FK_UF_id AS  municipio__FK_UF_id, 
+                            estado.nome AS estado__nome, 
+                            escola.FK_municipio_id AS escola__FK_municipio_id, 
+                            municipio.nome AS municipio__nome
+                            FROM profissonal_escola_perfil
+                            INNER JOIN escola ON profissonal_escola_perfil.FK_escola_id = escola.id 
+                            INNER JOIN profiles ON profissonal_escola_perfil.FK_perfil_id = profiles.id
+                            INNER JOIN municipio ON escola.FK_municipio_id = municipio.id
+                            INNER JOIN estado ON municipio.FK_UF_id = estado.id
+                            WHERE profissonal_escola_perfil.FK_user_id = {args[1]} """
+        
+        
+        is_first_condition = True
+        for column, value in kwargs.items():
+            if column != 'order_by' and column != 'qtd' and column != 'IdLog' and value is not None:
+                if is_first_condition:
+                    if column != 'qtd':
+                    
+                        columnSplited = column.split('__')
+                    
+                    
+                        queryDefalt += f"WHERE {columnSplited[0]}.{columnSplited[1]} = {value}"
+                        is_first_condition = False
+                      
+                
+                else:
+                    columnSplited = column.split('__')
+                      
+                    queryDefalt += f"AND {columnSplited[0]}.{columnSplited[1]} = {value}"
+                
+                
+                
+                    
+
+        order_by = kwargs.get('order_by')
+        if order_by:
+            queryDefalt += f" ORDER BY {order_by}"
+        
+         
+        
+        queryDefalt += " FOR JSON PATH, ROOT('request')) AS VARCHAR(MAX));"
+
+        cursor.execute(queryDefalt)
+        result = cursor.fetchall()
+
+        if result[0][0] != None:
+            s = str(result)
+
+            
+            strip1 = s.lstrip("[('")
+            strip2 = strip1.rstrip("', )]")
+            
+            j = json.loads(strip2)
+
+            return j
+        return False
+
+        
     
     @classmethod
     def find_by_FK_secretaria_municipio_id(cls, FK_secretaria_municipio_id):

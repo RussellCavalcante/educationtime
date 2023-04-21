@@ -208,6 +208,16 @@ class UserLogin(Resource):
 
             IdLog = UserModel.create_log_login(user[0], dateNow, navegador, ip)
 
+            profissional = UserModel.find_profissional_by_FK_user_id(user[0])
+            
+            if profissional:
+                dataJson = {'acess_token': token_de_acesso,
+                    'cpf': cpf,
+                    'IdLog':IdLog,
+                    'id': user[0]}
+                dataJson['Escolas'] = profissional
+
+                return dataJson
 
             return {'acess_token': token_de_acesso,
                     'cpf': cpf,
