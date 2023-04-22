@@ -188,6 +188,7 @@ class UserModel():
                             secretaria_municipal.nome AS secretaria_municipal__nome, 
                             secretaria_municipal.FK_secretaria_municipio_id AS secretaria_municipal__FK_secretaria_municipio_id,
                             municipio.nome AS municipio__nome,
+                            municipio.id AS municipio__id,
                             municipio.FK_UF_id AS municipio__FK_UF_id,
                             estado.nome AS estado__nome, 
                             estado.uf AS estado__ud
