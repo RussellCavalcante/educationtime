@@ -320,12 +320,12 @@ class ProfissionaisEducacaoModel():
         # #     return None
 
     @classmethod
-    def update_profissionais_educacao(*args, **kwargs):
+    def update_profissionais_educacao_perfil(*args, **kwargs):
         # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
         # try:
             cursor = conn.cursor()
-                # print(args)
-                # input()
+            # print(args)
+            # input()
             
             cursor.execute('''
                         UPDATE profissonal_escola_perfil
