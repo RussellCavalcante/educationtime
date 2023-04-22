@@ -130,7 +130,8 @@ class ProfissionaisEducacaoModel():
         cursor.execute(f"""SELECT profissonal_escola_perfil.id ,  profissonal_escola_perfil.FK_user_id, 
                         users.nome, users.email, users.telefone, users.cpf, users.accept_lgpd, users.perfil_ativo,
                         profissonal_escola_perfil.FK_perfil_id, profiles.profile_name, escola.id, escola.nome_escola ,
-                        escola.FK_municipio_id, municipio.id, municipio.nome, estado.id, estado.nome, estado.uf
+                        escola.FK_municipio_id, municipio.id, municipio.nome, estado.id, estado.nome, estado.uf,
+                        profissonal_escola_perfil.data_inicio, profissonal_escola_perfil.data_fim
                         FROM profissonal_escola_perfil 
                         INNER JOIN  users ON  profissonal_escola_perfil.FK_user_id =  users.id 
                         INNER JOIN  escola ON  profissonal_escola_perfil.FK_escola_id =  escola.id 
@@ -147,7 +148,7 @@ class ProfissionaisEducacaoModel():
             
             tup1 = ('id' , 'FK_user_id', 'nome', 'email', 'telefone', 'cpf', 'accept_lgpd', 'perfil_ativo',
                         'FK_perfil_id', 'profile_name', 'escola_id', 'nome_escola' ,
-                        'FK_municipio_id', 'municipio_id', 'municipio_nome', 'estado_id', 'estado_nome', 'estado_uf') 
+                        'FK_municipio_id', 'municipio_id', 'municipio_nome', 'estado_id', 'estado_nome', 'estado_uf', 'data_inicio', 'data_fim') 
             
             tup2 = estadoTupla
            

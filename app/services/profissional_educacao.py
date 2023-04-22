@@ -34,7 +34,10 @@ class ProfissionaisEducacaoServices(Resource):
     @jwt_required()
     def get_by_id(self, *args, **kwargs):
         try:
-            return  ProfissionaisEducacaoModel.get_profissionais_educacao_by_id(args[0]), 200
+            profissional = ProfissionaisEducacaoModel.get_profissionais_educacao_by_id(args[0])
+            if profissional != False:
+                return  profissional, 200
+            else:return{'error':'Profissional inexistente.'}
         except:
             return { 'error': 'verifique a requisição !' }, 400
         
