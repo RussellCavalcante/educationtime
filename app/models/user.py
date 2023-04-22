@@ -762,7 +762,7 @@ class UserModel():
 
             conn.autocommit = True
 
-            cursor.execute("insert into profissonal_escola_perfil (FK_user_id , FK_escola_id ,FK_perfil_id) values(?,?,?)",args[1], args[2], args[3])
+            cursor.execute("insert into profissonal_escola_perfil (FK_user_id , data_inicio, data_fim ,FK_escola_id ,FK_perfil_id) values(?,?,?,?,?)",args[1], args[2], args[3], args[4], args[5])
             
             conn.commit()
             # conn.close()

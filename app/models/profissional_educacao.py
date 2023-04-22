@@ -252,7 +252,7 @@ class ProfissionaisEducacaoModel():
                 # print(args)
                 # input()
     
-            cursor.execute("insert into profissionais_educacao ( FK_user_id, data_inicio, data_fim) values(?,?,?);",args[1],args[2],args[3])
+            cursor.execute("insert into profissionais_educacao ( FK_user_id ) values(?);",args[1])
             
             conn.commit()
             # conn.close()

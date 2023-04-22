@@ -170,7 +170,7 @@ class ProfissionaisEducacaoServices(Resource):
                                     UserModel.associateProfissionalEscolaComponentes(user[0], FK_escola_id, componente)
                         
 
-                    return  {'created': nome}, 201
+                        return  {'created': nome}, 201
                 
                 else:   
                     return {'error': 'escola ja associada a usuario'}, 400
@@ -197,11 +197,11 @@ class ProfissionaisEducacaoServices(Resource):
 
             UserModel.create_convite_acesso(user[0], str(today), hashconvite, salt)
             
-            UserModel.associateProfissionalEscolaPerfil(user[0], FK_escola_id, FK_perfil_id)
+            UserModel.associateProfissionalEscolaPerfil(user[0], data_inicio, data_fim, FK_escola_id, FK_perfil_id)
 
             UserModel.associateUserProfile(user[0], FK_perfil_id)
             
-            ProfissionaisEducacaoModel.create_profissionais_educacao( user[0], data_inicio, data_fim )
+            ProfissionaisEducacaoModel.create_profissionais_educacao( user[0] )
 
             manter = []
             
@@ -245,11 +245,11 @@ class ProfissionaisEducacaoServices(Resource):
             
             UserModel.update_profissionais_educacao(cpf, nome, email, telefone, perfil_ativo, profissionaleducacao[0]['FK_user_id'])
 
-            ProfissionaisEducacaoModel.update_profissionais_educacao(profissionaleducacao[0]['FK_user_id'] ,data_inicio, data_fim, args[0])
+            # ProfissionaisEducacaoModel.update_profissionais_educacao(profissionaleducacao[0]['FK_user_id'] ,data_inicio, data_fim, args[0])
 
             ProfissionaisEducacaoModel.delete_profissionais_escola_perfil(args[0])
 
-            UserModel.associateProfissionalEscolaPerfil(profissionaleducacao[0]['FK_user_id'], FK_escola_id, FK_perfil_id)
+            UserModel.associateProfissionalEscolaPerfil(profissionaleducacao[0]['FK_user_id'], data_inicio, data_fim, FK_escola_id, FK_perfil_id)
 
             componentizar = ProfissionaisEducacaoModel.get_componentes_id_by_FK_turma_id(FK_escola_id)
 
