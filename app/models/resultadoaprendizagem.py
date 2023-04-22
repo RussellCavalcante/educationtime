@@ -1,4 +1,5 @@
 from sqlalchemy.dialects.postgresql import UUID
+from app.utils.defaultGet import GetModel
 # from app import banco
 from uuid import uuid1, uuid4
 import re
@@ -89,39 +90,37 @@ class ResultadoAprendizagemModel():
 
     @classmethod
     def get_resultado_aprendizagem(*args, **kwargs):
-        cursor = conn.cursor()
-
-        cursor.execute("""SELECT resultado_aprendizagem_acoes.id, nome_escola, escola.FK_municipio_id,
-                            municipio.nome, estado.uf, estado.nome, notas_saeb.ano
-                            FROM resultado_aprendizagem_acoes 
-                            INNER JOIN notas_saeb_area_conhecimento ON resultado_aprendizagem_acoes.FK_notas_saeb_area_conhecimento_id = notas_saeb_area_conhecimento.id
-                            INNER JOIN notas_saeb ON notas_saeb_area_conhecimento.FK_notas_saeb_id = notas_saeb.id
-                            INNER JOIN escola ON notas_saeb.FK_escola_id = escola.id
-                            INNER JOIN municipio ON escola.FK_municipio_id = municipio.id
-                            INNER JOIN estado ON municipio.FK_UF_id = estado.id""")
-
-        result = cursor.fetchall()
-        cursor.close()
-
-        # print(result)
-        # input()
-        # dictFinal = {}
-        listEstadosDict = []
-        for estadoTupla in result:
-
-            # tup1 = ('id', 'FK_UF_id' ,'nome_uf' , 'FK_municipio_id', 'municipio_nome' , 'FK_escola_id', 'nome_escola' , 'nome_rotina','ordem', 'nome_momento', 'descricao', 'FK_turma_id', 'educador_nome',
-            #             'FK_etapa_ensino_id' , 'etapa_ensino_nome', 'FK_grau_etapa_ensino_id', 'nome_grau', 'componente_curricular_nome', 'ano', 'nome_turma', 'turno_nome')
-            tup1 = ("id", 'nome_escola', "FK_municipio_id",
-                            "municipio_nome", "estado_uf", "estado_nome", "ano")
-
-            tup2 = estadoTupla
-
-            if len(tup1) == len(tup2):
-                res = dict(zip(tup1, tup2))
-                listEstadosDict.append(res)
-
-
-        return listEstadosDict
+        queryDefalt = f""" 
+                            profissonal_escola_perfil.id AS profissonal_escola_perfil__id,
+                            profissonal_escola_perfil.FK_user_id AS profissonal_escola_perfil__FK_user_id,
+                            users.id AS users__id,
+                            users.nome AS users__nome,
+                            users.email AS users__email,
+                            users.telefone AS users__telefone,
+                            users.cpf AS users__cpf,
+                            users.accept_lgpd AS users__accept_lgpd,
+                            users.perfil_ativo AS users__perfil_ativo,
+                            profissonal_escola_perfil.FK_perfil_id AS profissonal_escola_perfil__FK_perfil_id,
+                            profiles.profile_name AS profiles__profile_name,
+                            escola.id AS escola__id, 
+                            escola.nome_escola AS escola__nome_escola,
+                            escola.FK_municipio_id AS escola__FK_municipio_id, 
+                            municipio.id AS municipio__id, 
+                            municipio.nome AS municipio__nome, 
+                            estado.id AS estado__id, 
+                            estado.nome AS estado__nome, 
+                            estado.uf AS estado__uf
+                            FROM profissonal_escola_perfil 
+                                INNER JOIN  users ON  profissonal_escola_perfil.FK_user_id =  users.id 
+                                INNER JOIN  escola ON  profissonal_escola_perfil.FK_escola_id =  escola.id 
+                                INNER JOIN  municipio ON  escola.FK_municipio_id =  municipio.id 
+                                INNER JOIN  estado ON  municipio.FK_UF_id =  estado.id 
+                                INNER JOIN  profiles ON  profissonal_escola_perfil.FK_perfil_id = profiles.id 
+                        """
+        
+        j = GetModel.get_default(queryDefalt, **kwargs)
+       
+        return j
 
     @classmethod
     def get_resultado_aprendizagem_by_id(*args, **kwargs):

@@ -5,6 +5,7 @@ from datetime import date
 from datetime import datetime
 # from flask import Flask
 from flask import jsonify
+from app.models.perfil import PerfilModel
 # from flask import request
 
 # from flask_jwt_extended import create_access_token
@@ -209,6 +210,8 @@ class UserLogin(Resource):
             IdLog = UserModel.create_log_login(user[0], dateNow, navegador, ip)
 
             profissional = UserModel.find_profissional_by_FK_user_id(user[0])
+
+            perfil = PerfilModel.get_perfil_by_user_id(user[0])
             
             if profissional:
                 dataJson = {'acess_token': token_de_acesso,
@@ -216,13 +219,28 @@ class UserLogin(Resource):
                     'IdLog':IdLog,
                     'id': user[0]}
                 dataJson['Escolas'] = profissional
+                dataJson['perfil'] =  perfil   
 
                 return dataJson
 
-            return {'acess_token': token_de_acesso,
+            dirigente = UserModel.find_dirigente_by_FK_user_id(user[0])
+
+            if dirigente:
+                dataJson = {'acess_token': token_de_acesso,
                     'cpf': cpf,
                     'IdLog':IdLog,
-                    'id': user[0]}, 200
+                    'id': user[0]}
+                dataJson['perfil'] =  perfil   
+                dataJson['dirigente'] = dirigente 
+                return dataJson, 200
+            
+            dataJson = {'acess_token': token_de_acesso,
+                    'cpf': cpf,
+                    'IdLog':IdLog,
+                    'id': user[0]}
+            dataJson['perfil'] =  perfil
+            
+            return dataJson, 200
         except:
             return { 'error': 'verifique a requisição !' }, 400   
 

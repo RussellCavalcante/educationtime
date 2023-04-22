@@ -1,4 +1,5 @@
 from sqlalchemy.dialects.postgresql import UUID
+from app.utils.defaultGet import GetModel
 # from app import banco
 from uuid import uuid1, uuid4
 import re
@@ -27,36 +28,24 @@ class AgendaDiretoriaModel():
 
     @classmethod
     def get_agenda_diretoria(*args, **kwargs):
-        cursor = conn.cursor()
- 
-        cursor.execute("""SELECT  agenda_diretoria.id, agenda_diretoria.nome , estado.uf , municipio.nome ,
-                        escola.nome_escola  , agenda_diretoria.prazo, agenda_analise.resultado
-                        FROM agenda_diretoria
-                        INNER JOIN escola ON agenda_diretoria.FK_escola_id = escola.id
-                        INNER JOIN municipio ON escola.FK_municipio_id  = municipio.id
-                        INNER JOIN estado ON municipio.FK_UF_id = estado.id     
-                        INNER JOIN agenda_analise ON agenda_diretoria.id = agenda_analise.FK_agenda_diretoria_id              
-                    ;""")
+        queryDefalt = f""" 
+                            agenda_diretoria.id AS agenda_diretoria__id, 
+                            agenda_diretoria.nome AS agenda_diretoria__nome, 
+                            estado.uf AS estado__uf, 
+                            municipio.nome AS municipio__nome,
+                            escola.nome_escola AS escola__nome_escola, 
+                            agenda_diretoria.prazo AS agenda_diretoria__prazo, 
+                            agenda_analise.resultado AS agenda_analise__resultado
+                                FROM agenda_diretoria
+                                INNER JOIN escola ON agenda_diretoria.FK_escola_id = escola.id
+                                INNER JOIN municipio ON escola.FK_municipio_id  = municipio.id
+                                INNER JOIN estado ON municipio.FK_UF_id = estado.id     
+                                INNER JOIN agenda_analise ON agenda_diretoria.id = agenda_analise.FK_agenda_diretoria_id   
+                        """
         
-        result = cursor.fetchall()
-        cursor.close()
-
-        # print(result)
-        # input()
-        listEstadosDict = []
-        for estadoTupla in result:
-            
-            tup1 = ('id', 'agenda_diretoria_nome' , 'uf' , 'municipio_nome' ,
-                        'nome_escola'  , 'prazo', 'resultado') 
-            tup2 = estadoTupla
-           
-            if len(tup1) == len(tup2): 
-                res = dict(zip(tup1, tup2))
-                # print(res)
-
-                listEstadosDict.append(res)   
-            
-        return listEstadosDict
+        j = GetModel.get_default(queryDefalt, **kwargs)
+       
+        return j
     
     @classmethod
     def get_agenda_diretoria_resultado(*args, **kwargs):

@@ -1,4 +1,5 @@
 from sqlalchemy.dialects.postgresql import UUID
+from app.utils.defaultGet import GetModel
 # from app import banco
 from uuid import uuid1, uuid4
 import re
@@ -89,37 +90,25 @@ class FormacaoServicosModel():
 
     @classmethod
     def get_formacao_servico(*args, **kwargs):
-        cursor = conn.cursor()
-
-        cursor.execute("""SELECT formacao_servico_escola.id, formacao_servico.id, formacao_servico.FK_municipio,
-                        formacao_servico.nome, formacao_servico.responsavel , formacao_servico.ano_letivo , formacao_servico.data_inicio, 
-                        formacao_servico.data_limite, escola.id, escola.nome_escola 
-                        FROM formacao_servico_escola 
-                        INNER JOIN formacao_servico ON formacao_servico_escola.FK_formacao_servico_id = formacao_servico.id
-                        INNER JOIN escola ON formacao_servico_escola.FK_escola_id = escola.id
-                        """)
-
-        result = cursor.fetchall()
-        cursor.close()
-
-        # print(result)
-        # input()
-        listEstadosDict = []
-        for estadoTupla in result:
-
-            tup1 = ('id', 'formacao_servico_id', 'FK_municipio',
-                        'formacao_servico_nome', 'responsavel' ,'ano' , 'data_inicio', 
-                        'data_limite', 'FK_escola_id', 'nome_escola'  )
-
-            tup2 = estadoTupla
-
-            if len(tup1) == len(tup2):
-                res = dict(zip(tup1, tup2))
-                # print(res)
-
-                listEstadosDict.append(res)
-
-        return listEstadosDict
+        queryDefalt = f""" 
+                            formacao_servico_escola.id AS formacao_servico_escola__id, 
+                            formacao_servico.id AS formacao_servico__id, 
+                            formacao_servico.FK_municipio AS formacao_servico__FK_municipio,
+                            formacao_servico.nome AS formacao_servico__nome, 
+                            formacao_servico.responsavel AS formacao_servico__responsavel, 
+                            formacao_servico.ano_letivo AS formacao_servico__ano_letivo, 
+                            formacao_servico.data_inicio AS  formacao_servico__data_inicio, 
+                            formacao_servico.data_limite AS formacao_servico__data_limite, 
+                            escola.id AS escola__id,
+                            escola.nome_escola AS escola__nome_escola 
+                            FROM formacao_servico_escola 
+                            INNER JOIN formacao_servico ON formacao_servico_escola.FK_formacao_servico_id = formacao_servico.id
+                            INNER JOIN escola ON formacao_servico_escola.FK_escola_id = escola.id
+                        """
+        
+        j = GetModel.get_default(queryDefalt, **kwargs)
+       
+        return j
 
     @classmethod
     def get_formacao_servico_by_id(*args, **kwargs):

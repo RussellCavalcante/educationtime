@@ -214,10 +214,10 @@ def update_escola(id):
 
 def get_turma():    
     from app.services.turma import GetTurma
-    
+    kwargs = request.args.to_dict()
     _Get_services = GetTurma()
     
-    return _Get_services.get()
+    return _Get_services.get(**kwargs)
 
 @avaliable_route.route('/turmas/<int:id>', methods=['GET'])
 
@@ -250,10 +250,10 @@ def post_turma():
 
 def get_estudante():    
     from app.services.estudante import GetEstudante
-    
+    kwargs = request.args.to_dict()
     _Get_services = GetEstudante()
     
-    return _Get_services.get()
+    return _Get_services.get(**kwargs)
 
 
 @avaliable_route.route('/Estudante/Cadastro', methods=['POST'])
@@ -915,10 +915,10 @@ def update_FuncoesEscola(id):
 @avaliable_route.route('/EscolaridadeEducador', methods=['GET'])
 def get_EscolaridadeEducador():    
     from app.services.escolaridade_educadores import EscolaridadeEducadoresaServices
-    
+    kwargs = request.args.to_dict()
     _Get_services = EscolaridadeEducadoresaServices()
     
-    return _Get_services.get()
+    return _Get_services.get(**kwargs)
 
 @avaliable_route.route('/EscolaridadeEducador/educador/<int:id>', methods=['GET'])
 
@@ -1140,10 +1140,10 @@ def update_Monitoramento(id):
 
 def get_AgendaDiretoria():    
     from app.services.agenda_diretoria import AgendaDiretoriaServices
-    
+    kwargs = request.args.to_dict()
     _Get_services = AgendaDiretoriaServices()
     
-    return _Get_services.get()
+    return _Get_services.get(**kwargs)
 
 @avaliable_route.route('/AgendaDiretoria/<int:id>', methods=['GET'])
 
@@ -1193,10 +1193,10 @@ def post_FormacaoServico():
 
 def get_FormacaoServico():    
     from app.services.formacaoservico import FormacaoServicoServices
-    
+    kwargs = request.args.to_dict()
     _Get_services = FormacaoServicoServices()
     
-    return _Get_services.get()
+    return _Get_services.get(**kwargs)
 
 @avaliable_route.route('/PlanoLeitura/Cadastro', methods=['POST'])
 

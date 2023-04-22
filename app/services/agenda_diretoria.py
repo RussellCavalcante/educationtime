@@ -38,7 +38,7 @@ class AgendaDiretoriaServices(Resource):
     def get(self, *args, **kwargs):
         try:
                 
-            return  AgendaDiretoriaModel.get_agenda_diretoria(), 200
+            return  AgendaDiretoriaModel.get_agenda_diretoria(**kwargs), 200
         except:
             return { 'error': 'verifique a requisição !' }, 400
 

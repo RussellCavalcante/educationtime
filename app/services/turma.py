@@ -21,7 +21,7 @@ class GetTurma(Resource):
     def get(self, *args, **kwargs):
         try:
             
-            return  TurmaModel.get_turma(), 200
+            return  TurmaModel.get_turma(**kwargs), 200
         except:
             return { 'error': 'verifique a requisição !' }, 400
         

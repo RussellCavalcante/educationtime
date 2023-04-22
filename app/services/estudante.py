@@ -20,7 +20,7 @@ class GetEstudante(Resource):
     @jwt_required()
     def get(self, *args, **kwargs):
         try:
-            return  estudanteModel.get_estudante(), 200
+            return  estudanteModel.get_estudante(**kwargs), 200
         except:
             return { 'error': 'verifique a requisição !' }, 400
         

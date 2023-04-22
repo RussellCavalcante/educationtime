@@ -166,8 +166,84 @@ class UserModel():
             return j
         return False
 
+    @classmethod
+    def find_dirigente_by_FK_user_id(*args, **kwargs):
+
+        cursor = conn.cursor()
+        qtd = kwargs.get('qtd')
+        if not qtd:
+            qtd = None
+             
+        queryDefalt = f"""SELECT CAST( (SELECT distinct {'TOP ' + str(qtd) if qtd else ''} dirigente_municipal.id AS dirigente_municipal__id, 
+                            dirigente_municipal.data_inicio AS dirigente_municipal__data_inicio,
+                            dirigente_municipal.data_fim AS dirigente_municipal__data_fim, 
+                            dirigente_municipal.FK_secretaria_municipal_id AS dirigente_municipal__FK_secretaria_municipal_id,
+                            dirigente_municipal.FK_user_id AS dirigente_municipal__FK_user_id,
+                            users.nome AS users__nome,
+                            users.email AS users__email, 
+                            users.telefone AS users__telefone,
+                            users.cpf AS  users__cpf, 
+                            users.accept_lgpd AS users__accept_lgpd,
+                            users.perfil_ativo AS users__perfil_ativo, 
+                            secretaria_municipal.nome AS secretaria_municipal__nome, 
+                            secretaria_municipal.FK_secretaria_municipio_id AS secretaria_municipal__FK_secretaria_municipio_id,
+                            municipio.nome AS municipio__nome,
+                            municipio.FK_UF_id AS municipio__FK_UF_id,
+                            estado.nome AS estado__nome, 
+                            estado.uf AS estado__ud
+                             FROM  dirigente_municipal 
+                            INNER JOIN  users ON  dirigente_municipal.FK_user_id =  users.id 
+                            INNER JOIN  secretaria_municipal ON  dirigente_municipal.FK_secretaria_municipal_id =  secretaria_municipal.id 
+                            INNER JOIN  municipio ON  secretaria_municipal.FK_secretaria_municipio_id =  municipio.id 
+                            INNER JOIN  estado ON  municipio.FK_UF_id =  estado.id
+                            WHERE dirigente_municipal.FK_user_id = {args[1]} """
         
-    
+        
+        is_first_condition = True
+        for column, value in kwargs.items():
+            if column != 'order_by' and column != 'qtd' and column != 'IdLog' and value is not None:
+                if is_first_condition:
+                    if column != 'qtd':
+                    
+                        columnSplited = column.split('__')
+                    
+                    
+                        queryDefalt += f"WHERE {columnSplited[0]}.{columnSplited[1]} = {value}"
+                        is_first_condition = False
+                      
+                
+                else:
+                    columnSplited = column.split('__')
+                      
+                    queryDefalt += f"AND {columnSplited[0]}.{columnSplited[1]} = {value}"
+                
+                
+                
+                    
+
+        order_by = kwargs.get('order_by')
+        if order_by:
+            queryDefalt += f" ORDER BY {order_by}"
+        
+         
+        
+        queryDefalt += " FOR JSON PATH, ROOT('request')) AS VARCHAR(MAX));"
+
+        cursor.execute(queryDefalt)
+        result = cursor.fetchall()
+
+        if result[0][0] != None:
+            s = str(result)
+
+            
+            strip1 = s.lstrip("[('")
+            strip2 = strip1.rstrip("', )]")
+            
+            j = json.loads(strip2)
+
+            return j
+        return False
+
     @classmethod
     def find_by_FK_secretaria_municipio_id(cls, FK_secretaria_municipio_id):
         # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id

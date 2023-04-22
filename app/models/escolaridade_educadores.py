@@ -1,4 +1,5 @@
 from sqlalchemy.dialects.postgresql import UUID
+from app.utils.defaultGet import GetModel
 # from app import banco
 from uuid import uuid1, uuid4
 import re
@@ -26,40 +27,32 @@ class EscolaridadeEducadoresModel():
 
     @classmethod
     def get_escolaridade_educador(*args, **kwargs):
-        cursor = conn.cursor()
- 
-        cursor.execute(f"""SELECT escolaridade_educador.id , FK_user_id, users.cpf, users.nome, FK_escola_id, 
-                        escola.nome_escola, escolaridade, ano_conclusao, nome_instituicao, municipio.id , municipio.nome , estado.id, 
-                        estado.nome, estado.uf  FROM escolaridade_educador
-                        INNER JOIN users on escolaridade_educador.FK_user_id = users.id
-                        INNER JOIN escola on escolaridade_educador.FK_escola_id = escola.id
-                        INNER JOIN municipio on escola.FK_municipio_id = municipio.id
-                        INNER JOIN estado on municipio.FK_UF_id = estado.id;""")
         
-        result = cursor.fetchall()
-        cursor.close()
-
-        # print(result)
-        # input()
-        listEstadosDict = []
-        for estadoTupla in result:
-            
-            tup1 = ('id' , 'FK_user_id', 'cpf', 'nome', 'FK_escola_id', 
-                       'nome_escola', 'escolaridade', 'ano_conclusao', 'nome_instituicao', 'FK_municipio_id','municipio_nome' ,'FK_UF_id', 
-                        'estado_nome', 'estado_uf') 
-            
-            tup2 = estadoTupla
-           
-            if len(tup1) == len(tup2): 
-                res = dict(zip(tup1, tup2)) 
-                # print(res)
-
-                listEstadosDict.append(res)   
-            
-        if len(listEstadosDict) != 0:
-            return listEstadosDict
-
-        return False
+        queryDefalt = f""" 
+                            escolaridade_educador.id AS escolaridade_educador__id,
+                            escolaridade_educador.FK_user_id AS escolaridade_educador__FK_user_id, 
+                            escolaridade_educador.FK_escola_id AS escolaridade_educador__FK_escola_id,
+                            users.cpf AS users__cpf, 
+                            users.nome AS users__nome, 
+                            escola.nome_escola AS escola__nome_escola, 
+                            escolaridade_educador.escolaridade AS escolaridade_educador__escolaridade,
+                            escolaridade_educador.ano_conclusao AS escolaridade_educador__ano_conclusao,
+                            escolaridade_educador.nome_instituicao AS escolaridade_educador__nome_instituicao,
+                            municipio.id AS municipio_id , 
+                            municipio.nome AS municipio__nome, 
+                            estado.id AS estado__id , 
+                            estado.nome AS estado__nome, 
+                            estado.uf AS estado__uf
+                            FROM escolaridade_educador
+                            INNER JOIN users on escolaridade_educador.FK_user_id = users.id
+                            INNER JOIN escola on escolaridade_educador.FK_escola_id = escola.id
+                            INNER JOIN municipio on escola.FK_municipio_id = municipio.id
+                            INNER JOIN estado on municipio.FK_UF_id = estado.id
+                        """
+        
+        j = GetModel.get_default(queryDefalt, **kwargs)
+       
+        return j
 
     @classmethod
     def get_escolaridade_educador_by_id(*args, **kwargs):

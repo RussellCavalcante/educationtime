@@ -1,4 +1,5 @@
 from sqlalchemy.dialects.postgresql import UUID
+from app.utils.defaultGet import GetModel
 # from app import banco
 from uuid import uuid1, uuid4
 import re
@@ -89,87 +90,37 @@ class NotasSaebModel():
 
     @classmethod
     def get_notas_saeb(*args, **kwargs):
-        cursor = conn.cursor()
-
-        cursor.execute("""SELECT notas_saeb_area_conhecimento.id, notas_saeb.FK_escola_id, escola.nome_escola, escola.FK_municipio_id,
-                        municipio.nome, municipio.FK_UF_id, estado.uf, estado.nome, notas_saeb.ano, 
-                        notas_saeb_area_conhecimento.id, notas_saeb_area_conhecimento.FK_area_conhecimento_id,
-                        area_conhecimento.nome, notas_saeb_area_conhecimento.nota
-                        FROM notas_saeb_area_conhecimento 
-                        INNER JOIN area_conhecimento ON notas_saeb_area_conhecimento.FK_area_conhecimento_id = area_conhecimento.id
-                        INNER JOIN notas_saeb ON notas_saeb_area_conhecimento.FK_notas_saeb_id = notas_saeb.id
-                        INNER JOIN escola ON notas_saeb.FK_escola_id = escola.id
-                        INNER JOIN municipio ON escola.FK_municipio_id = municipio.id
-                        INNER JOIN estado ON municipio.FK_UF_id = estado.id""")
-
-        result = cursor.fetchall()
-        cursor.close()
-
-        # print(result)
-        # input()
-        dictAll = []
-        dictFinal = {}
+        queryDefalt = f""" 
+                            profissonal_escola_perfil.id AS profissonal_escola_perfil__id,
+                            profissonal_escola_perfil.FK_user_id AS profissonal_escola_perfil__FK_user_id,
+                            users.id AS users__id,
+                            users.nome AS users__nome,
+                            users.email AS users__email,
+                            users.telefone AS users__telefone,
+                            users.cpf AS users__cpf,
+                            users.accept_lgpd AS users__accept_lgpd,
+                            users.perfil_ativo AS users__perfil_ativo,
+                            profissonal_escola_perfil.FK_perfil_id AS profissonal_escola_perfil__FK_perfil_id,
+                            profiles.profile_name AS profiles__profile_name,
+                            escola.id AS escola__id, 
+                            escola.nome_escola AS escola__nome_escola,
+                            escola.FK_municipio_id AS escola__FK_municipio_id, 
+                            municipio.id AS municipio__id, 
+                            municipio.nome AS municipio__nome, 
+                            estado.id AS estado__id, 
+                            estado.nome AS estado__nome, 
+                            estado.uf AS estado__uf
+                            FROM profissonal_escola_perfil 
+                                INNER JOIN  users ON  profissonal_escola_perfil.FK_user_id =  users.id 
+                                INNER JOIN  escola ON  profissonal_escola_perfil.FK_escola_id =  escola.id 
+                                INNER JOIN  municipio ON  escola.FK_municipio_id =  municipio.id 
+                                INNER JOIN  estado ON  municipio.FK_UF_id =  estado.id 
+                                INNER JOIN  profiles ON  profissonal_escola_perfil.FK_perfil_id = profiles.id 
+                        """
         
-        listEstadosDict = []
-        for estadoTupla in result:
-
-            # tup1 = ('id', 'FK_UF_id' ,'nome_uf' , 'FK_municipio_id', 'municipio_nome' , 'FK_escola_id', 'nome_escola' , 'nome_rotina','ordem', 'nome_momento', 'descricao', 'FK_turma_id', 'educador_nome',
-            #             'FK_etapa_ensino_id' , 'etapa_ensino_nome', 'FK_grau_etapa_ensino_id', 'nome_grau', 'componente_curricular_nome', 'ano', 'nome_turma', 'turno_nome')
-            tup1 = ('id', 'FK_escola_id', 'nome_escola', 'FK_municipio_id',
-                        'municipio_nome', 'FK_UF_id', 'estado_uf', 'estado_nome', 'ano', 
-                        'notas_saeb_area_conhecimento_id', 'FK_area_conhecimento_id',
-                        'area_conhecimento_nome', 'nota')
-
-            tup2 = estadoTupla
-
-            if len(tup1) == len(tup2):
-                res = dict(zip(tup1, tup2))
-                listEstadosDict.append(res)
-
-        AceptKeysListTurmaCompoenente = { 'notas_saeb_area_conhecimento_id':str, 'FK_area_conhecimento_id':str, 'area_conhecimento_nome':str, 'nota':str}
-
-        NotAceptKeyForStart = {'notas_saeb_area_conhecimento_id':str, 'FK_area_conhecimento_id':str, 'area_conhecimento_nome':str, 'nota':int}
-
-        # print(listEstadosDict)
-        # input()
-
-        for Dict in listEstadosDict:
-
-            # print(dictAll)
-            # input()
-            
-            # dictMmentos = {}
-            notasDict = {}
-
-            for chave in Dict:
-
-                if 'notas' not in dictFinal.keys():
-                    if chave == 'notas_saeb_area_conhecimento_id':
-
-                        dictFinal['notas'] = {'itens':[]}
-                        notasDict[chave] = Dict[chave]
-
-                else:
-                    if chave in AceptKeysListTurmaCompoenente.keys() :
-
-                        notasDict[chave] = Dict[chave]
-
-                    if chave == 'nota':
-                        dictFinal['notas']['itens'].append(notasDict)
-
-                        dictAll.append(dictFinal)
-                        dictFinal = {}
-                        
-                if chave in dictFinal.keys():
-                    continue
-
-                
-                if chave not in NotAceptKeyForStart.keys():
-                        
-                        dictFinal[chave] = Dict[chave]
-
-
-        return dictAll
+        j = GetModel.get_default(queryDefalt, **kwargs)
+       
+        return j
 
     @classmethod
     def get_notas_saeb_by_id(*args, **kwargs):

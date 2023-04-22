@@ -23,7 +23,7 @@ class FormacaoServicoServices(Resource):
     def get(self, *args, **kwargs):
         try:
                 
-            return  FormacaoServicosModel.get_formacao_servico(), 200
+            return  FormacaoServicosModel.get_formacao_servico(**kwargs), 200
         except:
             return { 'error': 'verifique a requisição !' }, 400
     

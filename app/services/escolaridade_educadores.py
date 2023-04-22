@@ -23,7 +23,7 @@ class EscolaridadeEducadoresaServices(Resource):
     @jwt_required()
     def get(self, *args, **kwargs):
         try:
-            return  EscolaridadeEducadoresModel.get_escolaridade_educador(), 200
+            return  EscolaridadeEducadoresModel.get_escolaridade_educador(**kwargs), 200
         except:
             return { 'error': 'verifique a requisição !' }, 400
         

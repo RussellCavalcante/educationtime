@@ -1,5 +1,6 @@
 from sqlalchemy.dialects.postgresql import UUID
 # from app import banco
+from app.utils.defaultGet import GetModel
 from uuid import uuid1, uuid4
 import re
 from app import conn
@@ -27,45 +28,38 @@ class TurmaModel():
 
     @classmethod
     def get_turma(*args, **kwargs):
-        cursor = conn.cursor()
- 
-        cursor.execute("select turma.id, turma.nome_turma, turma.ano_letivo, turma.FK_modalidade_id, modalidade.nome, turma.FK_grau_etapa_ensino_id, grau_etapa_ensino.nome_grau, turma.FK_etapa_ensino_id, etapa_ensino.nome, turma.FK_turno_id, turno.nome, turma.FK_escola_id, escola.nome_escola, escola.FK_municipio_id, municipio.nome, municipio.FK_UF_id, estado.uf, estado.nome FROM turma INNER JOIN etapa_ensino ON turma.FK_etapa_ensino_id = etapa_ensino.id INNER JOIN grau_etapa_ensino  ON turma.FK_grau_etapa_ensino_id = grau_etapa_ensino.id INNER JOIN  turno ON  turma.FK_turno_id =  turno.id INNER JOIN  modalidade ON turma.FK_modalidade_id = modalidade.id INNER JOIN  escola  ON turma.FK_escola_id =  escola.id INNER JOIN  municipio ON  escola.FK_municipio_id = municipio.id INNER JOIN estado  ON municipio.FK_UF_id =  estado.id;")
+        queryDefalt = f""" 
+                            turma.id AS turma__id, 
+                            turma.nome_turma AS turma__nome_turma, 
+                            turma.ano_letivo AS turma__ano_letivo, 
+                            turma.FK_modalidade_id AS turma__FK_modalidade_id, 
+                            modalidade.nome AS modalidade__nome, 
+                            turma.FK_grau_etapa_ensino_id AS turma__FK_grau_etapa_ensino_id, 
+                            grau_etapa_ensino.nome_grau AS grau_etapa_ensino__nome_grau, 
+                            turma.FK_etapa_ensino_id AS turma__FK_etapa_ensino_id, 
+                            etapa_ensino.nome AS etapa_ensino__nome, 
+                            turma.FK_turno_id AS turma__FK_turno_id, 
+                            turno.nome AS turno__nome, 
+                            turma.FK_escola_id AS turma__FK_escola_id, 
+                            escola.nome_escola AS escola__nome_escola, 
+                            escola.FK_municipio_id AS escola__FK_municipio_id, 
+                            municipio.nome AS municipio__nome, 
+                            municipio.FK_UF_id municipio__FK_UF_id, 
+                            estado.uf AS estado__uf, 
+                            estado.nome AS estado__nome
+                            FROM turma 
+                            INNER JOIN etapa_ensino ON turma.FK_etapa_ensino_id = etapa_ensino.id 
+                            INNER JOIN grau_etapa_ensino  ON turma.FK_grau_etapa_ensino_id = grau_etapa_ensino.id 
+                            INNER JOIN  turno ON  turma.FK_turno_id =  turno.id 
+                            INNER JOIN  modalidade ON turma.FK_modalidade_id = modalidade.id 
+                            INNER JOIN  escola  ON turma.FK_escola_id =  escola.id 
+                            INNER JOIN  municipio ON  escola.FK_municipio_id = municipio.id 
+                            INNER JOIN estado  ON municipio.FK_UF_id =  estado.id
+                        """
         
-        result = cursor.fetchall()
-        cursor.close()
-
-        # print(result)
-        # input()
-        listEstadosDict = []
-        for estadoTupla in result:
-            
-            tup1 = ('id',
-                    'nome_turma',
-                    'ano_letivo',
-                    'FK_modalidade_id',
-                    'modalidade_nome',
-                    'FK_grau_etapa_ensino_id',
-                    'nome_grau',
-                    'FK_etapa_ensino_id',
-                    'etapa_ensino_nome',
-                    'FK_turno_id',
-                    'turno_nome',
-                    'FK_escola_id',
-                    'nome_escola',
-                    'FK_municipio_id',
-                    'nome_municipio',
-                    'FK_UF_id',
-                    'uf',
-                    'nome_uf') 
-            tup2 = estadoTupla
-           
-            if len(tup1) == len(tup2): 
-                res = dict(zip(tup1, tup2))
-                # print(res)
-
-                listEstadosDict.append(res)   
-            
-        return listEstadosDict
+        j = GetModel.get_default(queryDefalt, **kwargs)
+       
+        return j
 
     @classmethod
     def get_turma_by_id(*args, **kwargs):

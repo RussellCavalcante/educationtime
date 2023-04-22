@@ -19,7 +19,7 @@ class NotasSaebServices(Resource):
     def get(self, *args, **kwargs):
         try:
                 
-            return  NotasSaebModel.get_notas_saeb(), 200
+            return  NotasSaebModel.get_notas_saeb(**kwargs), 200
         except:
             return { 'error': 'verifique a requisição !' }, 400
     

@@ -1,4 +1,5 @@
 from sqlalchemy.dialects.postgresql import UUID
+from app.utils.defaultGet import GetModel
 # from app import banco
 from uuid import uuid1, uuid4
 import re
@@ -27,28 +28,29 @@ class estudanteModel():
 
     @classmethod
     def get_estudante(*args, **kwargs):
-        cursor = conn.cursor()
- 
-        cursor.execute("SELECT estudante.id, estudante.nome, estudante.cod_nacional_estudante, estudante.data_nascimento, estudante.tipo_aluno, estudante.nee, estudante.FK_escola_id, escola.nome_escola, municipio.id, municipio.nome, estado.id, estado.nome, estado.uf FROM  estudante INNER JOIN  escola ON  estudante.FK_escola_id =  escola.id INNER JOIN  municipio ON  escola.FK_municipio_id =  municipio.id INNER JOIN  estado ON  municipio.FK_UF_id =  estado.id ;")
+        queryDefalt = f""" 
+                            estudante.id AS estudante__id, 
+                            estudante.nome AS estudante__nome, 
+                            estudante.cod_nacional_estudante AS estudante__cod_nacional_estudante, 
+                            estudante.data_nascimento AS estudante__data_nascimento, 
+                            estudante.tipo_aluno AS estudante__tipo_aluno, 
+                            estudante.nee AS estudante__nee, 
+                            estudante.FK_escola_id AS estudante__FK_escola_id, 
+                            escola.nome_escola AS escola__nome_escola, 
+                            municipio.id AS municipio__id, 
+                            municipio.nome AS municipio__nome, 
+                            estado.id AS estado__id,
+                            estado.nome AS estado__nome, 
+                            estado.uf AS estado__uf 
+                            FROM  estudante 
+                            INNER JOIN  escola ON  estudante.FK_escola_id =  escola.id 
+                            INNER JOIN  municipio ON  escola.FK_municipio_id =  municipio.id 
+                            INNER JOIN  estado ON  municipio.FK_UF_id =  estado.id
+                        """
         
-        result = cursor.fetchall()
-        cursor.close()
-
-        # print(result)
-        # input()
-        listEstadosDict = []
-        for estadoTupla in result:
-            
-            tup1 = ('id', 'nome','cod_nacional_estudante', 'data_nascimento', 'tipo_aluno', 'nee', 'FK_escola_id', 'nome_escola', 'FK_municipio_id', 'municipio_nome', 'FK_UF_id', 'estado_nome', 'uf') 
-            tup2 = estadoTupla
-           
-            if len(tup1) == len(tup2): 
-                res = dict(zip(tup1, tup2))
-                # print(res)
-
-                listEstadosDict.append(res)   
-            
-        return listEstadosDict
+        j = GetModel.get_default(queryDefalt, **kwargs)
+       
+        return j
 
 
     @classmethod
