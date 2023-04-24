@@ -1,4 +1,5 @@
 from sqlalchemy.dialects.postgresql import UUID
+from app.utils.defaultGet import GetModel
 # from app import banco
 from uuid import uuid1, uuid4
 import re
@@ -27,35 +28,31 @@ class MonitoramentoModel():
 
     @classmethod
     def get_monitoramento(*args, **kwargs):
-        cursor = conn.cursor()
- 
-        cursor.execute("""SELECT  monitoramento.id, escola.nome_escola, users.nome, profiles.profile_name , monitoramento.data , 
-                        monitoramento.tipo FROM monitoramento
-                    INNER JOIN escola ON monitoramento.FK_escola_id = escola.id
-                    INNER JOIN users ON monitoramento.FK_user_id = users.id
-                    INNER JOIN user_profiles ON users.id = user_profiles.FK_user_id
-                    INNER JOIN profiles ON user_profiles.FK_profile_id = profiles.id
-                    ;""")
+        queryDefalt = f""" 
+                        escola.nome_escola AS escola__nome_escola, 
+                        users.nome AS users__nome, 
+                        profiles.profile_name AS profiles__profile_name,
+                        monitoramento.data AS monitoramento__data, 
+                        monitoramento.tipo AS monitoramento__tipo,
+                        escola.id AS municipio__id,
+                        escola.nome_escola AS escola__nome_escola, 
+                        municipio.id AS municipio__id,
+                        municipio.nome AS municipio__nome, 
+                        estado.id AS estado__id, 
+                        estado.uf AS estado__uf,
+                        estado.nome AS estado__nome
+                                FROM monitoramento
+                        INNER JOIN escola ON monitoramento.FK_escola_id = escola.id
+                        INNER JOIN users ON monitoramento.FK_user_id = users.id
+                        INNER JOIN user_profiles ON users.id = user_profiles.FK_user_id
+                        INNER JOIN profiles ON user_profiles.FK_profile_id = profiles.id
+                        INNER JOIN  municipio ON  escola.FK_municipio_id =  municipio.id 
+                        INNER JOIN  estado ON  municipio.FK_UF_id =  estado.id
+                        """
         
-        result = cursor.fetchall()
-        cursor.close()
-
-        # print(result)
-        # input()
-        listEstadosDict = []
-        for estadoTupla in result:
-            
-            tup1 = ('id', 'nome_escola', 
-                    'nome', 'profile_name', 'data' , 'tipo') 
-            tup2 = estadoTupla
-           
-            if len(tup1) == len(tup2): 
-                res = dict(zip(tup1, tup2))
-                # print(res)
-
-                listEstadosDict.append(res)   
-            
-        return listEstadosDict
+        j = GetModel.get_default(queryDefalt, **kwargs)
+       
+        return j
     
     @classmethod
     def get_monitoramento_by_id(*args, **kwargs):

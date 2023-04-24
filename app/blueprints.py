@@ -1105,10 +1105,10 @@ def user_update_by(id):
 
 def get_Monitoramento():    
     from app.services.monitoramento import MonitoramentoServices
-    
+    kwargs = request.args.to_dict()
     _Get_services = MonitoramentoServices()
     
-    return _Get_services.get()
+    return _Get_services.get(**kwargs)
 
 @avaliable_route.route('/Monitoramento/<int:id>', methods=['GET'])
 

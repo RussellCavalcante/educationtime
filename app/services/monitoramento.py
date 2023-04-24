@@ -28,7 +28,7 @@ class MonitoramentoServices(Resource):
     def get(self, *args, **kwargs):
         try:
                 
-            return  MonitoramentoModel.get_monitoramento(), 200
+            return  MonitoramentoModel.get_monitoramento(**kwargs), 200
         except:
             return { 'error': 'verifique a requisição !' }, 400
 
