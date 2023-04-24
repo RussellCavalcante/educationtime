@@ -33,7 +33,7 @@ class MonitoramentoModel():
                             profiles.profile_name AS profiles__profile_name,
                             monitoramento.data AS monitoramento__data, 
                             monitoramento.tipo AS monitoramento__tipo,
-                            escola.id AS municipio__id,
+                            escola.id AS escola__id,
                             escola.nome_escola AS escola__nome_escola, 
                             municipio.id AS municipio__id,
                             municipio.nome AS municipio__nome, 
