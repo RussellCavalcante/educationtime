@@ -56,6 +56,9 @@ class NotasSaebServices(Resource):
             ano_letivo = dados['ano']
             
             notas = dados['notas']
+
+            if NotasSaebModel.find_by_notassaeb_by_escola_and_ano(FK_escola_id , ano_letivo):
+                return {'error':'notas ja cadastradas a escola e ano letivo informados.'}
             
             nota_saeb = NotasSaebModel.create_notas_saeb(FK_escola_id, ano_letivo)
             

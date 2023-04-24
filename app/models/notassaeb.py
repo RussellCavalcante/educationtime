@@ -344,11 +344,11 @@ class NotasSaebModel():
 
 
     @classmethod
-    def find_by_notassaeb_by_escola_and_ano(cls, email):
+    def find_by_notassaeb_by_escola_and_ano(cls,FK_escola_id, ano):
         # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
         cursor = conn.cursor()
  
-        cursor.execute("select * from notas_saeb where FK_escola_id = ?;", email)
+        cursor.execute("select * from notas_saeb where FK_escola_id = ? AND ano = ?;", FK_escola_id, ano)
 
         row = cursor.fetchall()
 

@@ -28,26 +28,25 @@ class MonitoramentoModel():
 
     @classmethod
     def get_monitoramento(*args, **kwargs):
-        queryDefalt = f""" 
-                        escola.nome_escola AS escola__nome_escola, 
-                        users.nome AS users__nome, 
-                        profiles.profile_name AS profiles__profile_name,
-                        monitoramento.data AS monitoramento__data, 
-                        monitoramento.tipo AS monitoramento__tipo,
-                        escola.id AS municipio__id,
-                        escola.nome_escola AS escola__nome_escola, 
-                        municipio.id AS municipio__id,
-                        municipio.nome AS municipio__nome, 
-                        estado.id AS estado__id, 
-                        estado.uf AS estado__uf,
-                        estado.nome AS estado__nome
-                                FROM monitoramento
-                        INNER JOIN escola ON monitoramento.FK_escola_id = escola.id
-                        INNER JOIN users ON monitoramento.FK_user_id = users.id
-                        INNER JOIN user_profiles ON users.id = user_profiles.FK_user_id
-                        INNER JOIN profiles ON user_profiles.FK_profile_id = profiles.id
-                        INNER JOIN  municipio ON  escola.FK_municipio_id =  municipio.id 
-                        INNER JOIN  estado ON  municipio.FK_UF_id =  estado.id
+        queryDefalt = f""" monitoramento.id AS monitoramento__id,  
+                            users.nome AS users__nome, 
+                            profiles.profile_name AS profiles__profile_name,
+                            monitoramento.data AS monitoramento__data, 
+                            monitoramento.tipo AS monitoramento__tipo,
+                            escola.id AS municipio__id,
+                            escola.nome_escola AS escola__nome_escola, 
+                            municipio.id AS municipio__id,
+                            municipio.nome AS municipio__nome, 
+                            estado.id AS estado__id, 
+                            estado.uf AS estado__uf,
+                            estado.nome AS estado__nome
+                                    FROM monitoramento
+                            INNER JOIN escola ON monitoramento.FK_escola_id = escola.id
+                            INNER JOIN users ON monitoramento.FK_user_id = users.id
+                            INNER JOIN user_profiles ON users.id = user_profiles.FK_user_id
+                            INNER JOIN profiles ON user_profiles.FK_profile_id = profiles.id
+                            INNER JOIN  municipio ON  escola.FK_municipio_id =  municipio.id 
+                            INNER JOIN  estado ON  municipio.FK_UF_id =  estado.id
                         """
         
         j = GetModel.get_default(queryDefalt, **kwargs)
