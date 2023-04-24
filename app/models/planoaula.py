@@ -39,20 +39,23 @@ class planoAulaModel():
                             area_conhecimento.id AS area_conhecimento__id, area_conhecimento.nome AS area_conhecimento__nome,
                             componente_curricular.id AS componente_curricular__id, componente_curricular.nome AS componente_curricular__nome,
                             plano_aula.ano AS plano_aula__ano,
+                            plano_aula.bimestre_escolar AS plano_aula__bimestre_escolar,
                             plano_aula.unidade_tematica AS plano_aula__unidade_tematica,
                             plano_aula.conteudo AS plano_aula__conteudo,
                             plano_aula.FK_etapa_ensino AS plano_aula__FK_etapa_ensino,
+                            etapa_ensino.nome AS etapa_ensino__nome,
                             plano_aula.FK_turma_id AS plano_aula__FK_turma_id,
                             escola.nome_escola AS escola__nome_escola,
                             (SELECT conteudo_plano_aula.id as conteudo_plano_aula__id ,nome as conteudo_plano_aula__nome FROM conteudo_plano_aula WHERE FK_plano_aula_id = plano_aula.id FOR JSON PATH) AS sub_conteudo
                         FROM plano_aula
                         INNER JOIN conteudo_plano_aula ON conteudo_plano_aula.FK_plano_aula_id = plano_aula.id
                         INNER JOIN escola ON plano_aula.FK_escola_id = escola.id
+                        INNER JOIN etapa_ensino ON plano_aula.FK_etapa_ensino = etapa_ensino.id
                         INNER JOIN profissional_escola_componente ON  plano_aula.FK_componente_escola_profissional_id = profissional_escola_componente.id
                         INNER JOIN componente_curricular ON componente_curricular.id = profissional_escola_componente.FK_componente_id
                         INNER JOIN area_conhecimento ON area_conhecimento.id = componente_curricular.FK_area_conhecimento_id
                         INNER JOIN municipio ON escola.FK_municipio_id = municipio.id
-                        INNER JOIN estado ON municipio.FK_UF_id = estado.id 
+                        INNER JOIN estado ON municipio.FK_UF_id = estado.id
                         """
         
         j = GetModel.get_default(queryDefalt, **kwargs)
