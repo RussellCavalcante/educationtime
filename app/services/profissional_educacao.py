@@ -194,9 +194,9 @@ class ProfissionaisEducacaoServices(Resource):
 
             body = sendEmailModel.conviteAcesso(hashconvite)
 
-            if email != None:
-                if convite != None:
-                    constructorEmail(email, body)
+            # if email != None:
+            #     if convite != None:
+            #         constructorEmail(email, body)
 
             UserModel.create_convite_acesso(user[0], str(today), hashconvite, salt)
             
