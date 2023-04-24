@@ -1,4 +1,5 @@
 from sqlalchemy.dialects.postgresql import UUID
+from app.utils.defaultGet import GetModel
 # from app import banco
 from uuid import uuid1, uuid4
 import re
@@ -27,49 +28,36 @@ class DirigenteMunicipalModel():
 
     @classmethod
     def get_dirigente_municipal(*args, **kwargs):
-        cursor = conn.cursor()
- 
-        cursor.execute("""SELECT dirigente_municipal.id, dirigente_municipal.data_inicio, dirigente_municipal.data_fim, dirigente_municipal.FK_secretaria_municipal_id,
-        dirigente_municipal.FK_user_id, users.nome, users.email, users.telefone, users.cpf, users.accept_lgpd, users.perfil_ativo, 
-        secretaria_municipal.nome, secretaria_municipal.FK_secretaria_municipio_id, municipio.nome, municipio.FK_UF_id, estado.nome, 
-        estado.uf FROM  dirigente_municipal 
-        INNER JOIN  users ON  dirigente_municipal.FK_user_id =  users.id 
-        INNER JOIN  secretaria_municipal ON  dirigente_municipal.FK_secretaria_municipal_id =  secretaria_municipal.id 
-        INNER JOIN  municipio ON  secretaria_municipal.FK_secretaria_municipio_id =  municipio.id 
-        INNER JOIN  estado ON  municipio.FK_UF_id =  estado.id;""")
         
-        result = cursor.fetchall()
-        cursor.close()
-
-        listEstadosDict = []
-        for estadoTupla in result:
-            
-            tup1 = ('id',
-                    'data_inicio',
-                    'data_fim',
-                    'FK_secretaria_municipal_id',
-                    'FK_user_id',
-                    'nome',
-                    'email',
-                    'telefone',
-                    'cpf',
-                    'accept_lgpd',
-                    'perfil_ativo',
-                    'secretaria',
-                    'FK_secretaria_municipio_id',
-                    'municipio',
-                    'FK_UF_id',
-                    'estado',
-                    'uf') 
-            tup2 = estadoTupla
-           
-            if len(tup1) == len(tup2): 
-                res = dict(zip(tup1, tup2)) 
-                # print(res)
-
-                listEstadosDict.append(res)   
-            
-        return listEstadosDict
+        queryDefalt = f""" 
+                            dirigente_municipal.id AS dirigente_municipal__id, 
+                            dirigente_municipal.data_inicio AS dirigente_municipal__data_inicio, 
+                            dirigente_municipal.data_fim AS dirigente_municipal__data_fim, 
+                            secretaria_municipal.id AS secretaria_municipal__id,
+                            users.id AS users__id, 
+                            users.nome AS users__nome, 
+                            users.email AS users__email, 
+                            users.telefone AS users__telefone, 
+                            users.cpf AS users__cpf, 
+                            users.accept_lgpd AS users__accept_lgpd, 
+                            users.perfil_ativo AS users__perfil_ativo, 
+                            secretaria_municipal.nome,
+                            municipio.id AS municipio__id,
+                            municipio.nome AS municipio__nome, 
+                            estado.id AS estado__id, 
+                            estado.uf AS estado__uf,
+                            estado.nome AS estado__nome
+                            FROM  dirigente_municipal 
+                            INNER JOIN  users ON  dirigente_municipal.FK_user_id =  users.id 
+                            INNER JOIN  secretaria_municipal ON  dirigente_municipal.FK_secretaria_municipal_id =  secretaria_municipal.id 
+                            INNER JOIN  municipio ON  secretaria_municipal.FK_secretaria_municipio_id =  municipio.id 
+                            INNER JOIN  estado ON  municipio.FK_UF_id =  estado.id
+                        """
+        
+        j = GetModel.get_default(queryDefalt, **kwargs)
+       
+        return j
+    
     @classmethod
     def get_dirigente_municipal_by_secretaria_id(*args, **kwargs):
         cursor = conn.cursor()

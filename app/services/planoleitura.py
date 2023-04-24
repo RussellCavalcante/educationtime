@@ -21,7 +21,7 @@ class PlanoLeituraServices(Resource):
     def get(self, *args, **kwargs):
         try:
                 
-            return  PlanoLeituraModel.get_plano_leitura(), 200
+            return  PlanoLeituraModel.get_plano_leitura(**kwargs), 200
         except:
             return { 'error': 'verifique a requisição !' }, 400
     

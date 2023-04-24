@@ -29,7 +29,7 @@ class DirigenteMunicipalServices(Resource):
     @jwt_required()
     def get(self, *args, **kwargs):
         try:
-            return  DirigenteMunicipalModel.get_dirigente_municipal(), 200
+            return  DirigenteMunicipalModel.get_dirigente_municipal(**kwargs), 200
         except:
             return { 'error': 'verifique a requisição !' }, 400
         

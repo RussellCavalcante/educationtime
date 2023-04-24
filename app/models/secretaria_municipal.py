@@ -1,5 +1,6 @@
 from sqlalchemy.dialects.postgresql import UUID
 # from app import banco
+from app.utils.defaultGet import GetModel
 from uuid import uuid1, uuid4
 import re
 from app import conn
@@ -27,27 +28,27 @@ class SecretariaMunicipalModel():
 
     @classmethod
     def get_secretaria_municipal(*args, **kwargs):
-        cursor = conn.cursor()
- 
-        cursor.execute("SELECT * FROM secretaria_municipal INNER JOIN municipio ON secretaria_municipal.FK_secretaria_municipio_id = municipio.id INNER JOIN estado ON municipio.FK_UF_id = estado.id;")
+        queryDefalt = f""" 
+                        secretaria_municipal.id AS secretaria_municipal__id,
+                        secretaria_municipal.nome AS secretaria_municipal__nome,
+                        secretaria_municipal.cnpj AS secretaria_municipal__cnpj,
+                        secretaria_municipal.endereco AS secretaria_municipal__endereco,
+                        secretaria_municipal.telefone AS secretaria_municipal__telefone,
+                        secretaria_municipal.email AS secretaria_municipal__email,
+                        secretaria_municipal.status AS secretaria_municipal__status,
+                        municipio.id AS municipio__id,
+                        municipio.nome AS municipio__nome, 
+                        estado.id AS estado__id, 
+                        estado.uf AS estado__uf,
+                        estado.nome AS estado__nome
+                        FROM secretaria_municipal 
+                        INNER JOIN municipio ON secretaria_municipal.FK_secretaria_municipio_id = municipio.id 
+                        INNER JOIN estado ON municipio.FK_UF_id = estado.id
+                        """
         
-        result = cursor.fetchall()
-        cursor.close()
-
-     
-        listEstadosDict = []
-        for estadoTupla in result:
-            
-            tup1 = ('id', 'nome', 'cnpj', 'endereco', 'telefone', 'email', 'status', 'FK_secretaria_municipio_id', 'idMunicipio', 'codigo_ibge', 'nomemunicipio', 'FK_UF_id', 'iduf', 'nomeuf', 'uf' ) 
-            tup2 = estadoTupla
-           
-            if len(tup1) == len(tup2): 
-                res = dict(zip(tup1, tup2)) 
-                # print(res)
-
-                listEstadosDict.append(res)   
-            
-        return listEstadosDict
+        j = GetModel.get_default(queryDefalt, **kwargs)
+       
+        return j
 
     @classmethod
     def find_by_cnpj(cls, cnpj):

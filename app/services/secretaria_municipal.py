@@ -20,7 +20,7 @@ class GetSecretariamunicipal(Resource):
     @jwt_required()
     def get(self, *args, **kwargs):
         try:
-            return  SecretariaMunicipalModel.get_secretaria_municipal(), 200
+            return  SecretariaMunicipalModel.get_secretaria_municipal(**kwargs), 200
         except:
             return { 'error': 'verifique a requisição !' }, 400
         

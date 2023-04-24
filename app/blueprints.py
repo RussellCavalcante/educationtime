@@ -123,10 +123,10 @@ def update_municipio(id):
 
 def get_secretaria_municipal():    
     from app.services.secretaria_municipal import GetSecretariamunicipal
-    
+    kwargs = request.args.to_dict()
     _Get_services = GetSecretariamunicipal()
     
-    return _Get_services.get()
+    return _Get_services.get(**kwargs)
 
 @avaliable_route.route('/secretariamunicipal/<int:id>', methods=['GET'])
 
@@ -318,10 +318,10 @@ def update_turma(id):
 
 def get_planoaula():    
     from app.services.planoaula import GetPlanoAula
-    
+    kwargs = request.args.to_dict()
     _Get_services = GetPlanoAula()
     
-    return _Get_services.get()
+    return _Get_services.get(**kwargs)
 
 @avaliable_route.route('/planoaula/<int:id>', methods=['GET'])
 
@@ -603,8 +603,8 @@ def post_profissional_educacao():
 
 def get_Dirigente():    
     from app.services.dirigente_municipal import DirigenteMunicipalServices
-    
-    _Get_services = DirigenteMunicipalServices()
+    kwargs = request.args.to_dict()
+    _Get_services = DirigenteMunicipalServices(**kwargs)
     
     return _Get_services.get()
 
@@ -1211,10 +1211,10 @@ def post_PlanoLeitura():
 
 def get_planoleitura():    
     from app.services.planoleitura import PlanoLeituraServices
-    
+    kwargs = request.args.to_dict()
     _Get_services = PlanoLeituraServices()
     
-    return _Get_services.get()
+    return _Get_services.get(**kwargs)
 
 @avaliable_route.route('/NotasSaeb/Cadastro', methods=['POST'])
 
@@ -1230,7 +1230,7 @@ def post_NotasSaeb():
 def get_post_NotasSaeb():    
     from app.services.notassaeb import NotasSaebServices
     kwargs = request.args.to_dict()
-    
+
     _Get_services = NotasSaebServices()
 
     return _Get_services.get(**kwargs)
@@ -1298,6 +1298,15 @@ def post_calendario():
     _Get_services = CalendarioServices()
     
     return _Get_services.post(**kwargs)
+
+@avaliable_route.route('/Calendario', methods=['GET'])
+
+def get_calendario():    
+    from app.services.calendario import CalendarioServices
+    kwargs = request.args.to_dict()
+    _Get_services = CalendarioServices()
+    
+    return _Get_services.get(**kwargs)
 
 @avaliable_route.route('/FrequenciaEstudante/Cadastro', methods=['POST'])
 

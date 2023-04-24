@@ -1,4 +1,5 @@
 from sqlalchemy.dialects.postgresql import UUID
+from app.utils.defaultGet import GetModel
 # from app import banco
 import json
 
@@ -29,35 +30,35 @@ class planoAulaModel():
 
     @classmethod
     def get_planoaula(*args, **kwargs):
-        cursor = conn.cursor()
- 
-        cursor.execute(f"""SELECT plano_aula.id, unidade_tematica, FK_componente_escola_profissional_id, componente_curricular.nome,
-                    FK_etapa_ensino,etapa_ensino.nome, ano, bimestre_escolar, resultado 
-                    FROM plano_aula 
-                    INNER JOIN profissional_escola_componente ON plano_aula.FK_componente_escola_profissional_id = profissional_escola_componente.id
-                    INNER JOIN componente_curricular on profissional_escola_componente.FK_componente_id = componente_curricular.id
-                    INNER JOIN etapa_ensino on plano_aula.FK_etapa_ensino = etapa_ensino.id
-                    ; ;""")
+        queryDefalt = f""" 
+                        plano_aula.id AS plano_aula__id, 
+                            plano_aula.FK_escola_id AS plano_aula__FK_escola_id,
+                            municipio.id AS municipio__id ,municipio.nome as municipio__nome, estado.id AS estado__id, 
+                            estado.nome AS estado__nome, estado.uf AS estado__uf ,
+                            plano_aula.FK_componente_escola_profissional_id AS plano_aula__FK_componente_escola_profissional_id, resultado AS plano_aula__resultado, 
+                            area_conhecimento.id AS area_conhecimento__id, area_conhecimento.nome AS area_conhecimento__nome,
+                            componente_curricular.id AS componente_curricular__id, componente_curricular.nome AS componente_curricular__nome,
+                            plano_aula.ano AS plano_aula__ano,
+                            plano_aula.unidade_tematica AS plano_aula__unidade_tematica,
+                            plano_aula.conteudo AS plano_aula__conteudo,
+                            plano_aula.FK_etapa_ensino AS plano_aula__FK_etapa_ensino,
+                            plano_aula.FK_turma_id AS plano_aula__FK_turma_id,
+                            escola.nome_escola AS escola__nome_escola,
+                            (SELECT conteudo_plano_aula.id as conteudo_plano_aula__id ,nome as conteudo_plano_aula__nome FROM conteudo_plano_aula WHERE FK_plano_aula_id = plano_aula.id FOR JSON PATH) AS sub_conteudo
+                        FROM plano_aula
+                        INNER JOIN conteudo_plano_aula ON conteudo_plano_aula.FK_plano_aula_id = plano_aula.id
+                        INNER JOIN escola ON plano_aula.FK_escola_id = escola.id
+                        INNER JOIN profissional_escola_componente ON  plano_aula.FK_componente_escola_profissional_id = profissional_escola_componente.id
+                        INNER JOIN componente_curricular ON componente_curricular.id = profissional_escola_componente.FK_componente_id
+                        INNER JOIN area_conhecimento ON area_conhecimento.id = componente_curricular.FK_area_conhecimento_id
+                        INNER JOIN municipio ON escola.FK_municipio_id = municipio.id
+                        INNER JOIN estado ON municipio.FK_UF_id = estado.id 
+                        """
         
-        result = cursor.fetchall()
-        cursor.close()
+        j = GetModel.get_default(queryDefalt, **kwargs)
+       
+        return j
 
-        # print(result)
-        # input()
-        listEstadosDict = []
-        for estadoTupla in result:
-            
-            tup1 = ('id', 'unidade_tematica', 'FK_componente_escola_profissional_id', 'componente_curricular_nome',
-                    'FK_etapa_ensino', 'etapa_ensino_nome', 'ano', 'bimestre_escolar', 'resultado' ) 
-            tup2 = estadoTupla
-           
-            if len(tup1) == len(tup2): 
-                res = dict(zip(tup1, tup2))
-                # print(res)
-
-                listEstadosDict.append(res)   
-            
-        return listEstadosDict
 
     @classmethod
     def get_plano_aula_by_id(*args, **kwargs):

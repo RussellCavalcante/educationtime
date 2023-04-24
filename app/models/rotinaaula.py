@@ -1,4 +1,5 @@
 from sqlalchemy.dialects.postgresql import UUID
+from app.utils.defaultGet import GetModel
 # from app import banco
 from uuid import uuid1, uuid4
 import re
@@ -89,38 +90,37 @@ class RotinaAulaModel():
 
     @classmethod
     def get_rotina_aula(*args, **kwargs):
-        cursor = conn.cursor()
-
-        cursor.execute("""SELECT rotina_componente_turma.id, rotina_aula.id, rotina_aula.nome, users.nome, componente_curricular.nome,
-                         etapa_ensino.nome, rotina_aula.ano_letivo FROM rotina_componente_turma
+        queryDefalt = f""" 
+                        rotina_componente_turma.id AS rotina_componente_turma__id, 
+                        rotina_aula.id AS rotina_aula__id, 
+                        rotina_aula.nome AS rotina_aula__nome, 
+                        componente_curricular.nome AS componente_curricular__nome,
+                        etapa_ensino.nome AS etapa_ensino_nome, 
+                        rotina_aula.ano_letivo AS rotina_aula__ano_letivo,
+                        escola.id AS escola__id,
+                        escola.nome_escola AS escola__nome_escola,
+                        municipio.id AS municipio__id,
+                        municipio.nome AS municipio__nome, 
+                        estado.id AS estado__id, 
+                        estado.uf AS estado__uf,
+                        estado.nome AS estado__nome,
+                        users.nome AS users__nome
+                        FROM rotina_componente_turma
                         INNER JOIN rotina_aula ON rotina_componente_turma.FK_rotina_aula = rotina_aula.id
                         INNER JOIN turma_componente_educador ON rotina_componente_turma.FK_turma_componente_educador_id = turma_componente_educador.id
                         INNER JOIN profissional_escola_componente ON turma_componente_educador.FK_profissional_componente_id = profissional_escola_componente.id
                         INNER JOIN users ON profissional_escola_componente.FK_user_id = users.id
                         INNER JOIN componente_curricular ON profissional_escola_componente.FK_componente_id = componente_curricular.id
                         INNER JOIN turma ON turma_componente_educador.FK_turma_id = turma.id
-                        INNER JOIN etapa_ensino ON turma.FK_etapa_ensino_id = etapa_ensino.id""")
-
-        result = cursor.fetchall()
-        cursor.close()
-
-        # print(result)
-        # input()
-        listEstadosDict = []
-        for estadoTupla in result:
-
-            tup1 = ('id', 'rotina_aula_id','nome_rotina', 'educador_nome', 'componente_curricular_nome',
-                    'etapa_ensino_nome', 'ano' )
-
-            tup2 = estadoTupla
-
-            if len(tup1) == len(tup2):
-                res = dict(zip(tup1, tup2))
-                # print(res)
-
-                listEstadosDict.append(res)
-
-        return listEstadosDict
+                        INNER JOIN etapa_ensino ON turma.FK_etapa_ensino_id = etapa_ensino.id
+                        INNER JOIN escola ON turma.FK_escola_id = escola.id
+                        INNER JOIN municipio ON escola.FK_municipio_id = municipio.id
+                        INNER JOIN estado ON municipio.FK_UF_id = estado.id
+                        """
+        
+        j = GetModel.get_default(queryDefalt, **kwargs)
+       
+        return j
 
     @classmethod
     def get_rotinaaula_by_id(*args, **kwargs):

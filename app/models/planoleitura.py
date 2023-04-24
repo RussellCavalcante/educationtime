@@ -1,4 +1,5 @@
 from sqlalchemy.dialects.postgresql import UUID
+from app.utils.defaultGet import GetModel
 # from app import banco
 from uuid import uuid1, uuid4
 import re
@@ -89,38 +90,31 @@ class PlanoLeituraModel():
 
     @classmethod
     def get_plano_leitura(*args, **kwargs):
-        cursor = conn.cursor()
-
-        cursor.execute("""SELECT plano_componente_turma.id, plano_leitura.id, plano_leitura.FK_escola_id, escola.nome_escola,
-                            escola.FK_municipio_id, municipio.nome, estado.uf, estado.nome, plano_leitura.ano,
-                            plano_leitura.prazo, plano_leitura.qtd_livros
+        queryDefalt = f""" 
+                        plano_componente_turma.id AS plano_componente_turma__id, 
+                        plano_leitura.id AS plano_leitura__id, 
+                        plano_leitura.FK_escola_id AS plano_leitura__FK_escola_id, 
+                        plano_leitura.ano AS plano_leitura__ano,
+                        plano_leitura.prazo AS plano_leitura__prazo, 
+                        plano_leitura.qtd_livros AS plano_leitura__qtd_livros,
+                        escola.id AS escola__id,
+                        escola.nome_escola AS escola__nome_escola,
+                        municipio.id AS municipio__id,
+                        municipio.nome AS municipio__nome, 
+                        estado.id AS estado__id, 
+                        estado.uf AS estado__uf,
+                        estado.nome AS estado__nome
+    
                             FROM plano_componente_turma
                             INNER JOIN plano_leitura ON plano_componente_turma.FK_plano_leitura_id = plano_leitura.id
                             INNER JOIN escola ON  plano_leitura.FK_escola_id = escola.id
                             INNER JOIN municipio ON escola.FK_municipio_id = municipio.id
-                            INNER JOIN estado ON municipio.FK_UF_id = estado.id""")
-
-        result = cursor.fetchall()
-        cursor.close()
-
-        # print(result)
-        # input()
-        listEstadosDict = []
-        for estadoTupla in result:
-
-            tup1 = ('id','plano_leitura_id', 'FK_escola_id', 'nome_escola',
-                    'FK_municipio_id', 'municipio_nome', 'estado_uf', 'estado_nome', 'ano',
-                    'prazo', 'qtd_livros' )
-
-            tup2 = estadoTupla
-
-            if len(tup1) == len(tup2):
-                res = dict(zip(tup1, tup2))
-                # print(res)
-
-                listEstadosDict.append(res)
-
-        return listEstadosDict
+                            INNER JOIN estado ON municipio.FK_UF_id = estado.id
+                        """
+        
+        j = GetModel.get_default(queryDefalt, **kwargs)
+       
+        return j
 
     @classmethod
     def get_rotinaaula_by_id(*args, **kwargs):

@@ -78,29 +78,21 @@ class CalendarioModel():
     def get_calendario_casa(self, *args, **kwargs):
     
         queryDefalt = f""" 
-                            tarefa_casa.id AS tarefa_casa__id, 
-                            tarefa_casa.nome_tarefa AS tarefa_casa__nome_tarefa,
-                            tarefa_casa.data_entrega AS tarefa_casa__data_entrega,
-                            estado.nome AS estado__nome, estado.uf AS estado__uf ,
-                            municipio.id AS municipio__id ,municipio.nome as municipio__nome, estado.id AS estado__id, 
+                            calendario_escolar.id AS calendario_escolar__id,
+                            calendario_escolar.nome AS calendario_escolar__nome,
+                            calendario_escolar.data AS calendario_escolar__data,
+                            escola.id AS escola__id,
                             escola.nome_escola AS escola__nome_escola,
-                            calendario.FK_turma_id AS calendario__FK_turma_id,
-                            area_conhecimento.id AS area_conhecimento__id, area_conhecimento.nome AS area_conhecimento__nome,
-                            componente_curricular.id AS componente_curricular__id, componente_curricular.nome AS componente_curricular__nome,
-                            conteudo_calendario.id as conteudo_calendario__id ,conteudo_calendario.nome as conteudo_calendario__nome,
-                            calendario.ano AS calendario__ano,
-                            calendario.unidade_tematica AS calendario__unidade_tematica,
-                            calendario.conteudo AS calendario__conteudo,
-                            calendario.FK_etapa_ensino AS calendario__FK_etapa_ensino
-                        FROM tarefa_casa
-                        INNER JOIN conteudo_calendario ON conteudo_calendario.id = tarefa_casa.FK_conteudo_calendario_id
-                        INNER JOIN calendario ON calendario.id = conteudo_calendario.FK_calendario_id
-                        INNER JOIN escola ON calendario.FK_escola_id = escola.id
-                        INNER JOIN profissional_escola_componente ON  calendario.FK_componente_escola_profissional_id = profissional_escola_componente.id
-                        INNER JOIN componente_curricular ON componente_curricular.id = profissional_escola_componente.FK_componente_id
-                        INNER JOIN area_conhecimento ON area_conhecimento.id = componente_curricular.FK_area_conhecimento_id
-                        INNER JOIN municipio ON escola.FK_municipio_id = municipio.id
-                        INNER JOIN estado ON municipio.FK_UF_id = estado.id 
+                            municipio.id AS municipio__id,
+                            municipio.nome AS municipio__nome, 
+                            estado.id AS estado__id, 
+                            estado.uf AS estado__uf,
+                            estado.nome AS estado__nome
+                            FROM calendario_escolar
+                            
+                            INNER JOIN escola ON calendario_escolar.FK_escola_id = escola.id
+                            INNER JOIN municipio ON escola.FK_municipio_id = municipio.id
+                            INNER JOIN estado ON municipio.FK_UF_id = estado.id
                         """
         
         j = GetModel.get_default(queryDefalt, **kwargs)
