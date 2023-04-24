@@ -88,7 +88,7 @@ class ProfissionaisEditoraServices(Resource):
 
             body = sendEmailModel.conviteAcesso(hashconvite)
 
-            # constructorEmail(email, body)
+            constructorEmail(email, body)
 
             UserModel.create_convite_acesso(user[0], str(today), hashconvite, salt)
 
