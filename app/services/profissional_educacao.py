@@ -254,7 +254,7 @@ class ProfissionaisEducacaoServices(Resource):
 
             UserModel.associateProfissionalEscolaPerfil(profissionaleducacao[0]['FK_user_id'], data_inicio, data_fim, FK_escola_id, FK_perfil_id)
 
-            componentizar = ProfissionaisEducacaoModel.get_componentes_id_by_FK_turma_id(FK_escola_id)
+            componentizar = ProfissionaisEducacaoModel.get_componentes_id_by_FK_turma_id(FK_escola_id, profissionaleducacao[0]['FK_user_id'])
 
             manter = []
             excluirAssociacao = []
@@ -268,7 +268,6 @@ class ProfissionaisEducacaoServices(Resource):
                         manter.append(element) 
 
                 for adicionar in componentes_curriculares['componentes']:
-        
                     if adicionar not in manter:
                         novos.append(adicionar)
                         UserModel.associateProfissionalEscolaComponentes(profissionaleducacao[0]['FK_user_id'], FK_escola_id, adicionar)

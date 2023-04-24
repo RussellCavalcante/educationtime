@@ -422,7 +422,7 @@ class ProfissionaisEducacaoModel():
         # print(args)
         # input()
  
-        cursor.execute(f"""SELECT FK_componente_id FROM profissional_escola_componente WHERE FK_escola_id = {args[1]} ; """)
+        cursor.execute(f"""SELECT FK_componente_id FROM profissional_escola_componente WHERE FK_escola_id = {args[1]} AND FK_user_id = {args[2]}; """)
         
         result = cursor.fetchall()
         cursor.close()
