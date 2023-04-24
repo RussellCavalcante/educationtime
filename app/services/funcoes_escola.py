@@ -17,7 +17,7 @@ class FuncoesEscolaServices(Resource):
     @jwt_required()
     def get(self, *args, **kwargs):
         try:
-            return  FuncoesEscolaModel.get_Funcoes_escola(), 200
+            return  FuncoesEscolaModel.get_Funcoes_escola(**kwargs), 200
         except:
             return { 'error': 'verifique a requisição !' }, 400
         

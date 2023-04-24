@@ -19,7 +19,7 @@ class CalendarioServices(Resource):
     def get(self, *args, **kwargs):
         try:
                 
-            return  CalendarioModel.get_tarefa_casa(**kwargs), 200
+            return  CalendarioModel.get_calendario_casa(**kwargs), 200
         except:
             return { 'error': 'verifique a requisição !' }, 400
         

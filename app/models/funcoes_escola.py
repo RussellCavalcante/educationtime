@@ -1,5 +1,6 @@
 from sqlalchemy.dialects.postgresql import UUID
 # from app import banco
+from app.utils.defaultGet import GetModel
 from uuid import uuid1, uuid4
 import re
 from app import conn
@@ -27,33 +28,24 @@ class FuncoesEscolaModel():
 
     @classmethod
     def get_Funcoes_escola(*args, **kwargs):
-        cursor = conn.cursor()
- 
-        cursor.execute("""SELECT funcoes_escola.id, funcoes_escola.nome, funcoes_escola.FK_escola_id, escola.nome_escola , 
-                        funcoes_escola.FK_profile_id , profiles.profile_name  
-                        FROM funcoes_escola 
-                        INNER JOIN escola ON funcoes_escola.FK_escola_id = escola.id 
-                        INNER JOIN profiles ON funcoes_escola.FK_profile_id = profiles.id ;""")
+        queryDefalt = f""" 
         
-        result = cursor.fetchall()
-        cursor.close()
-
-        # print(result)
-        # input()
-        listEstadosDict = []
-        for estadoTupla in result:
-            
-            tup1 = ('id', 'nome', 'FK_escola_id', 'nome_escola' , 
-                        'FK_profile_id' , 'profile_name'  ) 
-            tup2 = estadoTupla
-           
-            if len(tup1) == len(tup2): 
-                res = dict(zip(tup1, tup2))
-                # print(res)
-
-                listEstadosDict.append(res)   
-            
-        return listEstadosDict
+                            funcoes_escola.id AS funcoes_escola__id, 
+                            funcoes_escola.nome AS funcoes_escola__nome, 
+                            funcoes_escola.FK_escola_id AS funcoes_escola__FK_escola_id, 
+                            escola.nome_escola AS escola__nome_escola, 
+                            funcoes_escola.FK_profile_id AS funcoes_escola__FK_profile_id, 
+                            profiles.profile_name  AS profiles__profile_nam
+                            FROM funcoes_escola 
+                            INNER JOIN escola ON funcoes_escola.FK_escola_id = escola.id 
+                            INNER JOIN municipio ON escola.FK_municipio_id = municipio.id 
+                            INNER JOIN estado ON municipio.FK_UF_id = estado.id 
+                            INNER JOIN profiles ON funcoes_escola.FK_profile_id = profiles.id 
+                        """
+        
+        j = GetModel.get_default(queryDefalt, **kwargs)
+       
+        return j
 
 
     @classmethod

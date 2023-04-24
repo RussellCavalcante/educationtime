@@ -1229,13 +1229,11 @@ def post_NotasSaeb():
 
 def get_post_NotasSaeb():    
     from app.services.notassaeb import NotasSaebServices
+    kwargs = request.args.to_dict()
     
     _Get_services = NotasSaebServices()
 
-    if request.args.get('FK_escola_id') and request.args.get('ano'):
-        return _Get_services.get_notas_saeb_by_FK_escola_id_and_ano(request.args.get('FK_escola_id'), request.args.get('ano'))
-
-    return _Get_services.get()
+    return _Get_services.get(**kwargs)
 
 @avaliable_route.route('/ResultadoAprendizagem/Cadastro', methods=['POST'])
 
@@ -1296,10 +1294,10 @@ def get_tarefacasa():
 
 def post_calendario():    
     from app.services.calendario import CalendarioServices
-    
+    kwargs = request.args.to_dict()
     _Get_services = CalendarioServices()
     
-    return _Get_services.post()
+    return _Get_services.post(**kwargs)
 
 @avaliable_route.route('/FrequenciaEstudante/Cadastro', methods=['POST'])
 

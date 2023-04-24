@@ -91,31 +91,38 @@ class ResultadoAprendizagemModel():
     @classmethod
     def get_resultado_aprendizagem(*args, **kwargs):
         queryDefalt = f""" 
-                            profissonal_escola_perfil.id AS profissonal_escola_perfil__id,
-                            profissonal_escola_perfil.FK_user_id AS profissonal_escola_perfil__FK_user_id,
-                            users.id AS users__id,
-                            users.nome AS users__nome,
-                            users.email AS users__email,
-                            users.telefone AS users__telefone,
-                            users.cpf AS users__cpf,
-                            users.accept_lgpd AS users__accept_lgpd,
-                            users.perfil_ativo AS users__perfil_ativo,
-                            profissonal_escola_perfil.FK_perfil_id AS profissonal_escola_perfil__FK_perfil_id,
-                            profiles.profile_name AS profiles__profile_name,
-                            escola.id AS escola__id, 
-                            escola.nome_escola AS escola__nome_escola,
-                            escola.FK_municipio_id AS escola__FK_municipio_id, 
-                            municipio.id AS municipio__id, 
-                            municipio.nome AS municipio__nome, 
-                            estado.id AS estado__id, 
-                            estado.nome AS estado__nome, 
-                            estado.uf AS estado__uf
-                            FROM profissonal_escola_perfil 
-                                INNER JOIN  users ON  profissonal_escola_perfil.FK_user_id =  users.id 
-                                INNER JOIN  escola ON  profissonal_escola_perfil.FK_escola_id =  escola.id 
-                                INNER JOIN  municipio ON  escola.FK_municipio_id =  municipio.id 
-                                INNER JOIN  estado ON  municipio.FK_UF_id =  estado.id 
-                                INNER JOIN  profiles ON  profissonal_escola_perfil.FK_perfil_id = profiles.id 
+                        notas_saeb.id AS notas_saeb__id,
+                        notas_saeb.ano AS notas_saeb__ano,
+                        escola.id AS escola__id,
+                        escola.nome_escola AS escola__nome_escola,
+                        municipio.id AS municipio__id,
+                        municipio.nome AS municipio__nome, 
+                        estado.id AS estado__id, 
+                        estado.uf AS estado__uf,
+                        estado.nome AS estado__nome, 
+                        (SELECT 
+                        notas_saeb_area_conhecimento.id AS notas_saeb_area_conhecimento__id,
+                        notas_saeb_area_conhecimento.nota AS notas_saeb_area_conhecimento__nota, 
+                        area_conhecimento.nome AS area_conhecimento__nome,
+                        area_conhecimento.id AS area_conhecimento__id,
+
+                        (SELECT 
+                        resultado_aprendizagem_acoes.id AS resultado_aprendizagem_acoes__id,
+                        resultado_aprendizagem_acoes.nome_acao AS resultado_aprendizagem_acoes__nome_acao,
+                        resultado_aprendizagem_acoes.prazo AS resultado_aprendizagem_acoes__prazo
+                        FROM resultado_aprendizagem_acoes 
+                        INNER JOIN area_conhecimento ON notas_saeb_area_conhecimento.FK_area_conhecimento_id = area_conhecimento.id
+                        WHERE notas_saeb_area_conhecimento.id = resultado_aprendizagem_acoes.FK_notas_saeb_area_conhecimento_id FOR JSON PATH) AS acoes
+                        FROM notas_saeb_area_conhecimento 
+                        INNER JOIN area_conhecimento ON notas_saeb_area_conhecimento.FK_area_conhecimento_id = area_conhecimento.id
+                        WHERE notas_saeb_area_conhecimento.FK_notas_saeb_id = notas_saeb.id FOR JSON PATH) AS notas
+            
+
+                        FROM notas_saeb
+                        
+                        INNER JOIN escola ON notas_saeb.FK_escola_id = escola.id
+                        INNER JOIN municipio ON escola.FK_municipio_id = municipio.id
+                        INNER JOIN estado ON municipio.FK_UF_id = estado.id
                         """
         
         j = GetModel.get_default(queryDefalt, **kwargs)

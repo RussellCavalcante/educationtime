@@ -1,4 +1,5 @@
 from sqlalchemy.dialects.postgresql import UUID
+from app.utils.defaultGet import GetModel
 # from app import banco
 from uuid import uuid1, uuid4
 import re
@@ -74,13 +75,9 @@ class CalendarioModel():
         return dictFinal
     
     @classmethod
-    def get_tarefa_casa(self, *args, **kwargs):
-        cursor = conn.cursor()
-        qtd = kwargs.get('qtd')
-        if not qtd:
-            qtd = None
-             
-        queryDefalt = f"""SELECT distinct {'TOP ' + str(qtd) if qtd else ''} 
+    def get_calendario_casa(self, *args, **kwargs):
+    
+        queryDefalt = f""" 
                             tarefa_casa.id AS tarefa_casa__id, 
                             tarefa_casa.nome_tarefa AS tarefa_casa__nome_tarefa,
                             tarefa_casa.data_entrega AS tarefa_casa__data_entrega,
@@ -103,49 +100,13 @@ class CalendarioModel():
                         INNER JOIN componente_curricular ON componente_curricular.id = profissional_escola_componente.FK_componente_id
                         INNER JOIN area_conhecimento ON area_conhecimento.id = componente_curricular.FK_area_conhecimento_id
                         INNER JOIN municipio ON escola.FK_municipio_id = municipio.id
-                        INNER JOIN estado ON municipio.FK_UF_id = estado.id
+                        INNER JOIN estado ON municipio.FK_UF_id = estado.id 
                         """
         
-        is_first_condition = True
-        for column, value in kwargs.items():
-            if column != 'order_by' and column != 'qtd' and value is not None:
-                if is_first_condition:
-                    if column != 'qtd':
-                    
-                        columnSplited = column.split('__')
-                    
-                    
-                        queryDefalt += f"WHERE {columnSplited[0]}.{columnSplited[1]} = {value}"
-                        is_first_condition = False
-                      
-                
-                else:
-                    columnSplited = column.split('__')
-                    print(columnSplited)
-                      
-                    queryDefalt += f"AND {columnSplited[0]}.{columnSplited[1]} = {value}"
-                
-                
-                
-                    
+        j = GetModel.get_default(queryDefalt, **kwargs)
+       
+        return j
 
-        order_by = kwargs.get('order_by')
-        if order_by:
-            queryDefalt += f" ORDER BY {order_by}"
-        
-         
-        
-        queryDefalt += " FOR JSON PATH, ROOT('request');"
-
-        cursor.execute(queryDefalt)
-        result = cursor.fetchall()
-        cursor.close()
-        json_string = result[0][0]
-        
-        # json_obj = {'calendario': json_string}
-        # print(json_obj)
-        # input()
-        return json_string
 
     @classmethod
     def associate_tarefa_casa_serie(*args, **kwargs):
