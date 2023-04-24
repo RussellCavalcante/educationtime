@@ -90,13 +90,14 @@ class PlanoLeituraModel():
 
     @classmethod
     def get_plano_leitura(*args, **kwargs):
-        queryDefalt = f""" 
-                        plano_componente_turma.id AS plano_componente_turma__id, 
+        queryDefalt = f"""plano_componente_turma.id AS plano_componente_turma__id, 
                         plano_leitura.id AS plano_leitura__id, 
                         plano_leitura.FK_escola_id AS plano_leitura__FK_escola_id, 
                         plano_leitura.ano AS plano_leitura__ano,
                         plano_leitura.prazo AS plano_leitura__prazo, 
                         plano_leitura.qtd_livros AS plano_leitura__qtd_livros,
+                        componente_curricular.nome AS  componente_curricular__nome,
+                        etapa_ensino.nome AS etapa_ensino__nome,
                         escola.id AS escola__id,
                         escola.nome_escola AS escola__nome_escola,
                         municipio.id AS municipio__id,
@@ -107,6 +108,14 @@ class PlanoLeituraModel():
     
                             FROM plano_componente_turma
                             INNER JOIN plano_leitura ON plano_componente_turma.FK_plano_leitura_id = plano_leitura.id
+                            INNER JOIN turma_componente_educador ON plano_componente_turma.FK_turma_componente_educador_id = turma_componente_educador.id
+
+
+                            INNER JOIN profissional_escola_componente ON turma_componente_educador.FK_profissional_componente_id = profissional_escola_componente.id
+                            INNER JOIN componente_curricular ON profissional_escola_componente.FK_componente_id = componente_curricular.id
+
+                            INNER JOIN turma ON turma_componente_educador.FK_turma_id = turma.id
+                            INNER JOIN etapa_ensino ON turma.FK_etapa_ensino_id = etapa_ensino.id
                             INNER JOIN escola ON  plano_leitura.FK_escola_id = escola.id
                             INNER JOIN municipio ON escola.FK_municipio_id = municipio.id
                             INNER JOIN estado ON municipio.FK_UF_id = estado.id
