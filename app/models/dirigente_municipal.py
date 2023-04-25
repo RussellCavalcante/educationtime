@@ -25,6 +25,21 @@ class DirigenteMunicipalModel():
     #     self.phone = phone
     #     self.salt = salt
     
+    @classmethod
+    def find_by_secretaria(cls, id):
+        cursor = conn.cursor()
+ 
+        cursor.execute("select * from secretaria_municipal where id = ?;", id)
+
+        row = cursor.fetchall()
+
+        cursor.commit()
+        
+        # print('Rows --->>',row, type(row) )
+        # input()
+        if len(row) != 0:
+            return row[0]
+        return False
 
     @classmethod
     def get_dirigente_municipal(*args, **kwargs):

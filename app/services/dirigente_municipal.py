@@ -113,15 +113,20 @@ class DirigenteMunicipalServices(Resource):
             nome = dados['nome'].strip()
             telefone = dados['telefone']
             email = dados['email'].strip()
-            FK_perfil_id = dados['FK_perfil_id']
 
             data_inicio = dados['data_inicio']
             data_fim = dados['data_fim']
             FK_secretaria_municipio_id = dados['FK_secretaria_municipio_id']
             
+            if DirigenteMunicipalModel.find_by_secretaria(FK_secretaria_municipio_id) == False:
+                return {'error': 'Secretaria selecionada inexistente.'}, 400
+
             dirigente = DirigenteMunicipalModel.get_dirigente_municipal_by_id(args[0])
+
+            if UserModel.find_by_FK_secretaria_municipio_id_and_fk_user_id(FK_secretaria_municipio_id, dirigente[0]['FK_user_id']):
+                return {'error': 'Secreataria ja possui dirigente ativo.'}, 400
             
-            UserModel.update_dirigente_municipal(cpf, nome, email, int(telefone), FK_perfil_id, dirigente[0]['FK_user_id'])
+            UserModel.update_dirigente_municipal(cpf, nome, email, int(telefone), dirigente[0]['FK_user_id'])
             user = UserModel.find_by_login(cpf)
             DirigenteMunicipalModel.update_dirigente_municipal(data_inicio, data_fim, FK_secretaria_municipio_id, user[0] , args[0])
             

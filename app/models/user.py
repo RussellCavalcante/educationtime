@@ -269,6 +269,33 @@ class UserModel():
             
         return False
     
+
+    @classmethod
+    def find_by_FK_secretaria_municipio_id_and_fk_user_id(cls, FK_secretaria_municipio_id, FK_user_id):
+        # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
+        cursor = conn.cursor()
+ 
+        cursor.execute("select id, FK_user_id from dirigente_municipal where FK_secretaria_municipal_id = ?", FK_secretaria_municipio_id)
+
+        rows = cursor.fetchall()
+
+        cursor.commit()
+   
+        if len(rows) != 0:
+
+            for row in rows:
+                
+                cursor.execute("select id, perfil_ativo from users where id = ? ;", row[1])
+
+                data = cursor.fetchall()
+                
+                if data[0][1] == True:
+                    if data[0][1] == FK_user_id:
+                        return False
+                    
+                    return True
+            
+        return False
     @classmethod
     def find_by_email(cls, email):
         # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
@@ -376,9 +403,9 @@ class UserModel():
             
             cursor.execute('''
                         UPDATE users
-                        SET cpf = ?, nome = ?, email = ?, telefone = ? , FK_profile_id = ?
+                        SET cpf = ?, nome = ?, email = ?, telefone = ? 
                         WHERE id = ?
-                        ''',args[1], args[2], args[3], args[4], args[5], int(args[6])
+                        ''',args[1], args[2], args[3], args[4], args[5]
                         )
             
             conn.commit()
