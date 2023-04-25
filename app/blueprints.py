@@ -1326,3 +1326,13 @@ def get_frequencia_estudante():
     
     return _Get_services.get()
 
+
+@avaliable_route.route('/Indicador/Estudante/Turma/Escola', methods=['GET'])
+
+def get_indicador_():    
+    from app.services.indicadores import IndicadoresServices
+    kwargs = request.args.to_dict()
+    _Get_services = IndicadoresServices()
+    
+    return _Get_services.get(**kwargs)
+
