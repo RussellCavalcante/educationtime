@@ -194,14 +194,14 @@ class UserLogin(Resource):
             ip = dados['ip']
 
             if not UserModel.find_by_login(cpf):
-                return {'status': "Por favor, verifique suas credenciais de acesso."}, 400
+                return {'error': "Por favor, verifique suas credenciais de acesso."}, 400
             
             user = UserModel.find_by_login(cpf)
             
             salt = UserModel.find_salt_by_id(user)
 
             if not UserModel.assert_password(user[0], password, salt):
-                return {'status': "Por favor, verifique suas credenciais de acesso."}, 400
+                return {'error': "Por favor, verifique suas credenciais de acesso."}, 400
         
             token_de_acesso = create_access_token(identity=1)
 

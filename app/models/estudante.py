@@ -79,6 +79,24 @@ class estudanteModel():
         return listEstadosDict
     
     @classmethod
+    def find_by_cod_nacional_estudante(cls, cod_nacional_estudante):
+        # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
+        cursor = conn.cursor()
+ 
+        cursor.execute("select * from estudante where cod_nacional_estudante = ?;", cod_nacional_estudante)
+
+        row = cursor.fetchall()
+
+        cursor.commit()
+        
+        # print('Rows --->>',row, type(row) )
+        # input()
+        if len(row) != 0:
+            return row[0]
+        return False
+    
+
+    @classmethod
     def get_estudante_cod(*args, **kwargs):
         cursor = conn.cursor()
  

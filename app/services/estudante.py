@@ -2,6 +2,8 @@ from flask_restful import Resource, reqparse
 from app.models.estudante import estudanteModel
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt
 # from app.config import conn
+from datetime import date
+from datetime import datetime
 
 # from werkzeug.security import safe_str_cmp
 from app.blacklist import BLACKLIST
@@ -76,6 +78,21 @@ class GetEstudante(Resource):
             tipo_aluno = dados['tipo_aluno'].strip()
             nee = dados['nee']
             FK_escola_id = dados['FK_escola_id']
+
+            if estudanteModel.find_by_cod_nacional_estudante(cod_nacional_estudante):
+                return {'error':'existe estudante com mesmo codigo nacional'}
+            
+            data_envio = data_nascimento.split('-')
+            today = str(date.today()).split('-')
+            
+            data1 = datetime(int(data_envio[0]), int(data_envio[1]), int(data_envio[2]))
+            data2 = datetime(int(today[0]), int(today[1]), int(today[2]))
+   
+            difdata = data2 - data1
+
+            if int(str(difdata).split(':')[0].split('days')[0])  <= 0:
+                
+                return {'error':'Data de nascimento superior a data informada.'}
 
             estudanteModel.create_estudante(cod_nacional_estudante ,nome, data_nascimento, tipo_aluno, nee, FK_escola_id)
             
