@@ -28,10 +28,10 @@ class IndicadoresServices(Resource):
 
     @jwt_required()
     def get(self, *args, **kwargs):
-        # try:
+        try:
             return  IndicadoresModel.get(**kwargs), 200
-        # except:
-        #     return { 'error': 'verifique a requisição !' }, 400
+        except:
+            return { 'error': 'verifique a requisição !' }, 400
         
     @jwt_required()
     def get_by_id(self, *args, **kwargs):
