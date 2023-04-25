@@ -83,7 +83,7 @@ class DirigenteMunicipalServices(Resource):
 
             hashconvite = UserModel.password_encrypted(cpf, salt)
 
-            body = sendEmailModel.conviteAcesso(hashconvite)
+            body = sendEmailModel.conviteAcesso(hashconvite, nome)
 
             constructorEmail(email, body)
 

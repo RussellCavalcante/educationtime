@@ -1,6 +1,6 @@
 class sendEmailModel():
 
-    def conviteAcesso(hash):
+    def conviteAcesso(hash,nome):
 
         htmlcorpo =  f"""\
         <body>
@@ -11,7 +11,7 @@ class sendEmailModel():
                     <h3 class="title">Convite de Acesso ao Sistema</h5>
                 </div>
                 <div class="body">
-                    <h4 class="subtitle">Olá, Marcos Peixoto.</h4>
+                    <h4 class="subtitle">Olá, {nome}.</h4>
                     <p>Boas Vindas à Aprender Editora!<br/><br/>
                     Estamos entusiasmados por ter você conosco.</p>
                     <p><b>Foi criada uma área exclusiva que lhe dará acesso a nossa plataforma</b>, por meio do botão abaixo você poderá completar seu cadastro e fazer o primeiro login. Depois de fazer login,<b> você terá acesso à nossa vasta coleção de recursos todos projetados para lhe ajudar a impulsionar os indicadores educacionais.</b></p>

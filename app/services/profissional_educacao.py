@@ -192,7 +192,7 @@ class ProfissionaisEducacaoServices(Resource):
 
             hashconvite = UserModel.password_encrypted(cpf, salt)
 
-            body = sendEmailModel.conviteAcesso(hashconvite)
+            body = sendEmailModel.conviteAcesso(hashconvite, nome)
 
             if email != None:
                 if convite != None:
