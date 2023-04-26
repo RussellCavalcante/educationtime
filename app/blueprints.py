@@ -1336,3 +1336,12 @@ def get_indicador_():
     
     return _Get_services.get(**kwargs)
 
+@avaliable_route.route('/Indicador/Escolaridade/Educadores', methods=['GET'])
+
+def get_indicador_escolaridade_educadores():    
+    from app.services.indicadores import IndicadoresServices
+    kwargs = request.args.to_dict()
+    _Get_services = IndicadoresServices()
+    
+    return _Get_services.get_escolaridade_educadores(**kwargs)
+
