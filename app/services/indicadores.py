@@ -29,7 +29,11 @@ class IndicadoresServices(Resource):
     @jwt_required()
     def get(self, *args, **kwargs):
         try:
-            return  IndicadoresModel.get(**kwargs), 200
+            estudante = IndicadoresModel.get(**kwargs), 200
+            if estudante[0] == False:
+                return {'error':'Nao existe registro para essa solicitação.'}, 400
+            else : return estudante
+            
         except:
             return { 'error': 'verifique a requisição !' }, 400
         
@@ -53,3 +57,14 @@ class IndicadoresServices(Resource):
             else : return escolaridade
         except:
             return {'error': 'verifique a requisição !'}, 400
+        
+    @jwt_required()
+    def get_satisfacao(self, *args, **kwargs):
+        try:
+            escolaridade = IndicadoresModel.get_satisfacao(**kwargs), 200
+            if escolaridade[0] == False:
+                return {'error':'Nao existe registro para essa solicitação.'}, 400
+            else : return escolaridade
+        except:
+            return {'error': 'verifique a requisição !'}, 400
+

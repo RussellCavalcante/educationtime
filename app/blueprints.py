@@ -1354,3 +1354,11 @@ def get_acoes_agenda_diretoria():
     
     return _Get_services.get_acoes_agenda_diretoria(**kwargs)
 
+@avaliable_route.route('/Indicador/Satisfacao', methods=['GET'])
+
+def get_satisfacao():    
+    from app.services.indicadores import IndicadoresServices
+    kwargs = request.args.to_dict()
+    _Get_services = IndicadoresServices()
+    
+    return _Get_services.get_satisfacao(**kwargs)
