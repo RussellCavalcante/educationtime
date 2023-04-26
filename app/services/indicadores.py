@@ -43,16 +43,6 @@ class IndicadoresServices(Resource):
         except:
             return {'error': 'verifique a requisição !'}, 400
         
-
-    @jwt_required()
-    def get_escolaridade_educadores(self, *args, **kwargs):
-        try:
-            escolaridade = IndicadoresModel.get_escolaridade_educadores(**kwargs), 200
-            if escolaridade[0] == False:
-                return {'error':'Nao existe registro para essa solicitação.'}, 400
-            else : return escolaridade
-        except:
-            return {'error': 'verifique a requisição !'}, 400
         
     @jwt_required()
     def get_acoes_agenda_diretoria(self, *args, **kwargs):
@@ -63,91 +53,3 @@ class IndicadoresServices(Resource):
             else : return escolaridade
         except:
             return {'error': 'verifique a requisição !'}, 400
-
-
-    @jwt_required()
-    def post(self, *args, **kwargs):
-        try:
-                
-            dados = atributos.parse_args()
-            cpf = dados['cpf']
-            nome = dados['nome'].strip()
-            telefone = dados['telefone']
-            email = dados['email'].strip()
-            FK_perfil_id = dados['FK_perfil_id']
-            perfil_ativo = dados['perfil_ativo']
-            data_inicio = dados['data_inicio']
-            data_fim = dados['data_fim']
-            FK_secretaria_municipio_id = dados['FK_secretaria_municipio_id']
-
-            if UserModel.find_by_FK_secretaria_municipio_id(FK_secretaria_municipio_id):
-                return {'error': 'Secreataria ja possui dirigente ativo.'}, 400
-
-            if UserModel.find_by_login(cpf):
-                return {'error': 'Cpf já cadastrado'}, 400  
-            
-            if UserModel.find_by_email(email):
-                return {'error': 'Email já cadastrado'}, 400
-            
-
-            UserModel.create_dirigente_municipal(cpf, nome, email, int(telefone), perfil_ativo)
-
-            user = UserModel.find_by_login(cpf)
-
-            salt = UserModel.get_new_salt()
-
-            today = date.today()
-
-            hashconvite = UserModel.password_encrypted(cpf, salt)
-
-            body = sendEmailModel.conviteAcesso(hashconvite, nome)
-
-            constructorEmail(email, body)
-
-            UserModel.create_convite_acesso(user[0], str(today), hashconvite, salt)
-
-            if UserModel.get_user_profiles_by_user_id(user[0]):
-                return {'error':'Usuario ja associado a perfil selecianado'}, 400
-
-            UserModel.associateUserProfile(user[0], FK_perfil_id)
-            
-            IndicadoresModel.create_dirigente_municipal(data_inicio, data_fim, FK_secretaria_municipio_id, user[0])
-            
-            return  {'created': nome}, 201
-        
-        except:
-            return { 'error': 'verifique a requisição !' }, 400
-        
-        
-
-    
-    @jwt_required()
-    def update(self, *args, **kwargs):
-        try:
-
-            dados = atributos.parse_args()
-            cpf = dados['cpf']
-            nome = dados['nome'].strip()
-            telefone = dados['telefone']
-            email = dados['email'].strip()
-
-            data_inicio = dados['data_inicio']
-            data_fim = dados['data_fim']
-            FK_secretaria_municipio_id = dados['FK_secretaria_municipio_id']
-            
-            if IndicadoresModel.find_by_secretaria(FK_secretaria_municipio_id) == False:
-                return {'error': 'Secretaria selecionada inexistente.'}, 400
-
-            dirigente = IndicadoresModel.get_dirigente_municipal_by_id(args[0])
-
-            if UserModel.find_by_FK_secretaria_municipio_id_and_fk_user_id(FK_secretaria_municipio_id, dirigente[0]['FK_user_id']):
-                return {'error': 'Secreataria ja possui dirigente ativo.'}, 400
-            
-            UserModel.update_dirigente_municipal(cpf, nome, email, int(telefone), dirigente[0]['FK_user_id'])
-            user = UserModel.find_by_login(cpf)
-            IndicadoresModel.update_dirigente_municipal(data_inicio, data_fim, FK_secretaria_municipio_id, user[0] , args[0])
-            
-            return {'updated': nome }, 200
-        
-        except:
-            return { 'error': 'verifique a requisição !' }, 400
