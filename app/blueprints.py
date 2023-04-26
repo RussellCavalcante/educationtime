@@ -759,6 +759,9 @@ def get_estudante_nome(nome):
     from app.services.estudante import GetEstudante
     
     _Get_services = GetEstudante()
+
+    if request.args.get('FK_escola_id'):
+        return _Get_services.get_by_nome_and_escola(nome, request.args.get('FK_escola_id'))
     
     return _Get_services.get_by_nome(nome)
 

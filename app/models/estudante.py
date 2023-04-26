@@ -178,6 +178,31 @@ class estudanteModel():
                 listEstadosDict.append(res)   
             
         return listEstadosDict
+    
+    @classmethod
+    def get_estudante_nome_and_escola(*args, **kwargs):
+        cursor = conn.cursor()
+ 
+        cursor.execute(f"SELECT id, nome, cod_nacional_estudante FROM estudante WHERE nome like '%{args[1]}%' and FK_escola_id = {args[2]};")
+        
+        result = cursor.fetchall()
+        cursor.close()
+
+        # print(result)
+        # input()
+        listEstadosDict = []
+        for estadoTupla in result:
+            
+            tup1 = ('id', 'estudant_nome','cod_nacional_estudante') 
+            tup2 = estadoTupla
+           
+            if len(tup1) == len(tup2): 
+                res = dict(zip(tup1, tup2))
+                # print(res)
+
+                listEstadosDict.append(res)   
+            
+        return listEstadosDict
 
     @classmethod
     def get_estudante_turma_id(*args, **kwargs):
