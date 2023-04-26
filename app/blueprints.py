@@ -802,7 +802,7 @@ def get_componentes_by_profissional_escola():
     _Get_services = ProfissionaisEducacaoServices()
    
     if request.args.get('FK_escola_id'):
-        return _Get_services.get_componentes_by_profissional_and_escola(request.args.get('FK_escola_id'))
+        return _Get_services.get_componentes_by_profissional_escola(request.args.get('FK_escola_id'))
 
 
     return _Get_services.get_profisisonal_componentes()
