@@ -193,6 +193,87 @@ class IndicadoresModel():
         return j
     
     @classmethod
+    def get_acoes_agenda_diretoria(self, *args, **kwargs):
+        cursor = conn.cursor()
+
+        estado = kwargs.get('FK_estado_id')
+
+        grupo = 'estado.nome AS grupo'
+
+        group_by = 'GROUP BY estado.nome'
+
+        where = 'WHERE agenda_analise.resultado > 1'
+
+        if estado:
+            grupo = 'municipio.nome AS grupo'
+
+            group_by = 'GROUP BY municipio.nome'
+
+            where += f'AND estado.id = {str(estado)}'
+        else:
+            False
+            
+        municipio = kwargs.get('FK_municipio_id')
+
+        if municipio:
+            grupo = 'escola.nome_escola AS grupo'
+            group_by = 'GROUP BY escola.nome_escola'
+            where += f'AND municipio.id = {str(municipio)}'
+        else:
+            False
+        escola = kwargs.get('FK_escola_id')
+
+        if escola:
+            grupo = 'turma.nome_turma AS grupo'
+            group_by = 'GROUP BY turma.nome_turma'
+            where += f'AND escola.id = {str(escola)}'
+        else:
+            False
+             
+        queryDefalt = f"""SELECT CAST( (SELECT distinct 
+                            COUNT(CASE WHEN agenda_analise.resultado > 2 THEN agenda_analise.resultado END) as "num_analises_realizadas",
+                            COUNT(agenda_analise.resultado) as "num_analises_total",
+
+
+                            { grupo }
+
+                            FROM agenda_analise
+                            INNER JOIN agenda_diretoria ON agenda_analise.FK_agenda_diretoria_id = agenda_diretoria.id
+                            INNER JOIN escola ON agenda_diretoria.FK_escola_id = escola.id
+                            INNER JOIN municipio ON escola.FK_municipio_id = municipio.id
+                            INNER JOIN estado ON municipio.FK_UF_id = estado.id
+
+                            {where}
+
+                            {group_by}
+
+                            
+                            """
+        
+        
+        
+         
+        
+        queryDefalt += " FOR JSON PATH, ROOT('request')) AS VARCHAR(MAX));"
+
+        cursor.execute(queryDefalt)
+
+
+        result = cursor.fetchall()
+        
+        if result[0][0] == None:
+            return False
+
+        s = str(result)
+
+        strip1 = s.lstrip("[('")
+        strip2 = strip1.rstrip("', )]")
+        
+        j = json.loads(strip2)
+        
+        return j
+    
+    @classmethod
     def get_dirigente_municipal_by_secretaria_id(*args, **kwargs):
         cursor = conn.cursor()
         

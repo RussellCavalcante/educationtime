@@ -1345,3 +1345,12 @@ def get_indicador_escolaridade_educadores():
     
     return _Get_services.get_escolaridade_educadores(**kwargs)
 
+@avaliable_route.route('/Indicador/AcoesAgendaDiretoria', methods=['GET'])
+
+def get_acoes_agenda_diretoria():    
+    from app.services.indicadores import IndicadoresServices
+    kwargs = request.args.to_dict()
+    _Get_services = IndicadoresServices()
+    
+    return _Get_services.get_acoes_agenda_diretoria(**kwargs)
+

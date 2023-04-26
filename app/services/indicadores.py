@@ -43,12 +43,26 @@ class IndicadoresServices(Resource):
         except:
             return {'error': 'verifique a requisição !'}, 400
         
+
     @jwt_required()
-    def get_by_muncipio_id(self, *args, **kwargs):
+    def get_escolaridade_educadores(self, *args, **kwargs):
         try:
-            return  IndicadoresModel.get_dirigente_municipal_by_secretaria_id(args[0]), 200
+            escolaridade = IndicadoresModel.get_escolaridade_educadores(**kwargs), 200
+            if escolaridade[0] == False:
+                return {'error':'Nao existe registro para essa solicitação.'}, 400
+            else : return escolaridade
         except:
-            return { 'error': 'verifique a requisição !' }, 400
+            return {'error': 'verifique a requisição !'}, 400
+        
+    @jwt_required()
+    def get_acoes_agenda_diretoria(self, *args, **kwargs):
+        try:
+            escolaridade = IndicadoresModel.get_acoes_agenda_diretoria(**kwargs), 200
+            if escolaridade[0] == False:
+                return {'error':'Nao existe registro para essa solicitação.'}, 400
+            else : return escolaridade
+        except:
+            return {'error': 'verifique a requisição !'}, 400
 
 
     @jwt_required()
