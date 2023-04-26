@@ -662,7 +662,7 @@ def update_enturmar():
     
     return _Get_services.update()
 
-@avaliable_route.route('/estudante/turma/<int:id>', methods=['GET'])
+@avaliable_route.route('/Estudante/Turma/<int:id>', methods=['GET'])
 
 def get_estudante_turma_id(id):
     from app.services.estudante import GetEstudante
