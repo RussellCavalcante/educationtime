@@ -1327,7 +1327,7 @@ def get_frequencia_estudante():
     return _Get_services.get()
 
 
-@avaliable_route.route('/Indicador/Estudante/Turma/Escola', methods=['GET'])
+@avaliable_route.route('/Indicador/EstudanteTurma', methods=['GET'])
 
 def get_indicador_():    
     from app.services.indicadores import IndicadoresServices
@@ -1336,7 +1336,7 @@ def get_indicador_():
     
     return _Get_services.get(**kwargs)
 
-@avaliable_route.route('/Indicador/Escolaridade/Educadores', methods=['GET'])
+@avaliable_route.route('/Indicador/Escolaridade', methods=['GET'])
 
 def get_indicador_escolaridade_educadores():    
     from app.services.indicadores import IndicadoresServices
