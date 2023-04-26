@@ -1254,10 +1254,10 @@ def post_ResultadoAprendizagem():
 
 def get_post_ResultadoAprendizagem():    
     from app.services.resultadoaprendizagem import ResultadoAprendizagemServices
-    
+    kwargs = request.args.to_dict()
     _Get_services = ResultadoAprendizagemServices()
 
-    return _Get_services.get()
+    return _Get_services.get(**kwargs)
 
 @avaliable_route.route('/idadeserie/Cadastro', methods=['POST'])
 

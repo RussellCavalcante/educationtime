@@ -17,7 +17,7 @@ class ResultadoAprendizagemServices(Resource):
     def get(self, *args, **kwargs):
         try:
                 
-            return  ResultadoAprendizagemModel.get_resultado_aprendizagem(), 200
+            return  ResultadoAprendizagemModel.get_resultado_aprendizagem(**kwargs), 200
         except:
             return { 'error': 'verifique a requisição !' }, 400
     
