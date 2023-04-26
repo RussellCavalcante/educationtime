@@ -48,11 +48,11 @@ class IndicadoresModel():
 
         estado = kwargs.get('FK_estado_id')
 
-        grupo = 'estado.nome AS GRUPO'
+        grupo = 'estado.nome AS grupo'
         group_by = 'GROUP BY estado.nome'
 
         if estado:
-            grupo = 'municipio.nome AS GRUPO'
+            grupo = 'municipio.nome AS grupo'
 
             group_by = 'GROUP BY municipio.nome'
         else:
@@ -61,14 +61,14 @@ class IndicadoresModel():
         municipio = kwargs.get('FK_municipio_id')
 
         if municipio:
-            grupo = 'escola.nome_escola AS GRUPO'
+            grupo = 'escola.nome_escola AS grupo'
             group_by = 'GROUP BY escola.nome_escola'
         else:
             False
         escola = kwargs.get('FK_escola_id')
 
         if escola:
-            grupo = 'turma.nome_turma AS GRUPO'
+            grupo = 'turma.nome_turma AS grupo'
             group_by = 'GROUP BY turma.nome_turma'
         else:
             False
