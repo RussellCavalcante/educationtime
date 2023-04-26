@@ -686,6 +686,9 @@ def get_estudante_cod(id):
     from app.services.estudante import GetEstudante
     
     _Get_services = GetEstudante()
+
+    if request.args.get('FK_escola_id'):
+        return _Get_services.get_by_cod_and_escola(id, request.args.get('FK_escola_id'))
     
     return _Get_services.get_by_cod(id)
 
