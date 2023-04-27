@@ -1368,3 +1368,19 @@ def get_satisfacao():
     _Get_services = IndicadoresServices()
     
     return _Get_services.get_satisfacao(**kwargs)
+
+@avaliable_route.route('/Upload/CSV/<string:entidade>', methods=['POST'])
+
+def post_csv(entidade):
+    if 'file' not in request.files:
+        return jsonify({"error":"Arquivo obrigatório!"}), 500
+    file = request.files['file']
+    if file and config.allowed_file(file.filename): 
+        if entidade == 'Escola':
+            from app.services.escola import GetEscola
+        
+            _Get_services = GetEscola()
+            
+            return _Get_services.post_csv(request.args.get('IdLog'), file, file.filename.rsplit('.', 1)[1].lower())
+        
+            

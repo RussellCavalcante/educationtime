@@ -99,6 +99,23 @@ class EscolaModel():
         return listEstadosDict
 
     @classmethod
+    def find_by_cod_inep(cls, cod_inep):
+        # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
+        cursor = conn.cursor()
+ 
+        cursor.execute("select id from escola where cod_inep = ?;", cod_inep)
+
+        row = cursor.fetchall()
+
+        cursor.commit()
+        
+        # print('Rows --->>',row, type(row) )
+        # input()
+        if len(row) != 0:
+            return row
+        return False
+
+    @classmethod
     def create_escola(*args, **kwargs):
         # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
         # try:

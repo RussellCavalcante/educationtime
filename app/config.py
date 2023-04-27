@@ -24,7 +24,7 @@ server.config['JWT_SECRET_KEY'] = 'DontTellAnyone'
 server.config['JWT_BLACKLIST_ENABLED'] = True
 server.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=999)
 server.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
-ALLOWED_EXTENSIONS = set(['pdf', 'png', 'jpg', 'jpeg'])
+ALLOWED_EXTENSIONS = set(['pdf', 'png', 'jpg', 'jpeg', 'csv'])
 
 def allowed_file(filename):
     return '.' in filename and \
