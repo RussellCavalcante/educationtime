@@ -72,43 +72,30 @@ class NotasSaebServices(Resource):
     
     @jwt_required()
     def update(self, *args, **kwargs):
-        try:
+        # try:
 
             dados = atributos.parse_args()
             
-            nome_rotina = dados['nome_rotina'].strip()
+      
             FK_escola_id = dados['FK_escola_id']
             ano_letivo = dados['ano']
-            momentos = dados['momentos']
-            turma_compoenente = dados['turma_compoenente']
-            # idRotina = NotasSaebModel.get_notas_saeb_by_rotina_componente_id(args[0])
-
             
-            NotasSaebModel.update_notas_saeb(nome_rotina, FK_escola_id, ano_letivo, args[0])
+            notas = dados['notas']
 
-            momento_id_get = NotasSaebModel.get_momento_id_by_notas_saeb(args[0])
-
-            for id_moment in momento_id_get:
-        
-                NotasSaebModel.delete_notas_saeb_momento(id_moment)
-
-                NotasSaebModel.delete_momentos(id_moment)
-
-                NotasSaebModel.delete_relacao_momentos(id_moment)
-
-
-            for i , momento in enumerate(momentos['itens']):
-                momento_id = NotasSaebModel.create_momento( momento['nome_momento'],momento['ordem'], momento['descricao'])
-
-
-                NotasSaebModel.associate_notas_saeb_momento(args[0], momento_id)
-
-            NotasSaebModel.delete_rotina_componente(args[0])
-
-            for i , turma_compoenente in enumerate(turma_compoenente['itens']):
-                rotina_componente = NotasSaebModel.associate_rotina_componente_turma( args[0], turma_compoenente['tumar_profissional_componente'])
+            if NotasSaebModel.find_by_notassaeb(args[0]) == False:
+                return {'error':'Nota saeb inexistente verifique se existe.'}, 400
             
-            return  {'id': args[0] ,'nome_rotina': nome_rotina}, 201
+            NotasSaebModel.update_notas_saeb(FK_escola_id, ano_letivo, args[0])
+            
+            # NotasSaebModel.delete_notas_saeb_area_conhecimento(args[0])
 
-        except:
-            return { 'error': 'verifique a requisição !' }, 400
+
+            for i , notas in enumerate(notas['itens']):
+                if NotasSaebModel.find_by_notassaeb__area_conhecimento(notas['FK_area_conehcimento_id'], args[0]):
+                    NotasSaebModel.update_notas_saeb_area_conhecimento( notas['nota'], args[0], notas['FK_area_conehcimento_id'], args[0])
+                else:
+                    NotasSaebModel.associate_notas_saeb_area_conhecimento( notas['FK_area_conehcimento_id'], args[0], notas['nota'])
+            return  {'updated': args[0] }, 201
+
+        # except:
+        #     return { 'error': 'verifique a requisição !' }, 400

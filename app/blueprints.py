@@ -1231,6 +1231,16 @@ def post_NotasSaeb():
     
     return _Get_services.post()
 
+@avaliable_route.route('/NotasSaeb/Update/<int:id>', methods=['PUT'])
+
+def put_NotasSaeb(id):    
+    from app.services.notassaeb import NotasSaebServices
+    
+    _Get_services = NotasSaebServices()
+    
+    return _Get_services.update(id)
+
+
 @avaliable_route.route('/NotasSaeb', methods=['GET'])
 
 def get_post_NotasSaeb():    

@@ -361,6 +361,40 @@ class NotasSaebModel():
         return False
     
     @classmethod
+    def find_by_notassaeb(cls , id):
+        # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
+        cursor = conn.cursor()
+ 
+        cursor.execute("select id from notas_saeb where id = ? ;", id)
+
+        row = cursor.fetchall()
+
+        cursor.commit()
+        
+        # print('Rows --->>',row, type(row) )
+        # input()
+        if len(row) != 0:
+            return row[0]
+        return False
+    
+    @classmethod
+    def find_by_notassaeb__area_conhecimento(cls , FK_area_conhecimento_id, FK_notas_saeb_id):
+        # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
+        cursor = conn.cursor()
+ 
+        cursor.execute("select id from notas_saeb_area_conhecimento where FK_area_conhecimento_id = ? AND FK_notas_saeb_id = ?;", FK_area_conhecimento_id, FK_notas_saeb_id)
+
+        row = cursor.fetchall()
+
+        cursor.commit()
+        
+        # print('Rows --->>',row, type(row) )
+        # input()
+        if len(row) != 0:
+            return row[0]
+        return False
+    
+    @classmethod
     def create_notas_saeb(*args, **kwargs):
         # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
         # try:
@@ -444,6 +478,28 @@ class NotasSaebModel():
         # #     return None
 
     @classmethod
+    def update_notas_saeb_area_conhecimento(*args, **kwargs):
+        # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
+        # try:
+            cursor = conn.cursor()
+            # print(args)
+            # input()
+
+            cursor.execute('''
+                        UPDATE notas_saeb_area_conhecimento
+                        SET nota = ? , FK_notas_saeb_id = ?
+                        WHERE FK_area_conhecimento_id = ? and FK_notas_saeb_id = ?
+                        ''',args[1],args[2], args[3], args[4])
+
+            conn.commit()
+            # conn.close()
+            # return 'created'
+            # rows = cursor.fetchall()
+        # except:
+        #     print(TypeError)
+        # #     return None
+
+    @classmethod
     def create_momento(*args, **kwargs):
         # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
         # try:
@@ -496,9 +552,9 @@ class NotasSaebModel():
 
             cursor.execute('''
                         UPDATE notas_saeb
-                        SET nome = ?, FK_escola_id = ? , ano_letivo = ?
+                        SET FK_escola_id = ? , ano = ?
                         WHERE id = ?
-                        ''',args[1],args[2], args[3], int(args[4]))
+                        ''',args[1],args[2], args[3])
 
             conn.commit()
             # conn.close()
@@ -554,7 +610,7 @@ class NotasSaebModel():
         # #     return None
 
     @classmethod
-    def delete_notas_saeb_momento(*args, **kwargs):
+    def delete_notas_saeb_area_conhecimento(*args, **kwargs):
         # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
         # try:
             cursor = conn.cursor()
@@ -562,7 +618,7 @@ class NotasSaebModel():
                 # input()
 
             cursor.execute('''
-                            DELETE FROM notas_saeb_momento WHERE FK_momento_id = ?;
+                            DELETE FROM notas_saeb_area_conhecimento WHERE FK_notas_saeb_id = ?;
 
                             ''', args[1])
 
