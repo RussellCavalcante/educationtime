@@ -99,9 +99,9 @@ class GetEscola(Resource):
                     Escolas += 1
 
             if len(EscolasExistentes) > 0:
-                return {'created': f"Exportação de escolas concluidas, Numero de escolas inseridas : {Escolas}, Cod_ineps que ja possuem escolas associadas: {EscolasExistentes}"}, 201
+                return {'created': f"Iportação de escolas concluidas, Numero de escolas inseridas : {Escolas}, Cod_ineps que ja possuem escolas associadas: {EscolasExistentes}"}, 201
             else:
-                return  {'created': f"Exportação de escolas concluidas, Numero de escolas inseridas : {Escolas}"}, 201
+                return  {'created': f"Importação de escolas concluidas, Numero de escolas inseridas : {Escolas}"}, 201
 
         except:
             return { 'error': 'verifique a requisição !' }, 400
