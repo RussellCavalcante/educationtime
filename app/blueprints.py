@@ -1400,6 +1400,6 @@ def post_csv(entidade):
         
             _Get_services = GetEscola()
             
-            return _Get_services.post_csv(request.args.get('IdLog'), file, file.filename.rsplit('.', 1)[1].lower())
+            return _Get_services.post_csv(request.args.get('IdLog'), file, file.filename.rsplit('.', 1)[1].lower(), request.args.get('FK_municipio_id'))
         
             

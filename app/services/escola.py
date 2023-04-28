@@ -79,30 +79,53 @@ class GetEscola(Resource):
 
             EscolasExistentes = []
 
-            for  dados in data_json:
+            EscolasJson = { 'Menssage': f'Importação de escolas concluída, Número de escolas inseridas : {Escolas}',
+                            'Escolas':[],
+                           }
 
+            for  dados in data_json:
+                
                 nome_escola = dados['nome_escola'].strip()
                 endereco = dados['endereco'].strip()
                 telefone = dados['telefone']
                 email_escola = dados['email_escola'].strip()
                 cod_inep = dados['cod_inep']
-                FK_municipio_id = dados['FK_municipio_id']
+                FK_municipio_id = args[3]
+
+
 
                 Escola = EscolaModel.find_by_cod_inep(cod_inep)
                 
                 if Escola:
                     if cod_inep not in EscolasExistentes:
+                        EscolaJson = {'nome_escola': nome_escola,
+                                  'cod_inep':cod_inep,
+                                  'status': False,
+                                  'Mensagem': 'Código inep já cadastrado.'}
                         EscolasExistentes.append(cod_inep)
+                        EscolasJson['Escolas'].append(EscolaJson)
                 else:
                     IdEscola = EscolaModel.create_escola(nome_escola, endereco, email_escola, telefone, cod_inep, FK_municipio_id)
+                    EscolaJson = {'nome_escola': nome_escola,
+                                  'cod_inep':cod_inep,
+                                  'status': True,
+                                  'Mensagem': 'Escola importada com sucesso.'}
+                    EscolasJson['Escolas'].append(EscolaJson)
                     LogAtividadeModel.create_log_atividade_insercao(args[0], str(datetime.today()),'criação', 'escola', f'foi adicionado escola id : {IdEscola}')
                     Escolas += 1
+                    EscolasJson['Menssage'] = f'Importação de escolas concluída, Número de escolas inseridas : {Escolas}'
 
             if len(EscolasExistentes) > 0:
-                return {'created': f"Iportação de escolas concluidas, Numero de escolas inseridas : {Escolas}, Cod_ineps que ja possuem escolas associadas: {EscolasExistentes}"}, 201
+                if Escolas == 0:
+                
+                    return EscolasJson, 400
+                else:
+                    
+                    return EscolasJson, 201
             else:
-                return  {'created': f"Importação de escolas concluidas, Numero de escolas inseridas : {Escolas}"}, 201
-
+                
+                return EscolasJson, 201
+    
         except:
             return { 'error': 'verifique a requisição !' }, 400
 
