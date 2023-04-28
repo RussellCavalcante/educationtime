@@ -109,7 +109,8 @@ class ResultadoAprendizagemModel():
                         (SELECT 
                         resultado_aprendizagem_acoes.id AS resultado_aprendizagem_acoes__id,
                         resultado_aprendizagem_acoes.nome_acao AS resultado_aprendizagem_acoes__nome_acao,
-                        resultado_aprendizagem_acoes.prazo AS resultado_aprendizagem_acoes__prazo
+                        resultado_aprendizagem_acoes.prazo AS resultado_aprendizagem_acoes__prazo,
+                        resultado_aprendizagem_acoes.status AS resultado_aprendizagem_acoes__status
                         FROM resultado_aprendizagem_acoes 
                         INNER JOIN area_conhecimento ON notas_saeb_area_conhecimento.FK_area_conhecimento_id = area_conhecimento.id
                         WHERE notas_saeb_area_conhecimento.id = resultado_aprendizagem_acoes.FK_notas_saeb_area_conhecimento_id FOR JSON PATH) AS acoes
@@ -237,6 +238,23 @@ class ResultadoAprendizagemModel():
         # print(dictFinal)
         # input()
         return dictFinal
+    
+    @classmethod
+    def find_by_resultado_aprendizagem_acoes__id(cls, id):
+        # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
+        cursor = conn.cursor()
+ 
+        cursor.execute("select * from resultado_aprendizagem_acoes where id = ?;", id)
+
+        row = cursor.fetchall()
+
+        cursor.commit()
+        
+        # print('Rows --->>',row, type(row) )
+        # input()
+        if len(row) != 0:
+            return row[0]
+        return False
     
     @classmethod
     def get_resultado_aprendizagem_componente_educador_by_id(*args, **kwargs):
@@ -532,6 +550,29 @@ class ResultadoAprendizagemModel():
 
 
     @classmethod
+    def update_resultado_aprendizagem_acoes_status(*args, **kwargs):
+        # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
+        # try:
+            cursor = conn.cursor()
+            # print(args)
+            # input()
+
+            cursor.execute('''
+                        UPDATE resultado_aprendizagem_acoes
+                        SET status = ?
+                        WHERE id = ?
+                        ''',args[1], args[2])
+
+            conn.commit()
+            # conn.close()
+            # return 'created'
+            # rows = cursor.fetchall()
+        # except:
+        #     print(TypeError)
+        # #     return None
+
+
+    @classmethod
     def delete_rotina_componente(*args, **kwargs):
         # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
         # try:
@@ -576,7 +617,7 @@ class ResultadoAprendizagemModel():
         # #     return None
 
     @classmethod
-    def delete_resultado_aprendizagem_momento(*args, **kwargs):
+    def delete_resultado_aprendizagem_acoes(*args, **kwargs):
         # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
         # try:
             cursor = conn.cursor()

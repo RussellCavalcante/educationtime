@@ -1260,6 +1260,15 @@ def post_ResultadoAprendizagem():
     
     return _Get_services.post()
 
+@avaliable_route.route('/ResultadoAprendizagem/Update', methods=['PUT'])
+
+def put_ResultadoAprendizagem():    
+    from app.services.resultadoaprendizagem import ResultadoAprendizagemServices
+    
+    _Get_services = ResultadoAprendizagemServices()
+    
+    return _Get_services.update()
+
 @avaliable_route.route('/ResultadoAprendizagem', methods=['GET'])
 
 def get_post_ResultadoAprendizagem():    
