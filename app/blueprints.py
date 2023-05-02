@@ -37,6 +37,15 @@ def register():
 
     return _register_service.post()    
 
+@avaliable_route.route('/Users', methods=['GET'])
+
+def get_users():    
+    from app.services.user import User
+    kwargs = request.args.to_dict()
+    _Get_services = User()
+    
+    return _Get_services.get(**kwargs)
+
 @avaliable_route.route('/uf', methods=['GET'])
 
 def get_uf():    

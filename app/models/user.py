@@ -1,4 +1,5 @@
 from sqlalchemy.dialects.postgresql import UUID
+from app.utils.defaultGet import GetModel
 from app import banco
 from uuid import uuid1, uuid4
 import json
@@ -296,6 +297,26 @@ class UserModel():
                     return True
             
         return False
+    
+
+    @classmethod
+    def get_users(*args, **kwargs):
+        queryDefalt = f""" 
+                         users.cpf as users__cpf, 
+                            users.telefone as users__telefone,
+                            users.nome as users__nome,
+                            users.email as users__email,  
+                            profiles.id as profiles__id,
+                            profiles.profile_name as profiles__profile_name
+                            FROM users
+                            INNER JOIN user_profiles ON users.id = user_profiles.FK_user_id
+                            INNER JOIN profiles ON user_profiles.FK_profile_id = profiles.id
+                        """
+        
+        j = GetModel.get_default(queryDefalt, **kwargs)
+       
+        return j
+    
     @classmethod
     def find_by_email(cls, email):
         # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
@@ -340,7 +361,7 @@ class UserModel():
 
             conn.autocommit = True
 
-            cursor.execute("insert into users (nome , email, cpf, password, salt) values(?,?,?,?,?)",args[1], args[2], args[3], args[4], args[5])
+            cursor.execute("insert into users (nome , email, cpf, telefone, salt) values(?,?,?,?,?)",args[1], args[2], args[3], args[4], args[5])
             
             conn.commit()
             # conn.close()

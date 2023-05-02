@@ -6,6 +6,8 @@ from datetime import datetime
 # from flask import Flask
 from flask import jsonify
 from app.models.perfil import PerfilModel
+from app.utils.contrucotorEmail import constructorEmail
+from app.utils.sendEmail import sendEmailModel
 # from flask import request
 
 # from flask_jwt_extended import create_access_token
@@ -34,13 +36,12 @@ atributos.add_argument('date_logout', type=str, help="campo de email e obrigator
 class User(Resource):
     #/usuarios/{user_id}
         
-    def get(self, user_id):
-        # user = UserModel.find_user(user_id)
-        
-        user = user_id
-        if user:
-            return user.json()
-        return {"message": 'Usuario nao encontrado'}, 404 # not found
+    def get(self, *args, **kwargs):
+        try:
+            return UserModel.get_users(**kwargs)
+
+        except:
+            return { 'error': 'verifique a requisição !' }, 400
 
     def get_convite_by_hashconvite(self, *args, **kwargs):
         # try:
@@ -109,7 +110,8 @@ class UserRegister(Resource):
             dados = atributos.parse_args()
 
             cpf = dados['cpf']
-            password = dados['password']
+            # password = dados['password']
+            telefone = dados['telefone']
             nome = dados['nome']
             email = dados['email']
             FK_perfil_id = dados['FK_perfil_id']
@@ -117,9 +119,12 @@ class UserRegister(Resource):
             if UserModel.find_by_login(dados['cpf']):
                 return {'message': "Esse usuario '{}' ja existe.".format(dados['cpf'])}
             
+            if UserModel.find_by_email(email):
+                return {'error': 'Email já cadastrado'}, 400
+            
             salt = UserModel.get_new_salt()
 
-            encrypted_password = UserModel.password_encrypted(password, salt)
+            # encrypted_password = UserModel.password_encrypted(password, salt)
             # print(encrypted_password)
 
             # print(salt)
@@ -129,9 +134,23 @@ class UserRegister(Resource):
             if not UserModel.email_validator(dados['email']):
                 return {'message': "Email '{}' esta invalido.".format(dados["email"])}, 400
 
-            UserModel.create_user(nome , email ,cpf ,encrypted_password, salt)
+            UserModel.create_user(nome , email ,cpf ,telefone , salt)
  
             id = UserModel.find_by_login(dados['cpf'])
+            
+            user = UserModel.find_by_login(cpf)
+
+            salt = UserModel.get_new_salt()
+
+            today = date.today()
+
+            hashconvite = UserModel.password_encrypted(cpf, salt)
+
+            body = sendEmailModel.conviteAcesso(hashconvite, nome)
+
+            constructorEmail(email, body)
+
+            UserModel.create_convite_acesso(user[0], str(today), hashconvite, salt)
            
             UserModel.associateUserProfile(id[0], FK_perfil_id) 
 
