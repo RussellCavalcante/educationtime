@@ -8,8 +8,8 @@ from app.blacklist import BLACKLIST
 
 atributos = reqparse.RequestParser()
 
-atributos.add_argument('profile_name', type=str, required=True, help="campo obrigatorio")
-atributos.add_argument('FK_roles_id', type=dict, required=True, help="campo obrigatorio")
+atributos.add_argument('profile_name', type=str, help="campo obrigatorio")
+atributos.add_argument('FK_roles_id', type=dict, help="campo obrigatorio")
 
 
 
@@ -94,16 +94,14 @@ class PerfilRegister(Resource):
             profile_name = dados['profile_name']
             
             FK_roles_id = dados['FK_roles_id']
-            # id = PerfilModel.find_by_FK_profile_id(args[0])
-
-            # print(id)
-            # input()
+            
             if not PerfilModel.find_by_profile_id(args[0]):
                 return {'message': "Esse perfil '{}' nao foi encontrado.".format(profile_name)}, 400    
 
             PerfilModel.delete_profile_roles(args[0])
 
-            PerfilModel.update_profile(profile_name, args[0])
+            if profile_name != None:
+                PerfilModel.update_profile(profile_name, args[0])
 
 
             for i , role in enumerate(FK_roles_id['roles']):

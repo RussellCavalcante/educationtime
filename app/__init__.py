@@ -10,6 +10,16 @@ import pyodbc
 conn = pyodbc.connect("Driver={ODBC Driver 18 for SQL Server};Server=tcp:sql-poncetech.database.windows.net,1433;Database=editora-aprender-homolog-2023-2-16-16-50;Uid=poncetech-admin;Pwd=12@editora@12!;Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;")
 # conn = pyodbc.connect("Driver={ODBC Driver 18 for SQL Server};Server=tcp:editora-aprender-teste.database.windows.net,1433;Database=editora-aprender-homolog;Uid=poncetechadm;Pwd=@Ponce1234;Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;")
 conn.autocommit = True
+import smtplib
+
+myemail='russell.cavalcante@poncetech.com.br'
+MY_ADDRESS = 'editoraponce@outlook.com'
+emailPonce = 'editora@poncetech.com.br'
+password = '@rus312519PONCE'
+PASSWORD = 'k3@UqUWWZ96u'
+s = smtplib.SMTP(host='smtp.office365.com', port=587)
+s.starttls()
+s.login(MY_ADDRESS, PASSWORD)
 
 server = Flask(__name__)
 # app.config.from_object('config')

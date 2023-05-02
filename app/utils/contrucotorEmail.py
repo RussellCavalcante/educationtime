@@ -1,5 +1,5 @@
 # import the smtplib module. It should be included in Python by default
-import smtplib
+from app import *
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 # import win32com.client as win32
@@ -11,15 +11,6 @@ def constructorEmail(emailSend, body):
     
 
     # set up the SMTP server
-
-    myemail='russell.cavalcante@poncetech.com.br'
-    MY_ADDRESS = 'editoraponce@outlook.com'
-    emailPonce = 'editora@poncetech.com.br'
-    password = '@rus312519PONCE'
-    PASSWORD = 'k3@UqUWWZ96u'
-    s = smtplib.SMTP(host='smtp.office365.com', port=587)
-    s.starttls()
-    s.login(MY_ADDRESS, PASSWORD)
 
     # print(s)
 
