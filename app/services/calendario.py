@@ -55,7 +55,6 @@ class CalendarioServices(Resource):
             
             CalendarioModel.update_calendario(nome, data, FK_escola_id, args[0])
             
-
             return  {'updated': f'calendario id : {args[0]}' }, 200
         
 
