@@ -291,7 +291,7 @@ class UserModel():
                 data = cursor.fetchall()
                 
                 if data[0][1] == True:
-                    if data[0][1] == FK_user_id:
+                    if data[0][0] == FK_user_id:
                         return False
                     
                     return True
@@ -424,9 +424,9 @@ class UserModel():
             
             cursor.execute('''
                         UPDATE users
-                        SET cpf = ?, nome = ?, email = ?, telefone = ? 
+                        SET cpf = ?, nome = ?, email = ?, telefone = ?, perfil_ativo = ? 
                         WHERE id = ?
-                        ''',args[1], args[2], args[3], args[4], args[5]
+                        ''',args[1], args[2], args[3], args[4], args[5], args[6]
                         )
             
             conn.commit()
