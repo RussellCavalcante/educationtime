@@ -46,4 +46,23 @@ class IdadeSerieServices(Resource):
 
             return { 'error': 'verifique a requisição !' }, 400
     
-   
+    @jwt_required()
+    def update(self, *args, **kwargs):
+        try:
+
+            dados = atributos.parse_args()
+            
+            dados = atributos.parse_args()
+            FK_turma_id = dados['FK_turma_id']
+            resultado = dados['resultado']
+            meta = dados['meta']
+            acoes = dados['acoes']         
+                
+            for i , acoes in enumerate(acoes['acoes']):
+
+                IdadeSerieModel.update_idade_serie(acoes['status'], acoes['resultado_aprendizagem_acoes__id'])
+
+            return  {'updated': 'Atualizado os status das ações solicitadas' }, 201
+
+        except:
+            return { 'error': 'verifique a requisição !' }, 400

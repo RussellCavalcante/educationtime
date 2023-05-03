@@ -1,4 +1,5 @@
 from sqlalchemy.dialects.postgresql import UUID
+from app.utils.defaultGet import GetModel
 # from app import banco
 from uuid import uuid1, uuid4
 import re
@@ -12,13 +13,9 @@ class IdadeSerieModel():
 
     @classmethod
     def get(self, *args, **kwargs):
-        cursor = conn.cursor()
-        qtd = kwargs.get('qtd')
-        if not qtd:
-            qtd = None
-             
-        queryDefalt = f"""SELECT distinct {'TOP ' + str(qtd) if qtd else ''}
-                            idade_serie.id AS idade_serie__id, 
+        
+        queryDefalt = f""" 
+                        idade_serie.id AS idade_serie__id, 
                                 idade_serie.resultado AS idade_serie__resultado,
                                 idade_serie.meta AS idade_serie_meta,
                                 estado.nome AS estado__nome, estado.uf AS estado__uf ,
@@ -44,49 +41,8 @@ class IdadeSerieModel():
                             INNER JOIN estado ON municipio.FK_UF_id = estado.id
                         """
         
-        is_first_condition = True
-        for column, value in kwargs.items():
-            if column != 'order_by' and column != 'qtd' and value is not None:
-                if is_first_condition:
-                    if column != 'qtd':
-                    
-                        columnSplited = column.split('__')
-                    
-                    
-                        queryDefalt += f"WHERE {columnSplited[0]}.{columnSplited[1]} = {value}"
-                        is_first_condition = False
-                      
-                
-                else:
-                    columnSplited = column.split('__')
-                    print(columnSplited)
-                      
-                    queryDefalt += f"AND {columnSplited[0]}.{columnSplited[1]} = {value}"
-                
-                
-                
-                    
-
-        order_by = kwargs.get('order_by')
-        if order_by:
-            queryDefalt += f" ORDER BY {order_by}"
-        
-         
-        
-        queryDefalt += " FOR JSON PATH, ROOT('request');"
-
-        cursor.execute(queryDefalt)
-        result = cursor.fetchall()
-        cursor.close()
-        
-        datastr = str(result)
-
-        strip1 = datastr.lstrip("[('")
-        strip2 = strip1.rstrip("', )]")
-        
-        
-        j = eval(strip2)
-        
+        j = GetModel.get_default(queryDefalt, **kwargs)
+       
         return j
     
     @classmethod
@@ -133,7 +89,7 @@ class IdadeSerieModel():
 
 
     @classmethod
-    def update_notas_saeb_area_conhecimento(*args, **kwargs):
+    def update_idade_serie(*args, **kwargs):
         # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
         # try:
             cursor = conn.cursor()
