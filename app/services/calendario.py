@@ -43,4 +43,21 @@ class CalendarioServices(Resource):
 
             return { 'error': 'verifique a requisição !' }, 400
     
-   
+
+    @jwt_required()
+    def update(self, *args, **kwargs):
+        try:
+            dados = atributos.parse_args()
+            FK_escola_id = dados['FK_escola_id']
+            nome = dados['nome']
+            data = dados['data']
+
+            
+            CalendarioModel.update_calendario(nome, data, FK_escola_id, args[0])
+            
+
+            return  {'updated': f'calendario id : {args[0]}' }, 200
+        
+
+        except:
+            return { 'error': 'verifique a requisição !' }, 400

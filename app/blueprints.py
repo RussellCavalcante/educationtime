@@ -1342,6 +1342,15 @@ def get_calendario():
     
     return _Get_services.get(**kwargs)
 
+@avaliable_route.route('/Calendario/Update/<int:id>', methods=['PUT'])
+
+def update_Calendario(id):    
+    from app.services.calendario import CalendarioServices
+    
+    _Get_services = CalendarioServices()
+    
+    return _Get_services.update(id)
+
 @avaliable_route.route('/FrequenciaEstudante/Cadastro', methods=['POST'])
 
 def post_frequencia_estudante():    

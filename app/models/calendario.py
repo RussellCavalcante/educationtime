@@ -144,7 +144,7 @@ class CalendarioModel():
 
 
     @classmethod
-    def update_notas_saeb_area_conhecimento(*args, **kwargs):
+    def update_calendario(*args, **kwargs):
         # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
         # try:
             cursor = conn.cursor()
@@ -152,10 +152,10 @@ class CalendarioModel():
             # input()
 
             cursor.execute('''
-                        UPDATE notas_saeb_area_conhecimento
-                        SET meta = ?
+                        UPDATE calendario_escolar
+                        SET nome = ?, data = ?, FK_escola_id = ?
                         WHERE id = ?
-                        ''',args[1], args[2])
+                        ''',args[1], args[2], args[3], args[4])
 
             conn.commit()
             # conn.close()
