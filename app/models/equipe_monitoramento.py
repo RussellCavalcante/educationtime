@@ -36,11 +36,18 @@ class EquipeMonitoramentoModel():
                         equipe_monitoramento.Fk_profile_id as equipe_monitoramento__Fk_profile_id, 
                         profiles.profile_name as profiles__profile_name, 
                         equipe_monitoramento.data_inicio as equipe_monitoramento__data_inicio, 
-                        equipe_monitoramento.data_fim as equipe_monitoramento__data_fim
+                        equipe_monitoramento.data_fim as equipe_monitoramento__data_fim,
+                        escola.FK_municipio_id as escola__FK_municipio_id,
+                        municipio.nome as municipio__nome,
+                        municipio.FK_UF_id as municipio__FK_UF_id,
+                        estado.nome as estado__nome,
+                        estado.uf as estado__uf
                         FROM equipe_monitoramento 
                         INNER JOIN escola ON equipe_monitoramento.FK_escola_id = escola.id
                         INNER JOIN profiles ON equipe_monitoramento.Fk_profile_id = profiles.id
                         INNER JOIN users ON equipe_monitoramento.FK_user_id = users.id
+                        INNER JOIN municipio ON escola.FK_municipio_id = municipio.id
+                        INNER JOIN estado ON municipio.FK_UF_id = estado.id
                         """
         
         j = GetModel.get_default(queryDefalt, **kwargs)
