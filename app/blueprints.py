@@ -1297,6 +1297,15 @@ def post_IdadeSerie():
 
         return _Get_services.post()
 
+@avaliable_route.route('/idadeserie/Update/<int:id>', methods=['PUT'])
+
+def update_idade_serie(id):    
+    from app.services.idade_serie import IdadeSerieServices
+    
+    _Get_services = IdadeSerieServices()
+    
+    return _Get_services.update(id)
+
 @avaliable_route.route('/idadeserie', methods=['GET'])
 
 def get_idadeserie():    

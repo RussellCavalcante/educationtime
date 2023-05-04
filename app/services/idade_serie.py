@@ -58,11 +58,14 @@ class IdadeSerieServices(Resource):
             meta = dados['meta']
             acoes = dados['acoes']         
                 
-            for i , acoes in enumerate(acoes['acoes']):
+            IdadeSerieModel.update_idade_serie(FK_turma_id, resultado, meta, args[0])
+            
+            IdadeSerieModel.delete_momentos(args[0])
+            
+            for i , acoes in enumerate(acoes['itens']):
+                IdadeSerieModel.associate_acao_idade_serie(args[0], acoes['nome_acao'], acoes['prazo'])
 
-                IdadeSerieModel.update_idade_serie(acoes['status'], acoes['resultado_aprendizagem_acoes__id'])
-
-            return  {'updated': 'Atualizado os status das ações solicitadas' }, 201
+            return  {'id': args[0] }, 201
 
         except:
             return { 'error': 'verifique a requisição !' }, 400

@@ -97,10 +97,10 @@ class IdadeSerieModel():
             # input()
 
             cursor.execute('''
-                        UPDATE notas_saeb_area_conhecimento
-                        SET meta = ?
+                        UPDATE idade_serie
+                        SET FK_turma_id = ?, resultado = ?, meta = ?
                         WHERE id = ?
-                        ''',args[1], args[2])
+                        ''',args[1], args[2], args[3], args[4])
 
             conn.commit()
             # conn.close()
@@ -142,7 +142,7 @@ class IdadeSerieModel():
                 # input()
 
             cursor.execute('''
-                            DELETE FROM momento WHERE id = ?;
+                            DELETE FROM acao_idade_serie WHERE FK_idade_serie_id = ?;
 
                             ''', args[1])
 

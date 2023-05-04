@@ -63,8 +63,9 @@ class DirigenteMunicipalServices(Resource):
             data_fim = dados['data_fim']
             FK_secretaria_municipio_id = dados['FK_secretaria_municipio_id']
 
-            if UserModel.find_by_FK_secretaria_municipio_id(FK_secretaria_municipio_id):
-                return {'error': 'Secreataria ja possui dirigente ativo.'}, 400
+            if perfil_ativo == 1:
+                if UserModel.find_by_FK_secretaria_municipio_id(FK_secretaria_municipio_id):
+                    return {'error': 'Secreataria ja possui dirigente ativo.'}, 400
 
             if UserModel.find_by_login(cpf):
                 return {'error': 'Cpf já cadastrado'}, 400  
@@ -84,8 +85,9 @@ class DirigenteMunicipalServices(Resource):
             hashconvite = UserModel.password_encrypted(cpf, salt)
 
             body = sendEmailModel.conviteAcesso(hashconvite, nome)
-
-            constructorEmail(email, body)
+            
+            if email != None:
+                constructorEmail(email, body)
 
             UserModel.create_convite_acesso(user[0], str(today), hashconvite, salt)
 
