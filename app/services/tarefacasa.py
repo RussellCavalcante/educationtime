@@ -42,4 +42,21 @@ class TarefaCasaServices(Resource):
 
             return { 'error': 'verifique a requisição !' }, 400
     
-   
+    @jwt_required()
+    def update(self, *args, **kwargs):
+        try:
+
+            dados = atributos.parse_args()
+            FK_conteudo_plano_aula_id = dados['FK_conteudo_plano_aula_id']
+
+            tarefas = dados['tarefas']
+           
+            TarefaCasaModel.delete_tarefa_casa(FK_conteudo_plano_aula_id)
+
+            for i , tarefa in enumerate(tarefas['itens']):
+                TarefaCasaModel.create_tarefa_casa(FK_conteudo_plano_aula_id, tarefa['nome_tarefa'], tarefa['data_entrega'])
+                        
+            return  {'updated': f'tarefas atualizadas para o FK_conteudo_plano_aula_id : {FK_conteudo_plano_aula_id}' }, 200
+
+        except:
+            return { 'error': 'verifique a requisição !' }, 400

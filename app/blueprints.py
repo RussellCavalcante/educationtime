@@ -1324,6 +1324,16 @@ def post_tarefacasa():
     
     return _Get_services.post()
 
+@avaliable_route.route('/TarefaCasa/Update/<int:id>', methods=['PUT'])
+
+def update_tarefa_casa(id):    
+    from app.services.tarefacasa import TarefaCasaServices
+    
+    _Get_services = TarefaCasaServices()
+    
+    return _Get_services.update(id)
+
+
 @avaliable_route.route('/TarefaCasa', methods=['GET'])
 
 def get_tarefacasa():    

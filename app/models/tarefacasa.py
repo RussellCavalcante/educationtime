@@ -198,7 +198,7 @@ class TarefaCasaModel():
         # #     return None
 
     @classmethod
-    def delete_momentos(*args, **kwargs):
+    def delete_tarefa_casa(*args, **kwargs):
         # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
         # try:
             cursor = conn.cursor()
@@ -206,7 +206,7 @@ class TarefaCasaModel():
                 # input()
 
             cursor.execute('''
-                            DELETE FROM momento WHERE id = ?;
+                            DELETE FROM tarefa_casa WHERE FK_conteudo_plano_aula_id = ?;
 
                             ''', args[1])
 
