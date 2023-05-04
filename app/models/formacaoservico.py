@@ -292,6 +292,24 @@ class FormacaoServicosModel():
         # #     return None
 
     @classmethod
+    def associate_formacao_servico_escola_profissional(*args, **kwargs):
+        # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
+        # try:
+            cursor = conn.cursor()
+            # print(args)
+            # input()
+
+            cursor.execute("insert into formacao_servico_educador_componente_escola ( FK_formacao_servico_escola_id , FK_profissional_escola_componente_id) values(?,?);",args[1], args[2])
+
+            conn.commit()
+            # conn.close()
+            # return 'created'
+            # rows = cursor.fetchall()
+        # except:
+        #     print(TypeError)
+        # #     return None
+
+    @classmethod
     def associate_rotina_componente_turma(*args, **kwargs):
         # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
         # try:

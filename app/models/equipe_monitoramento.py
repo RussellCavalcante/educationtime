@@ -1,4 +1,5 @@
 from sqlalchemy.dialects.postgresql import UUID
+from app.utils.defaultGet import GetModel
 # from app import banco
 from uuid import uuid1, uuid4
 import re
@@ -25,34 +26,27 @@ class EquipeMonitoramentoModel():
     #     self.salt = salt
     @classmethod
     def get_equipe_monitoramento(*args, **kwargs):
-        cursor = conn.cursor()
- 
-        cursor.execute("""SELECT equipe_monitoramento.id, FK_user_id, users.nome , FK_escola_id, escola.nome_escola, Fk_profile_id, 
-                                profiles.profile_name , data_inicio, data_fim 
-                            FROM equipe_monitoramento 
-                            INNER JOIN escola ON equipe_monitoramento.FK_escola_id = escola.id
-                            INNER JOIN profiles ON equipe_monitoramento.Fk_profile_id = profiles.id
-                            INNER JOIN users ON equipe_monitoramento.FK_user_id = users.id""")
+
+        queryDefalt = f""" 
+                        equipe_monitoramento.id as equipe_monitoramento__id, 
+                        equipe_monitoramento.FK_user_id as equipe_monitoramento__FK_user_id ,  
+                        users.nome as users__nome, 
+                        equipe_monitoramento.FK_escola_id as equipe_monitoramento__FK_escola_id,
+                        escola.nome_escola as escola__nome_escola, 
+                        equipe_monitoramento.Fk_profile_id as equipe_monitoramento__Fk_profile_id, 
+                        profiles.profile_name as profiles__profile_name, 
+                        equipe_monitoramento.data_inicio as equipe_monitoramento__data_inicio, 
+                        equipe_monitoramento.data_fim as equipe_monitoramento__data_fim
+                        FROM equipe_monitoramento 
+                        INNER JOIN escola ON equipe_monitoramento.FK_escola_id = escola.id
+                        INNER JOIN profiles ON equipe_monitoramento.Fk_profile_id = profiles.id
+                        INNER JOIN users ON equipe_monitoramento.FK_user_id = users.id
+                        """
         
-        result = cursor.fetchall()
-        cursor.close()
+        j = GetModel.get_default(queryDefalt, **kwargs)
+       
+        return j
 
-        # print(result)
-        # input()
-        listEstadosDict = []
-        for estadoTupla in result:
-            
-            tup1 = ('id', 'FK_user_id' ,  'users_nome'  , 'FK_escola_id', 'nome_escola', 
-                    'Fk_profile_id', 'profile_name' , 'data_inicio', 'data_fim') 
-            tup2 = estadoTupla
-           
-            if len(tup1) == len(tup2): 
-                res = dict(zip(tup1, tup2))
-                # print(res)
-
-                listEstadosDict.append(res)   
-            
-        return listEstadosDict
 
     @classmethod
     def get_equipe_monitoramento_by_id(*args, **kwargs):
