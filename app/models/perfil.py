@@ -222,7 +222,7 @@ class   PerfilModel():
         listEstadosDict = []
         for estadoTupla in result:
             
-            tup1 = ('id', 'role_name') 
+            tup1 = ('id', 'role_name', 'label') 
             tup2 = estadoTupla
            
             if len(tup1) == len(tup2): 
