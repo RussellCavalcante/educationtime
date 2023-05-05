@@ -1213,6 +1213,15 @@ def post_FormacaoServico_Profissional(id):
     
     return _Get_services.post_formacaoservico_escola_profissional(id)
 
+@avaliable_route.route('/FormacaoServico/Profissional/Update/<int:id>', methods=['PUT'])
+
+def update_FormacaoServico_Profissional(id):    
+    from app.services.formacaoservico import FormacaoServicoServices
+    
+    _Get_services = FormacaoServicoServices()
+    
+    return _Get_services.update(id)
+
 @avaliable_route.route('/FormacaoServico', methods=['GET'])
 
 def get_FormacaoServico():    

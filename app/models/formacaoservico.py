@@ -419,7 +419,7 @@ class FormacaoServicosModel():
         # #     return None
 
     @classmethod
-    def update_formacao_servico(*args, **kwargs):
+    def update_formacao_servico_educador_componente_escola(*args, **kwargs):
         # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
         # try:
             cursor = conn.cursor()
@@ -427,10 +427,10 @@ class FormacaoServicosModel():
             # input()
 
             cursor.execute('''
-                        UPDATE formacao_servico
-                        SET nome = ?, FK_escola_id = ? , ano_letivo = ?
-                        WHERE id = ?
-                        ''',args[1],args[2], args[3], int(args[4]))
+                        UPDATE formacao_servico_educador_componente_escola
+                        SET status = ?
+                        WHERE FK_profissional_escola_componente_id = ?
+                        ''',args[1],args[2])
 
             conn.commit()
             # conn.close()

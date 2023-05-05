@@ -93,40 +93,13 @@ class FormacaoServicoServices(Resource):
         try:
 
             dados = atributos.parse_args()
+            FK_profissional_escola_componente_id = dados['profissionais']
             
-            nome_rotina = dados['nome_rotina'].strip()
-            FK_escola_id = dados['FK_escola_id']
-            ano_letivo = dados['ano']
-            momentos = dados['momentos']
-            turma_compoenente = dados['turma_compoenente']
-            idRotina = FormacaoServicosModel.get_rotina_aula_by_rotina_componente_id(args[0])
-
+            for i , profissional in enumerate(FK_profissional_escola_componente_id['itens']):
+                FormacaoServicosModel.update_formacao_servico_educador_componente_escola(profissional['status'],args[0])
             
-            FormacaoServicosModel.update_formacao_servico(nome_rotina, FK_escola_id, ano_letivo, idRotina[0])
-
-            momento_id_get = FormacaoServicosModel.get_momento_id_by_rotina_aula(idRotina[0])
-
-            for id_moment in momento_id_get:
+            return  {'updated': args[0] }, 201
         
-                FormacaoServicosModel.delete_rotina_aula_momento(id_moment)
-
-                FormacaoServicosModel.delete_momentos(id_moment)
-
-                FormacaoServicosModel.delete_relacao_momentos(id_moment)
-
-
-            for i , momento in enumerate(momentos['itens']):
-                momento_id = FormacaoServicosModel.create_momento( momento['nome_momento'],momento['ordem'], momento['descricao'])
-
-
-                FormacaoServicosModel.associate_rotina_aula_momento(idRotina[0], momento_id)
-
-            FormacaoServicosModel.delete_rotina_componente(idRotina[0])
-
-            for i , turma_compoenente in enumerate(turma_compoenente['itens']):
-                rotina_componente = FormacaoServicosModel.associate_rotina_componente_turma( idRotina[0], turma_compoenente['tumar_profissional_componente'])
-            
-            return  {'id': rotina_componente ,'nome_rotina': nome_rotina}, 201
 
         except:
             return { 'error': 'verifique a requisição !' }, 400
