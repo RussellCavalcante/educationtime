@@ -35,12 +35,17 @@ class FuncoesEscolaModel():
                             funcoes_escola.FK_escola_id AS funcoes_escola__FK_escola_id, 
                             escola.nome_escola AS escola__nome_escola, 
                             funcoes_escola.FK_profile_id AS funcoes_escola__FK_profile_id, 
-                            profiles.profile_name  AS profiles__profile_nam
+                            profiles.profile_name  AS profiles__profile_name,
+                            escola.FK_municipio_id as escola__FK_municipio_id,
+                            municipio.nome as municipio__nome,
+                            municipio.FK_UF_id as municipio__FK_UF_id,
+                            estado.nome as estado__nome,
+                            estado.uf as estado__uf
                             FROM funcoes_escola 
                             INNER JOIN escola ON funcoes_escola.FK_escola_id = escola.id 
                             INNER JOIN municipio ON escola.FK_municipio_id = municipio.id 
                             INNER JOIN estado ON municipio.FK_UF_id = estado.id 
-                            INNER JOIN profiles ON funcoes_escola.FK_profile_id = profiles.id 
+                            INNER JOIN profiles ON funcoes_escola.FK_profile_id = profiles.id
                         """
         
         j = GetModel.get_default(queryDefalt, **kwargs)
