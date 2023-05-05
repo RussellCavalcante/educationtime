@@ -100,10 +100,17 @@ class FormacaoServicosModel():
                             formacao_servico.data_inicio AS  formacao_servico__data_inicio, 
                             formacao_servico.data_limite AS formacao_servico__data_limite, 
                             escola.id AS escola__id,
-                            escola.nome_escola AS escola__nome_escola 
+                            escola.nome_escola AS escola__nome_escola ,
+                            escola.FK_municipio_id as escola__FK_municipio_id,
+                            municipio.nome as municipio__nome,
+                            municipio.FK_UF_id as municipio__FK_UF_id,
+                            estado.nome as estado__nome,
+                            estado.uf as estado__uf
                             FROM formacao_servico_escola 
                             INNER JOIN formacao_servico ON formacao_servico_escola.FK_formacao_servico_id = formacao_servico.id
                             INNER JOIN escola ON formacao_servico_escola.FK_escola_id = escola.id
+                            INNER JOIN municipio ON escola.FK_municipio_id = municipio.id
+                            INNER JOIN estado ON municipio.FK_UF_id = estado.id
                         """
         
         j = GetModel.get_default(queryDefalt, **kwargs)
