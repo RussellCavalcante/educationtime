@@ -15,7 +15,7 @@ atributos.add_argument('responsavel', type=str, help="campo obrigatorio ")
 atributos.add_argument('data_inicio', type=str, help="campo obrigatorio ")
 atributos.add_argument('data_limite', type=str, help="campo obrigatorio ")
 atributos.add_argument('escolas', type=dict, help="campo obrigatorio ")
-atributos.add_argument('FK_profissional_escola_componente_id', type=dict, help="campo obrigatorio ")
+atributos.add_argument('profissionais', type=dict, help="campo obrigatorio ")
 
 
 class FormacaoServicoServices(Resource):
@@ -33,7 +33,7 @@ class FormacaoServicoServices(Resource):
     def get_formacao_servico_profissionais(self, *args, **kwargs):
         try:
                 
-            return  FormacaoServicosModel.get_formacao_servico(**kwargs), 200
+            return  FormacaoServicosModel.get_formacao_servico_profissional(**kwargs), 200
         except:
             return { 'error': 'verifique a requisição !' }, 400
     
@@ -66,7 +66,7 @@ class FormacaoServicoServices(Resource):
 
 
             
-            return  {'id': formacaoServico }, 201
+            return  {'created': formacaoServico }, 201
         
         except:
             return { 'error': 'verifique a requisição !' }, 400
@@ -77,14 +77,12 @@ class FormacaoServicoServices(Resource):
 
             dados = atributos.parse_args()
             
-            FK_profissional_escola_componente_id = dados['FK_profissional_escola_componente_id']
-            
-            # formacaoServico = FormacaoServicosModel.create_formacao_servico(FK_municipio_id, ano ,nome, responsavel, data_inicio, data_limite)
+            FK_profissional_escola_componente_id = dados['profissionais']
             
             for i , profissional in enumerate(FK_profissional_escola_componente_id['itens']):
-                FormacaoServicosModel.associate_formacao_servico_escola(args[0],profissional['FK_escola_id'])
+                FormacaoServicosModel.associate_formacao_servico_escola_profissional(args[0],profissional['FK_profissional_escola_componente_id'])
             
-            return  {'id': args[0] }, 201
+            return  {'created': args[0] }, 201
         
         except:
             return { 'error': 'verifique a requisição !' }, 400

@@ -1204,6 +1204,15 @@ def post_FormacaoServico():
     
     return _Get_services.post_formacaoservico()
 
+@avaliable_route.route('/FormacaoServico/Profissional/Cadastro/<int:id>', methods=['POST'])
+
+def post_FormacaoServico_Profissional(id):    
+    from app.services.formacaoservico import FormacaoServicoServices
+    
+    _Get_services = FormacaoServicoServices()
+    
+    return _Get_services.post_formacaoservico_escola_profissional(id)
+
 @avaliable_route.route('/FormacaoServico', methods=['GET'])
 
 def get_FormacaoServico():    
@@ -1212,6 +1221,15 @@ def get_FormacaoServico():
     _Get_services = FormacaoServicoServices()
     
     return _Get_services.get(**kwargs)
+
+@avaliable_route.route('/FormacaoServico/Profissionais', methods=['GET'])
+
+def get_FormacaoServico_Profissional():    
+    from app.services.formacaoservico import FormacaoServicoServices
+    kwargs = request.args.to_dict()
+    _Get_services = FormacaoServicoServices()
+    
+    return _Get_services.get_formacao_servico_profissionais(**kwargs)
 
 @avaliable_route.route('/PlanoLeitura/Cadastro', methods=['POST'])
 

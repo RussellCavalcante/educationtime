@@ -117,6 +117,44 @@ class FormacaoServicosModel():
        
         return j
 
+
+    @classmethod
+    def get_formacao_servico_profissional(*args, **kwargs):
+        queryDefalt = f""" 
+                            formacao_servico_escola.id AS formacao_servico_escola__id, 
+                            formacao_servico.id AS formacao_servico__id, 
+                            formacao_servico.FK_municipio AS formacao_servico__FK_municipio,
+                            formacao_servico.nome AS formacao_servico__nome, 
+                            formacao_servico.responsavel AS formacao_servico__responsavel, 
+                            formacao_servico.ano_letivo AS formacao_servico__ano_letivo, 
+                            formacao_servico.data_inicio AS  formacao_servico__data_inicio, 
+                            formacao_servico.data_limite AS formacao_servico__data_limite, 
+                            escola.id AS escola__id,
+                            escola.nome_escola AS escola__nome_escola ,
+                            escola.FK_municipio_id as escola__FK_municipio_id,
+                            municipio.nome as municipio__nome,
+                            municipio.FK_UF_id as municipio__FK_UF_id,
+                            estado.nome as estado__nome,
+                            estado.uf as estado__uf,
+                            (SELECT formacao_servico_educador_componente_escola.id AS formacao_servico_educador_componente_escola__id,
+                             formacao_servico_educador_componente_escola.FK_profissional_escola_componente_id AS formacao_servico_educador_componente_escola__FK_profissional_escola_componente_id, 
+                             formacao_servico_educador_componente_escola.status AS formacao_servico_educador_componente_escola__status ,
+                             formacao_servico_educador_componente_escola.FK_formacao_servico_escola_id as formacao_servico_educador_componente_escola__FK_formacao_servico_escola_id
+                             
+                                FROM formacao_servico_educador_componente_escola 
+                                WHERE formacao_servico_educador_componente_escola.FK_formacao_servico_escola_id = formacao_servico_escola.id FOR JSON PATH) AS profissionais
+
+                            FROM formacao_servico_escola 
+                            INNER JOIN formacao_servico ON formacao_servico_escola.FK_formacao_servico_id = formacao_servico.id
+                            INNER JOIN escola ON formacao_servico_escola.FK_escola_id = escola.id
+                            INNER JOIN municipio ON escola.FK_municipio_id = municipio.id
+                            INNER JOIN estado ON municipio.FK_UF_id = estado.id
+                        """
+        
+        j = GetModel.get_default(queryDefalt, **kwargs)
+       
+        return j
+    
     @classmethod
     def get_formacao_servico_by_id(*args, **kwargs):
         cursor = conn.cursor()
