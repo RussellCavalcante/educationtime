@@ -13,7 +13,7 @@ atributos.add_argument('ano', type=int, help="campo obrigatorio")
 atributos.add_argument('qtd_livros', type=int, help="campo obrigatorio ")
 atributos.add_argument('prazo', type=int, help="campo obrigatorio ")
 atributos.add_argument('turma_compoenente', type=dict, help="campo obrigatorio ")
-
+atributos.add_argument('livros', type=dict, help="campo obrigatorio ")
 
 class PlanoLeituraServices(Resource):
 
@@ -22,6 +22,14 @@ class PlanoLeituraServices(Resource):
         try:
                 
             return  PlanoLeituraModel.get_plano_leitura(**kwargs), 200
+        except:
+            return { 'error': 'verifique a requisição !' }, 400
+        
+    @jwt_required()
+    def get_livros(self, *args, **kwargs):
+        try:
+                
+            return  PlanoLeituraModel.get_plano_leitura_livros(**kwargs), 200
         except:
             return { 'error': 'verifique a requisição !' }, 400
     
@@ -60,44 +68,25 @@ class PlanoLeituraServices(Resource):
             return { 'error': 'verifique a requisição !' }, 400
     
     @jwt_required()
-    def update(self, *args, **kwargs):
+    def update_livro(self, *args, **kwargs):
         try:
 
             dados = atributos.parse_args()
+            livros = dados['livros']
+            getleituralivros = PlanoLeituraModel.find_livros_by_FK_plano_componente_turma_id(args)
+            if getleituralivros != False:
+                PlanoLeituraModel.delete_estudantes_livros_status(getleituralivros[0])
+                PlanoLeituraModel.delete_livros(getleituralivros[0])
+   
+            for i , livro in enumerate(livros['itens']):
+                
+                
             
-            nome_rotina = dados['nome_rotina'].strip()
-            FK_escola_id = dados['FK_escola_id']
-            ano_letivo = dados['ano']
-            momentos = dados['momentos']
-            turma_compoenente = dados['turma_compoenente']
-            # idRotina = PlanoLeituraModel.get_rotina_aula_by_rotina_componente_id(args[0])
+                PlanoLeituralivros = PlanoLeituraModel.associate_plano_leitura_livros(livro['titulo'], livro['autoria'], args[0])
 
-            
-            PlanoLeituraModel.update_rotinaaula(nome_rotina, FK_escola_id, ano_letivo, args[0])
-
-            momento_id_get = PlanoLeituraModel.get_momento_id_by_rotina_aula(args[0])
-
-            for id_moment in momento_id_get:
+                for i , estudante in enumerate(livro['estudantes']):
+                    PlanoLeituraModel.associate_plano_leitura_estudante( estudante['FK_estudante_id'], PlanoLeituralivros, estudante['status'])
         
-                PlanoLeituraModel.delete_rotina_aula_momento(id_moment)
+            return  {'plano_leitura': args[0]}, 200
 
-                PlanoLeituraModel.delete_momentos(id_moment)
-
-                PlanoLeituraModel.delete_relacao_momentos(id_moment)
-
-
-            for i , momento in enumerate(momentos['itens']):
-                momento_id = PlanoLeituraModel.create_momento( momento['nome_momento'],momento['ordem'], momento['descricao'])
-
-
-                PlanoLeituraModel.associate_rotina_aula_momento(args[0], momento_id)
-
-            PlanoLeituraModel.delete_rotina_componente(args[0])
-
-            for i , turma_compoenente in enumerate(turma_compoenente['itens']):
-                rotina_componente = PlanoLeituraModel.associate_rotina_componente_turma( args[0], turma_compoenente['tumar_profissional_componente'])
-            
-            return  {'id': args[0] ,'nome_rotina': nome_rotina}, 201
-
-        except:
-            return { 'error': 'verifique a requisição !' }, 400
+        except:  'verifique a requisição !' , 400

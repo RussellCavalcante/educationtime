@@ -1,6 +1,7 @@
 from flask_restful import Resource, reqparse
 from app.models.profissional_educacao import ProfissionaisEducacaoModel
 from app.models.user import UserModel
+from app.models.perfil import PerfilModel
 from app.utils.contrucotorEmail import constructorEmail
 from app.utils.sendEmail import sendEmailModel
 from datetime import date
@@ -149,6 +150,11 @@ class ProfissionaisEducacaoServices(Resource):
             if UserModel.find_by_login(cpf):
 
                 user = UserModel.find_by_login(cpf)
+                
+                perfil = PerfilModel.get_perfil_by_user_id(user[0])
+                perfis_id = [25, 8, 7, 26, 27, 28, 29]
+                if perfil['profile_id'] not in perfis_id:
+                    return {'error': 'CPF já cadastrado.'}
                 
                      
                 if ProfissionaisEducacaoModel.get_profissionais_educacao_escola_perfil_by_escola_id(FK_escola_id, FK_perfil_id, user[0]) == False:

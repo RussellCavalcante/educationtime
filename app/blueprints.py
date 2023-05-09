@@ -1249,6 +1249,24 @@ def post_PlanoLeitura():
     
     return _Get_services.post()
 
+@avaliable_route.route('/PlanoLeitura/Livros/Cadastro/<int:id>', methods=['POST'])
+
+def post_PlanoLeitura_livros(id):    
+    from app.services.planoleitura import PlanoLeituraServices
+    
+    _Get_services = PlanoLeituraServices()
+    
+    return _Get_services.update_livro(id)
+
+@avaliable_route.route('/PlanoLeitura/Livros', methods=['GET'])
+
+def get_planoleitura_Livros():    
+    from app.services.planoleitura import PlanoLeituraServices
+    kwargs = request.args.to_dict()
+    _Get_services = PlanoLeituraServices()
+    
+    return _Get_services.get_livros(**kwargs)
+
 @avaliable_route.route('/PlanoLeitura', methods=['GET'])
 
 def get_planoleitura():    

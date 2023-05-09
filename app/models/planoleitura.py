@@ -56,6 +56,23 @@ class PlanoLeituraModel():
         # input()
 
         return listEstadosDict
+    
+    @classmethod
+    def find_livros_by_FK_plano_componente_turma_id(cls, FK_plano_componente_turma_id):
+        # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
+        cursor = conn.cursor()
+ 
+        cursor.execute("select * from plano_leitura_livros where FK_plano_componente_turma_id = ?;", FK_plano_componente_turma_id)
+
+        row = cursor.fetchall()
+
+        cursor.commit()
+        
+        # print('Rows --->>',row, type(row) )
+        # input()
+        if len(row) != 0:
+            return row[0]
+        return False
 
     @classmethod
     def get_momento_id_by_plano_leitura(*args, **kwargs):
@@ -119,6 +136,26 @@ class PlanoLeituraModel():
                             INNER JOIN escola ON  plano_leitura.FK_escola_id = escola.id
                             INNER JOIN municipio ON escola.FK_municipio_id = municipio.id
                             INNER JOIN estado ON municipio.FK_UF_id = estado.id
+                        """
+        
+        j = GetModel.get_default(queryDefalt, **kwargs)
+       
+        return j
+
+    @classmethod
+    def get_plano_leitura_livros(*args, **kwargs):
+        queryDefalt = f"""  plano_leitura_livros.id as plano_leitura_livros__id,
+                            plano_leitura_livros.titulo as plano_leitura_livros__titulo,
+                            plano_leitura_livros.autoria as plano_leitura_livros__autoria,
+                            plano_leitura_livros.FK_plano_componente_turma_id as plnao_leitura_livros__FK_plano_componente_turma_id,
+                            (SELECT 
+                            plano_leitura_estudante.status as plano_leitura_estudante__status,
+                            plano_leitura_estudante.FK_estudante_id as plano_leitura_estudante__FK_estudante_id,
+                            estudante.nome
+                            FROM plano_leitura_estudante     
+                            INNER JOIN estudante ON plano_leitura_estudante.FK_estudante_id = estudante.id
+                            WHERE plano_leitura_estudante.FK_plano_leitura_livros_id = plano_leitura_livros.id FOR JSON PATH) AS estudantes
+                            FROM plano_leitura_livros
                         """
         
         j = GetModel.get_default(queryDefalt, **kwargs)
@@ -422,6 +459,30 @@ class PlanoLeituraModel():
         # except:
         #     print(TypeError)
         # #     return None
+
+
+    @classmethod
+    def create_plano_leitura_livros(*args, **kwargs):
+        # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
+        # try:
+            cursor = conn.cursor()
+            # print(args)
+            # input()
+
+            cursor.execute("""insert into plano_leitura_livros ( FK_plano_componente_turma_id ) OUTPUT INSERTED.id values(?);
+                           """,args[1])
+
+
+
+            result = cursor.fetchone()
+            cursor.commit()
+            cursor.close()
+            return result[0]
+            # print(result[0])
+            # input()
+            # conn.commit()
+            # cursor.close()
+
     @classmethod
     def associate_plano_leitura_momento(*args, **kwargs):
         # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
@@ -462,6 +523,27 @@ class PlanoLeituraModel():
         # #     return None
 
     @classmethod
+    def associate_plano_leitura_estudante(*args, **kwargs):
+        # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
+        # try:
+            cursor = conn.cursor()
+            # print(args)
+            # input()
+
+            cursor.execute("insert into plano_leitura_estudante ( FK_estudante_id, FK_plano_leitura_livros_id, status) OUTPUT INSERTED.id values(?,?,?);",args[1], args[2], args[3])
+
+            result = cursor.fetchone()
+            cursor.commit()
+            cursor.close()
+            return result[0]
+            # conn.close()
+            # return 'created'
+            # rows = cursor.fetchall()
+        # except:
+        #     print(TypeError)
+        # #     return None
+
+    @classmethod
     def create_momento(*args, **kwargs):
         # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
         # try:
@@ -484,14 +566,14 @@ class PlanoLeituraModel():
 
 
     @classmethod
-    def associate_plano_leitura_momento(*args, **kwargs):
+    def associate_plano_leitura_livros(*args, **kwargs):
         # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
         # try:
             cursor = conn.cursor()
             # print(args)
             # input()
 
-            cursor.execute("insert into plano_leitura_momento ( FK_plano_leitura_id, FK_momento_id) OUTPUT INSERTED.id values(?,?);",args[1], args[2])
+            cursor.execute("insert into plano_leitura_livros ( titulo, autoria, FK_plano_componente_turma_id) OUTPUT INSERTED.id values(?,?,?);",args[1], args[2], args[3])
 
             result = cursor.fetchone()
             cursor.commit()
@@ -505,7 +587,7 @@ class PlanoLeituraModel():
         # #     return None
 
     @classmethod
-    def update_rotinaaula(*args, **kwargs):
+    def update_plano_leitura_livros(*args, **kwargs):
         # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
         # try:
             cursor = conn.cursor()
@@ -513,10 +595,10 @@ class PlanoLeituraModel():
             # input()
 
             cursor.execute('''
-                        UPDATE plano_leitura
-                        SET nome = ?, FK_escola_id = ? , ano_letivo = ?
-                        WHERE id = ?
-                        ''',args[1],args[2], args[3], int(args[4]))
+                        UPDATE plano_leitura_livros 
+                        SET titulo = ?, autoria = ? 
+                        WHERE FK_plano_componente_turma_id = ?
+                        ''',args[1],args[2], args[3])
 
             conn.commit()
             # conn.close()
@@ -550,7 +632,7 @@ class PlanoLeituraModel():
         # #     return None
 
     @classmethod
-    def delete_momentos(*args, **kwargs):
+    def delete_estudantes_livros_status(*args, **kwargs):
         # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
         # try:
             cursor = conn.cursor()
@@ -558,7 +640,29 @@ class PlanoLeituraModel():
                 # input()
 
             cursor.execute('''
-                            DELETE FROM momento WHERE id = ?;
+                            DELETE FROM plano_leitura_estudante WHERE FK_plano_leitura_livros_id = ?;
+
+                            ''', args[1])
+
+
+            conn.commit()
+            # conn.close()
+            # return 'created'
+            # rows = cursor.fetchall()
+        # except:
+        #     print(TypeError)
+        # #     return None
+
+    @classmethod
+    def delete_livros(*args, **kwargs):
+        # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
+        # try:
+            cursor = conn.cursor()
+                # print(args)
+                # input()
+
+            cursor.execute('''
+                            DELETE FROM plano_leitura_livros WHERE id = ?;
 
                             ''', args[1])
 
