@@ -301,8 +301,9 @@ class UserModel():
 
     @classmethod
     def get_users(*args, **kwargs):
-        queryDefalt = f""" 
-                         users.cpf as users__cpf, 
+        queryDefalt = f"""  
+                            users.id as users__id,
+                            users.cpf as users__cpf, 
                             users.telefone as users__telefone,
                             users.nome as users__nome,
                             users.email as users__email,  
