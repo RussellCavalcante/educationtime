@@ -80,7 +80,7 @@ class GetEscola(Resource):
             EscolasExistentes = []
 
             EscolasJson = { 'Menssage': f'Importação de escolas concluída, Número de escolas inseridas : {Escolas}',
-                            'Escolas':[],
+                            'Dados':[],
                            }
 
             for  dados in data_json:
@@ -98,19 +98,21 @@ class GetEscola(Resource):
                 
                 if Escola:
                     if cod_inep not in EscolasExistentes:
-                        EscolaJson = {'nome_escola': nome_escola,
-                                  'cod_inep':cod_inep,
-                                  'status': False,
-                                  'Mensagem': 'Código inep já cadastrado.'}
+                        EscolaJson = {'cod_inep':cod_inep,
+                                      'nome_escola': nome_escola, 
+                                      'Mensagem': 'Código inep já cadastrado.',
+                                      'status': False
+                                      }
                         EscolasExistentes.append(cod_inep)
-                        EscolasJson['Escolas'].append(EscolaJson)
+                        EscolasJson['Dados'].append(EscolaJson)
                 else:
                     IdEscola = EscolaModel.create_escola(nome_escola, endereco, email_escola, telefone, cod_inep, FK_municipio_id)
-                    EscolaJson = {'nome_escola': nome_escola,
-                                  'cod_inep':cod_inep,
-                                  'status': True,
-                                  'Mensagem': 'Escola importada com sucesso.'}
-                    EscolasJson['Escolas'].append(EscolaJson)
+                    EscolaJson = {'cod_inep':cod_inep,
+                                  'nome_escola': nome_escola,
+                                  'Mensagem': 'Escola importada com sucesso.',
+                                  'status': True
+                                  }
+                    EscolasJson['Dados'].append(EscolaJson)
                     LogAtividadeModel.create_log_atividade_insercao(args[0], str(datetime.today()),'criação', 'escola', f'foi adicionado escola id : {IdEscola}')
                     Escolas += 1
                     EscolasJson['Menssage'] = f'Importação de escolas concluída, Número de escolas inseridas : {Escolas}'

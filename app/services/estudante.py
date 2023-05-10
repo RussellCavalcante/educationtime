@@ -1,6 +1,7 @@
 from flask_restful import Resource, reqparse
 from app.models.estudante import estudanteModel
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt
+import pandas as pd
 # from app.config import conn
 from datetime import date
 from datetime import datetime
@@ -116,6 +117,69 @@ class GetEstudante(Resource):
         except:
             return { 'error': 'verifique a requisição !' }, 400
     
+    @jwt_required()
+    def post_csv(self, *args, **kwargs):
+        try:
+
+            data_csv = pd.read_csv(args[0], delimiter=';')
+            
+            data_json = data_csv.to_dict(orient='records')
+            Estudantes = 0
+
+            EstudantesExistentes = []
+
+            EstudantesJson = { 'Menssage': f'Importação de estudantes concluída, Número de estudantes inseridos : {Estudantes}',
+                            'Dados':[],
+                           }
+
+            for  dados in data_json:
+                
+                cod_nacional_estudante = dados['cod_nacional_estudante']
+                nome = dados['nome'].strip()
+                data_nascimento = dados['data_nascimento'].strip()
+                tipo_aluno = dados['tipo_aluno'].strip()
+                nee = dados['nee']
+                FK_escola_id = args[2]
+
+
+
+                estudante = estudanteModel.find_by_cod_nacional_estudante(cod_nacional_estudante)
+                
+                if estudante:
+                    if cod_nacional_estudante not in EstudantesExistentes:
+                        estudanteJson = {'cod_nacional_estudante':cod_nacional_estudante,
+                                      'nome': nome,
+                                      'Mensagem': 'Código inep já cadastrado.',
+                                      'status': False}
+                        EstudantesExistentes.append(cod_nacional_estudante)
+                        EstudantesJson['Dados'].append(estudanteJson)
+                else:
+                    Idestudante = estudanteModel.create_estudante(cod_nacional_estudante, nome , data_nascimento, tipo_aluno, nee, FK_escola_id)
+                    estudanteJson = {'cod_nacional_estudante':cod_nacional_estudante,
+                                  'nome': nome,
+                                  'Mensagem': 'Estudante importado com sucesso.',
+                                  'status': True
+                                  }
+                    EstudantesJson['Dados'].append(estudanteJson)
+                    # LogAtividadeModel.create_log_atividade_insercao(args[0], str(datetime.today()),'criação', 'escola', f'foi adicionado escola id : {IdEscola}')
+                    Estudantes += 1
+                    EstudantesJson['Menssage'] = f'Importação de estudantes concluída, Número de estudantes inseridos : {Estudantes}'
+
+            if len(EstudantesExistentes) > 0:
+                if Estudantes == 0:
+                
+                    return EstudantesJson, 400
+                else:
+                    
+                    return EstudantesJson, 201
+            else:
+                
+                return EstudantesJson, 201
+    
+        except:
+            return { 'error': 'verifique a requisição !' }, 400
+
+
     @jwt_required()
     def update(self, *args, **kwargs):
         try:
