@@ -50,9 +50,11 @@ class User(Resource):
             user = UserModel.find_by_email(kwargs['email'])
             if user  == False:
                 return {'error':'não existe usuario associado a esse email'},400
-            
-            UserModel.update_convite_acesso(str(today), 'aceito', user[0])
-            print(user)
+            today = date.today()
+            UserModel.update_convite_acesso(str(today), 'reenviado', user[0])
+            convite = UserModel.find_convite_acesso_by_user_id(user[0])
+
+            print(convite)
             input()
         except:
             return { 'error': 'verifique a requisição !' }, 400

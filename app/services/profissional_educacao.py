@@ -130,7 +130,7 @@ class ProfissionaisEducacaoServices(Resource):
 
     @jwt_required()
     def post(self, *args, **kwargs):
-        try:
+        # try:
                 
             dados = atributos.parse_args()
             cpf = dados['cpf']
@@ -150,8 +150,9 @@ class ProfissionaisEducacaoServices(Resource):
             if UserModel.find_by_login(cpf):
 
                 user = UserModel.find_by_login(cpf)
-                
+  
                 perfil = PerfilModel.get_perfil_by_user_id(user[0])
+
                 perfis_id = [25, 8, 7, 26, 27, 28, 29]
                 if perfil['profile_id'] not in perfis_id:
                     return {'error': 'CPF já cadastrado.'}
@@ -164,7 +165,7 @@ class ProfissionaisEducacaoServices(Resource):
 
                         ProfissionaisEducacaoModel.create_profissionais_educacao( user[0], data_inicio, data_fim)
 
-                        UserModel.associateProfissionalEscolaPerfil(user[0], FK_escola_id, FK_perfil_id)
+                        UserModel.associateProfissionalEscolaPerfil(user[0], data_inicio, data_fim ,FK_escola_id, FK_perfil_id)
 
 
                         manter = []
@@ -200,10 +201,6 @@ class ProfissionaisEducacaoServices(Resource):
 
             body = sendEmailModel.conviteAcesso(hashconvite, nome)
 
-            if email != None:
-                if convite != None:
-                    constructorEmail(email, body)
-
             UserModel.create_convite_acesso(user[0], str(today), hashconvite, salt)
             
             UserModel.associateProfissionalEscolaPerfil(user[0], data_inicio, data_fim, FK_escola_id, FK_perfil_id)
@@ -222,11 +219,18 @@ class ProfissionaisEducacaoServices(Resource):
                        
                         UserModel.associateProfissionalEscolaComponentes(user[0], FK_escola_id, adicionar)
 
+            if email != None:
+                if convite != None:
+                    try:
+                        constructorEmail(email, body)
+                    except:
+                        return{'error': 'Não foi possivel enviar email'}
+
 
             return  {'created': nome}, 201
         
-        except:
-            return { 'error': 'verifique a requisição !' }, 400
+        # except:
+        #     return { 'error': 'verifique a requisição !' }, 400
         
         
 
