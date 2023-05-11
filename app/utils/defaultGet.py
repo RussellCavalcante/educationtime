@@ -6,6 +6,19 @@ import re
 from app import conn
 import pprint
 
+import json
+import re
+
+class LazyDecoder(json.JSONDecoder):
+    def decode(self, s, **kwargs):
+        regex_replacements = [
+            (re.compile(r'([^\\])\\([^\\])'), r'\1\\\\\2'),
+            (re.compile(r',(\s*])'), r'\1'),
+        ]
+        for regex, replacement in regex_replacements:
+            s = regex.sub(replacement, s)
+        return super().decode(s, **kwargs)
+    
 
 class GetModel(): 
     
@@ -125,7 +138,7 @@ class GetModel():
         strip1 = s.lstrip("[('")
         strip2 = strip1.rstrip("', )]")
         
-        j = json.loads(strip2)
+        j = json.loads(strip2, cls=LazyDecoder)
         
         return j
 
