@@ -63,7 +63,7 @@ class NotasSaebServices(Resource):
             nota_saeb = NotasSaebModel.create_notas_saeb(FK_escola_id, ano_letivo)
             
             for i , notas in enumerate(notas['itens']):
-                NotasSaebModel.associate_notas_saeb_area_conhecimento( notas['FK_area_conehcimento_id'], nota_saeb, notas['nota'])
+                NotasSaebModel.associate_notas_saeb_area_conhecimento( notas['FK_area_conehcimento_id'], nota_saeb, float(notas['nota']))
             
             return  {'id': nota_saeb }, 201
         
@@ -72,7 +72,7 @@ class NotasSaebServices(Resource):
     
     @jwt_required()
     def update(self, *args, **kwargs):
-        # try:
+        try:
 
             dados = atributos.parse_args()
             
@@ -94,8 +94,8 @@ class NotasSaebServices(Resource):
                 if NotasSaebModel.find_by_notassaeb__area_conhecimento(notas['FK_area_conehcimento_id'], args[0]):
                     NotasSaebModel.update_notas_saeb_area_conhecimento( notas['nota'], args[0], notas['FK_area_conehcimento_id'], args[0])
                 else:
-                    NotasSaebModel.associate_notas_saeb_area_conhecimento( notas['FK_area_conehcimento_id'], args[0], notas['nota'])
+                    NotasSaebModel.associate_notas_saeb_area_conhecimento( notas['FK_area_conehcimento_id'], args[0], float(notas['nota']))
             return  {'updated': args[0] }, 201
 
-        # except:
-        #     return { 'error': 'verifique a requisição !' }, 400
+        except:
+            return { 'error': 'verifique a requisição !' }, 400

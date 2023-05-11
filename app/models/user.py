@@ -459,6 +459,23 @@ class UserModel():
         # #     return None
 
     @classmethod
+    def find_convite_acesso_by_user_id(cls, FK_user_id):
+        # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
+        cursor = conn.cursor()
+ 
+        cursor.execute("select * from convite_acesso where FK_user_id = ?;", FK_user_id)
+
+        row = cursor.fetchall()
+
+        cursor.commit()
+        
+        # print('Rows --->>',row, type(row) )
+        # input()
+        if len(row) != 0:
+            return row[0]
+        return False
+
+    @classmethod
     def create_convite_acesso(*args, **kwargs):
         # user = cls.query.filter_by(username=username).first()  #select * from hoteis where hotel_id = $hotel_id
         # try:
