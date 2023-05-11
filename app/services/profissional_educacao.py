@@ -224,7 +224,7 @@ class ProfissionaisEducacaoServices(Resource):
                     try:
                         constructorEmail(email, body)
                     except:
-                        return{'error': 'Não foi possivel enviar email'}
+                        return{'error': 'Não foi possivel enviar email'}, 400
 
 
             return  {'created': nome}, 201
