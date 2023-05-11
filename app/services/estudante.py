@@ -149,7 +149,7 @@ class GetEstudante(Resource):
                     if cod_nacional_estudante not in EstudantesExistentes:
                         estudanteJson = {'cod_nacional_estudante':cod_nacional_estudante,
                                       'nome': nome,
-                                      'Mensagem': 'Código Nacional do Estudante já cadastrado.',
+                                      'mensagem': 'Código Nacional do Estudante já cadastrado.',
                                       'status': False}
                         EstudantesExistentes.append(cod_nacional_estudante)
                         EstudantesJson['Dados'].append(estudanteJson)
@@ -157,7 +157,7 @@ class GetEstudante(Resource):
                     Idestudante = estudanteModel.create_estudante(cod_nacional_estudante, nome , data_nascimento, tipo_aluno, nee, FK_escola_id)
                     estudanteJson = {'cod_nacional_estudante':cod_nacional_estudante,
                                   'nome': nome,
-                                  'Mensagem': 'Estudante importado com sucesso.',
+                                  'mensagem': 'Estudante importado com sucesso.',
                                   'status': True
                                   }
                     EstudantesJson['Dados'].append(estudanteJson)

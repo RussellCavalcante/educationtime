@@ -49,7 +49,7 @@ class User(Resource):
             input()
             user = UserModel.find_by_email(kwargs['email'])
             if user  == False:
-                return {'error':'nao existe usuario associado a esse email'},400
+                return {'error':'não existe usuario associado a esse email'},400
             print(user)
             input()
         except:

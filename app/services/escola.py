@@ -100,7 +100,7 @@ class GetEscola(Resource):
                     if cod_inep not in EscolasExistentes:
                         EscolaJson = {'cod_inep':cod_inep,
                                       'nome_escola': nome_escola, 
-                                      'Mensagem': 'Código inep já cadastrado.',
+                                      'mensagem': 'Código inep já cadastrado.',
                                       'status': False
                                       }
                         EscolasExistentes.append(cod_inep)
@@ -109,7 +109,7 @@ class GetEscola(Resource):
                     IdEscola = EscolaModel.create_escola(nome_escola, endereco, email_escola, telefone, cod_inep, FK_municipio_id)
                     EscolaJson = {'cod_inep':cod_inep,
                                   'nome_escola': nome_escola,
-                                  'Mensagem': 'Escola importada com sucesso.',
+                                  'mensagem': 'Escola importada com sucesso.',
                                   'status': True
                                   }
                     EscolasJson['Dados'].append(EscolaJson)
