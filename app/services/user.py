@@ -43,6 +43,18 @@ class User(Resource):
         except:
             return { 'error': 'verifique a requisição !' }, 400
 
+    def reset_password(self, *args, **kwargs):
+        try:
+            print(kwargs['email'])
+            input()
+            user = UserModel.find_by_email(kwargs['email'])
+            if user  == False:
+                return {'error':'nao existe usuario associado a esse email'},400
+            print(user)
+            input()
+        except:
+            return { 'error': 'verifique a requisição !' }, 400
+
     def get_convite_by_hashconvite(self, *args, **kwargs):
         # try:
             convite = UserModel.get_hash_by_hash(str(args[0]))

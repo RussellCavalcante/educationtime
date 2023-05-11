@@ -149,7 +149,7 @@ class GetEstudante(Resource):
                     if cod_nacional_estudante not in EstudantesExistentes:
                         estudanteJson = {'cod_nacional_estudante':cod_nacional_estudante,
                                       'nome': nome,
-                                      'Mensagem': 'Código inep já cadastrado.',
+                                      'Mensagem': 'Código Nacional do Estudante já cadastrado.',
                                       'status': False}
                         EstudantesExistentes.append(cod_nacional_estudante)
                         EstudantesJson['Dados'].append(estudanteJson)
